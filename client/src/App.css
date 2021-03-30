@@ -1,0 +1,15 @@
+.meta:hover {
+  text-decoration: underline;
+  color: teal !important;
+}
+
+.page-title {
+  display: block !important;
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 10px;
+}
+.ui.grid > .row > .column {
+  margin-top: 0;
+  margin-bottom: 20px;
+}

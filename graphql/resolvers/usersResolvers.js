@@ -58,7 +58,7 @@ module.exports = {
   },
   Mutation: {
     async registerUser(
-      parent,
+      _,
       { registerInput: { username, email, password, confirmPassword } },
       context,
       info
