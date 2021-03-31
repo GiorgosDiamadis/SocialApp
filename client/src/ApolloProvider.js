@@ -7,6 +7,8 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 
+import { ApolloProvider as ApolloHooksProvider } from "@apollo/react-hooks";
+
 const httpLink = createHttpLink({
   uri: "http://localhost:5000",
 });
@@ -18,6 +20,8 @@ const client = new ApolloClient({
 
 export default (
   <ApolloProvider client={client}>
-    <App />
+    <ApolloHooksProvider client={client}>
+      <App />
+    </ApolloHooksProvider>
   </ApolloProvider>
 );

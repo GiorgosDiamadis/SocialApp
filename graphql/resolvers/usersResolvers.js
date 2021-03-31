@@ -27,7 +27,7 @@ module.exports = {
       context,
       info
     ) {
-      const { valid, errors } = loginInputValidation(username, password);
+      const { errors, valid } = loginInputValidation(username, password);
 
       if (!valid) {
         throw new UserInputError("Errors", { errors });
@@ -71,7 +71,7 @@ module.exports = {
       );
 
       if (!valid) {
-        throw new UserInputError("Erros", errors);
+        throw new UserInputError("Errors", { errors });
       }
 
       const user = await User.findOne({ username });
