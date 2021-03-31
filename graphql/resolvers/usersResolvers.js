@@ -20,42 +20,7 @@ const generateToken = (user) => {
 };
 
 module.exports = {
-  Query: {
-    async loginUser(
-      parent,
-      { loginInput: { username, password } },
-      context,
-      info
-    ) {
-      const { errors, valid } = loginInputValidation(username, password);
-
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
-      }
-
-      const user = await User.findOne({ username });
-
-      if (!user) {
-        errors.loginError = "Wrong credentials!";
-        throw new UserInputError("Error", {
-          errors,
-        });
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        errors.loginError = "Wrong credentials!";
-        throw new UserInputError("Error", { errors });
-      }
-      const token = generateToken(user);
-
-      return {
-        ...user._doc,
-        id: user._id,
-        token,
-      };
-    },
-  },
+  Query: {},
   Mutation: {
     async registerUser(
       _,
@@ -94,6 +59,35 @@ module.exports = {
       return {
         ...res._doc,
         id: res._id,
+        token,
+      };
+    },
+    async loginUser(_, { loginInput: { username, password } }, context, info) {
+      const { errors, valid } = loginInputValidation(username, password);
+
+      if (!valid) {
+        throw new UserInputError("Errors", { errors });
+      }
+
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        errors.loginError = "Wrong credentials!";
+        throw new UserInputError("Error", {
+          errors,
+        });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        errors.loginError = "Wrong credentials!";
+        throw new UserInputError("Error", { errors });
+      }
+      const token = generateToken(user);
+
+      return {
+        ...user._doc,
+        id: user._id,
         token,
       };
     },

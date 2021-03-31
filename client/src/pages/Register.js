@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Form } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 
-function Register() {
+function Register(props) {
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     username: "",
@@ -19,6 +19,7 @@ function Register() {
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(proxy, result) {
       console.log(result);
+      props.history.push("/");
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -40,6 +41,7 @@ function Register() {
           placeholder="Username..."
           name="username"
           value={values.username}
+          error={errors.username ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -47,6 +49,7 @@ function Register() {
           placeholder="Email..."
           name="email"
           value={values.email}
+          error={errors.email ? true : false}
           onChange={onChange}
         />
         <Form.Input
@@ -54,6 +57,8 @@ function Register() {
           placeholder="Password..."
           name="password"
           value={values.password}
+          error={errors.password ? true : false}
+          type="password"
           onChange={onChange}
         />
         <Form.Input
@@ -61,6 +66,8 @@ function Register() {
           placeholder="Confirm Password..."
           name="confirmPassword"
           value={values.confirmPassword}
+          error={errors.confirmPassword ? true : false}
+          type="password"
           onChange={onChange}
         />
 

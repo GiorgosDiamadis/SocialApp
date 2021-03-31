@@ -21,7 +21,7 @@ module.exports.registerInputValidation = (
   if (password === "") {
     errors.password = "Password can't be empty!";
   } else if (password != confimPassword) {
-    errors.password = "Passwords don't match!";
+    errors.confirmPassword = "Passwords don't match!";
   }
 
   return {
