@@ -7,20 +7,27 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Post from "./pages/Post";
-import "./App.css";
 import { AuthProvider } from "./context/auth";
 import AuthRoute from "./util/AuthRoute";
 
+import "./App.css";
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <Container>
+        <Container className="outer">
           <MenuBar />
-          <Route exact path="/" component={Home} />
-          <AuthRoute exact path="/register" component={Register} />
-          <AuthRoute exact path="/login" component={Login} />
-          <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
+          <Container className="inner">
+            <Route exact path="/" component={Home} />
+            <AuthRoute exact path="/register" component={Register} />
+            <AuthRoute exact path="/login" component={Login} />
+            <AuthRoute
+              exact
+              path="/post/:postId"
+              component={Post}
+              mode="false"
+            />
+          </Container>
         </Container>
       </Router>
     </AuthProvider>

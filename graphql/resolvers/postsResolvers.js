@@ -4,7 +4,7 @@ const chechAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
     async getPosts() {
-      const posts = Post.find({});
+      const posts = Post.find({}).sort({ createdAt: -1 });
       return posts;
     },
     async getPost(parent, { postId }) {
@@ -23,6 +23,10 @@ module.exports = {
   Mutation: {
     async createPost(_, { body }, context) {
       const user = chechAuth(context);
+
+      if (body.trim() === "") {
+        throw new UserInputError("Body can't be empty");
+      }
       try {
         const post = new Post({
           body,

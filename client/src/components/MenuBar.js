@@ -10,13 +10,13 @@ export default function MenuBar() {
   const [activeItem, setActiveItem] = useState(path);
 
   const handleItemClick = (e, { name }) => setActiveItem(name);
-
+  const dummy = () => {};
   return (
     <Menu pointing secondary size="massive" color="teal">
       <Menu.Item
         name={user ? user.username : "home"}
         active={user ? true : activeItem === "home"}
-        onClick={user ? false : handleItemClick}
+        onClick={user ? dummy : handleItemClick}
         as={Link}
         to="/"
       />
