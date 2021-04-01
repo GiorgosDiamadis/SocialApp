@@ -1,11 +1,10 @@
 import gql from "graphql-tag";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
-
+import { AuthContext } from "../context/auth";
 function Login(props) {
-  const [state, setState] = useState({});
-
+  const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     username: "",
@@ -17,8 +16,8 @@ function Login(props) {
   };
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
-    update(proxy, result) {
-      console.log(result);
+    update(proxy, { data: { loginUser: userData } }) {
+      context.login(userData);
       props.history.push("/");
     },
     onError(err) {
@@ -35,7 +34,7 @@ function Login(props) {
   return (
     <div className="form-container">
       <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-        <h1>Register Form</h1>
+        <h1>Login Form</h1>
         <Form.Input
           label="Username"
           placeholder="Username..."

@@ -8,17 +8,22 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Post from "./pages/Post";
 import "./App.css";
+import { AuthProvider } from "./context/auth";
+import AuthRoute from "./util/AuthRoute";
+
 function App() {
   return (
-    <Router>
-      <Container>
-        <MenuBar />
-        <Route exact path="/" component={Home}></Route>
-        <Route exact path="/register" component={Register}></Route>
-        <Route exact path="/login" component={Login}></Route>
-        <Route exact path="/:postId" component={Post}></Route>
-      </Container>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Container>
+          <MenuBar />
+          <Route exact path="/" component={Home} />
+          <AuthRoute exact path="/register" component={Register} />
+          <AuthRoute exact path="/login" component={Login} />
+          <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
+        </Container>
+      </Router>
+    </AuthProvider>
   );
 }
 
