@@ -5,6 +5,7 @@ import { Divider, Form, Button } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard";
+const { FETCH_POSTS, MAKE_POST } = require("../util/graphql");
 
 function Home(props) {
   const [errors, setErrors] = useState({});
@@ -79,50 +80,5 @@ function Home(props) {
     </div>
   );
 }
-
-const MAKE_POST = gql`
-  mutation createPost($body: String!) {
-    createPost(body: $body) {
-      id
-      body
-      username
-      createdAt
-      comments {
-        id
-        body
-        username
-        createdAt
-      }
-      likes {
-        id
-        username
-        createdAt
-      }
-      likeCount
-      commentCount
-    }
-  }
-`;
-
-const FETCH_POSTS = gql`
-  {
-    getPosts {
-      id
-      body
-      createdAt
-      username
-      likeCount
-      likes {
-        username
-      }
-      commentCount
-      comments {
-        body
-        username
-        createdAt
-      }
-    }
-  }
-`;
 
 export default Home;

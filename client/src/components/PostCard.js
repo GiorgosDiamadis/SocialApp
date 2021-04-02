@@ -3,16 +3,14 @@ import { Button, Card, CardMeta, Icon, Label } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
-import gql from "graphql-tag";
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
+import { DELETE_POST, FETCH_POSTS } from "../util/graphql";
 
-export default function PostCard({ post }, props) {
+export default function PostCard({ post }) {
   const ID = post.id;
-  const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
-  const [errors, setErrors] = useState({});
 
   const [delPost] = useMutation(DELETE_POST, {
-    update(proxy, result) {
+    update(proxy) {
       const data = proxy.readQuery({
         query: FETCH_POSTS,
       });
@@ -20,7 +18,7 @@ export default function PostCard({ post }, props) {
       proxy.writeQuery({
         query: FETCH_POSTS,
         data: {
-          getPosts: [data.getPosts.filter((p) => p.id !== ID)],
+          getPosts: data.getPosts.filter((p) => p.id !== ID),
         },
       });
     },
@@ -75,30 +73,3 @@ export default function PostCard({ post }, props) {
     </Card.Group>
   );
 }
-
-const DELETE_POST = gql`
-  mutation deletePost($ID: ID!) {
-    deletePost(postId: $ID)
-  }
-`;
-
-const FETCH_POSTS = gql`
-  {
-    getPosts {
-      id
-      body
-      createdAt
-      username
-      likeCount
-      likes {
-        username
-      }
-      commentCount
-      comments {
-        body
-        username
-        createdAt
-      }
-    }
-  }
-`;
