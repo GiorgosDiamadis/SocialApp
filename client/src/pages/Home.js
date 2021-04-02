@@ -54,12 +54,23 @@ function Home(props) {
           onChange={onChange}
           label="Post"
           name="body"
+          error={errors.body ? true : false}
         />
         <Button primary type="submit">
           Post
         </Button>
       </Form>
+      {Object.keys(errors).length > 0 && (
+        <div className="ui error message">
+          <ul className="list">
+            {Object.values(errors).map((v) => (
+              <li key={v}> {v}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <Divider />
+
       {loading ? (
         <h1>Loading...</h1>
       ) : (

@@ -18,7 +18,7 @@ function App() {
         <Container className="outer">
           <MenuBar />
           <Container className="inner">
-            <Route exact path="/" component={Home} />
+            <AuthRoute exact path="/" component={Home} mode="false" />
             <AuthRoute exact path="/register" component={Register} />
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute

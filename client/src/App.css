@@ -19,7 +19,21 @@
   margin: auto;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 @media only screen and (min-width: 1200px) {
+  .ui.container.outer {
+    width: 100%;
+  }
+
+  .ui.container.inner {
+    width: 50%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
   .ui.container.outer {
     width: 100%;
   }

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-link-context": "^1.0.20",
     "apollo-server": "^2.22.1",
     "bcryptjs": "^2.4.3",
     "graphql": "^15.5.0",

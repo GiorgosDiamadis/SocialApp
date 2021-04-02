@@ -23,9 +23,10 @@ module.exports = {
   Mutation: {
     async createPost(_, { body }, context) {
       const user = chechAuth(context);
-
+      errors = {};
       if (body.trim() === "") {
-        throw new UserInputError("Body can't be empty");
+        errors.body = "Body can't be empty";
+        throw new UserInputError("Body can't be empty", { errors });
       }
       try {
         const post = new Post({
@@ -45,6 +46,7 @@ module.exports = {
       const user = chechAuth(context);
       try {
         const post = await Post.findById(postId);
+        console.log(post);
         if (post.username === user.username) {
           await post.delete();
           return "Post deleted";

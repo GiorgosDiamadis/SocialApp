@@ -19,6 +19,7 @@ export default function MenuBar() {
         onClick={user ? dummy : handleItemClick}
         as={Link}
         to="/"
+        className={user ? "" : "invisible"}
       />
       {user ? (
         <Menu.Menu position="right">
