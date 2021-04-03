@@ -46,7 +46,6 @@ module.exports = {
       const user = chechAuth(context);
       try {
         const post = await Post.findById(postId);
-        console.log(post);
         if (post.username === user.username) {
           await post.delete();
           return "Post deleted";

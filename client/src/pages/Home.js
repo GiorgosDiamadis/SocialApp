@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { Divider, Form, Button } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
@@ -12,8 +11,6 @@ function Home(props) {
   const [values, setValues] = useState({
     body: "",
   });
-
-  const { user } = useContext(AuthContext);
 
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });

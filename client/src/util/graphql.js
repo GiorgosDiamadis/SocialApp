@@ -84,3 +84,51 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const LIKE_POST = gql`
+  mutation likePost($ID: ID!) {
+    likePost(postId: $ID) {
+      id
+      body
+      username
+      createdAt
+      comments {
+        id
+        body
+        username
+        createdAt
+      }
+      likes {
+        id
+        username
+        createdAt
+      }
+      likeCount
+      commentCount
+    }
+  }
+`;
+
+export const COMMENT_POST = gql`
+  mutation makeComment($ID: ID!, $postComment: String!) {
+    makeComment(postId: $ID, body: $postComment) {
+      id
+      body
+      username
+      createdAt
+      comments {
+        id
+        body
+        username
+        createdAt
+      }
+      likes {
+        id
+        username
+        createdAt
+      }
+      likeCount
+      commentCount
+    }
+  }
+`;
