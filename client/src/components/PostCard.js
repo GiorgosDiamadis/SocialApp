@@ -1,5 +1,13 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, CardMeta, Form, Icon, Label } from "semantic-ui-react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMeta,
+  Form,
+  Icon,
+  Label,
+} from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
@@ -14,8 +22,13 @@ import {
 export default function PostCard({ post }) {
   const ID = post.id;
   const { user } = useContext(AuthContext);
+  const idClass = "id" + ID;
+  const newCommentDivSelector = `.newComment.invisible.${idClass}`;
+  const commentCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.commentCount`;
+  const likeCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.likeCount`;
+  const commentFormSelector = `.ui.form.commentForm.${idClass}`;
+
   var newComment = "";
-  const idClass = "a" + ID;
 
   const [delPost] = useMutation(DELETE_POST, {
     update(proxy) {
@@ -43,14 +56,13 @@ export default function PostCard({ post }) {
   const [comment] = useMutation(COMMENT_POST, {
     update(proxy, result) {
       newComment = values.postComment;
-      const newCommentDiv = document.querySelector(
-        `.newComment.invisible.${idClass}`
-      );
+      const newCommentDiv = document.querySelector(newCommentDivSelector);
       newCommentDiv.classList.remove("invisible");
-      console.log(newCommentDiv);
 
+      const commentCount = document.querySelector(commentCountSelector);
       newCommentDiv.innerHTML = "You just commented: " + `"${newComment}"`;
-      const form = document.querySelector(`.ui.form.commentForm.${idClass}`);
+      commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
+      const form = document.querySelector(commentFormSelector);
       form.classList.add("invisible");
     },
     variables: values,
@@ -71,13 +83,17 @@ export default function PostCard({ post }) {
 
   const likePost = (event) => {
     like();
-    const likeButton = document.querySelector(".ui.teal.button");
+    const likeButton = document.querySelector(
+      `.ui.teal.button.${idClass}.like`
+    );
+    const likeCount = document.querySelector(likeCountSelector);
+    likeCount.innerHTML = parseInt(likeCount.innerHTML) + (hasLiked() ? -1 : 1);
     likeButton.classList.contains("basic")
       ? likeButton.classList.remove("basic")
       : likeButton.classList.add("basic");
   };
   const toggleCommentForm = () => {
-    const form = document.querySelector(`.ui.form.commentForm.${idClass}`);
+    const form = document.querySelector(commentFormSelector);
     form.classList.contains("invisible")
       ? form.classList.remove("invisible")
       : form.classList.add("invisible");
@@ -108,10 +124,22 @@ export default function PostCard({ post }) {
         </Card.Content>
         <Card.Content extra>
           <Button as="div" labelPosition="right">
-            <Button color="teal" basic={!hasLiked()} onClick={likePost}>
+            <Button
+              color="teal"
+              className={idClass + " like"}
+              basic={!hasLiked()}
+              onClick={likePost}
+            >
               <Icon name="heart" />
             </Button>
-            <Label as="a" basic color="teal" pointing="left">
+
+            <Label
+              as="a"
+              basic
+              color="teal"
+              className={idClass + " likeCount"}
+              pointing="left"
+            >
               {post.likeCount}
             </Label>
           </Button>
@@ -120,7 +148,13 @@ export default function PostCard({ post }) {
             <Button color="teal" basic onClick={toggleCommentForm}>
               <Icon name="comments" />
             </Button>
-            <Label as="a" basic color="teal" pointing="left">
+            <Label
+              as="a"
+              basic
+              color="teal"
+              className={idClass + " commentCount"}
+              pointing="left"
+            >
               {post.commentCount}
             </Label>
           </Button>
@@ -146,6 +180,10 @@ export default function PostCard({ post }) {
             ></a>
           </div>
         </Card.Content>
+        <CardContent extra className="see-likes-comments">
+          <a href="">Comments </a>
+          <a href="">Likes</a>
+        </CardContent>
       </Card>
     </Card.Group>
   );
