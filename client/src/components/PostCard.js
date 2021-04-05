@@ -7,6 +7,8 @@ import {
   Form,
   Icon,
   Label,
+  Comment,
+  Divider,
 } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -20,6 +22,7 @@ import {
 } from "../util/graphql";
 
 export default function PostCard({ post }) {
+  //==========Variables========================
   const ID = post.id;
   const { user } = useContext(AuthContext);
   const idClass = "id" + ID;
@@ -28,7 +31,15 @@ export default function PostCard({ post }) {
   const likeCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.likeCount`;
   const commentFormSelector = `.ui.form.commentForm.${idClass}`;
 
+  const [values, setValues] = useState({
+    postComment: "",
+    ID: ID,
+  });
+
   var newComment = "";
+  //=============================================================
+
+  //==========Mutations/Queries========================
 
   const [delPost] = useMutation(DELETE_POST, {
     update(proxy) {
@@ -49,10 +60,7 @@ export default function PostCard({ post }) {
   const [like] = useMutation(LIKE_POST, {
     variables: { ID },
   });
-  const [values, setValues] = useState({
-    postComment: "",
-    ID: ID,
-  });
+
   const [comment] = useMutation(COMMENT_POST, {
     update(proxy, result) {
       newComment = values.postComment;
@@ -67,6 +75,9 @@ export default function PostCard({ post }) {
     },
     variables: values,
   });
+  //=============================================================
+
+  //==========Functions========================
 
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -102,6 +113,7 @@ export default function PostCard({ post }) {
     delPost();
   };
 
+  //=============================================================
   return (
     <Card.Group>
       <Card fluid className="postCard">
@@ -184,6 +196,20 @@ export default function PostCard({ post }) {
           <a href="">Comments </a>
           <a href="">Likes</a>
         </CardContent>
+        <div className="commentSection">
+          <Comment.Group>
+            <Comment.Content>
+              <Comment.Author as="a">Matt</Comment.Author>
+              <Comment.Metadata>
+                <div>Today at 5:42PM</div>
+              </Comment.Metadata>
+              <Comment.Text>How artistic!</Comment.Text>
+              <Comment.Actions>
+                <Comment.Action>Reply</Comment.Action>
+              </Comment.Actions>
+            </Comment.Content>
+          </Comment.Group>
+        </div>
       </Card>
     </Card.Group>
   );

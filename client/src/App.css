@@ -48,3 +48,19 @@
 .ui.form.commentForm > .field {
   margin-top: 10px;
 }
+
+.ui.card > .extra,
+.ui.cards > .card > .extra {
+  padding: 0.2em 1em;
+}
+
+.ui.labeled.button {
+  margin-top: 10px;
+}
+.content {
+  background: #f5f5f5;
+  border-radius: 15px;
+  padding: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
