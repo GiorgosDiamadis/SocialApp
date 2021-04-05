@@ -25,7 +25,7 @@
   height: 0px;
 }
 
-@media only screen and (min-width: 1200px) {
+/* @media only screen and (min-width: 1200px) {
   .ui.container.outer {
     width: 100%;
   }
@@ -43,10 +43,14 @@
   .ui.container.inner {
     width: 40%;
   }
+} */
+
+.ui.container.outer {
+  width: 100%;
 }
 
 .ui.container.inner {
-  width: 40%;
+  width: 80%;
 }
 .ui.form.commentForm > .field {
   margin-top: 10px;
@@ -70,4 +74,20 @@
 
 .text-muted {
   opacity: 0.6;
+}
+
+.ui.card.profile {
+  width: 100%;
+  background: #f9f9f9;
+  margin: auto;
+}
+.ui.medium.circular.centered.image {
+  background: rgba(0, 0, 0, 0);
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.ui.cards > .card {
+  border-radius: 1.3em;
+  box-shadow: 0 1px 6px 0 #d4d4d5;
 }

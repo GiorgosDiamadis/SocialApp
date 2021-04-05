@@ -18,16 +18,11 @@ function App() {
       <Router>
         <Container className="outer">
           <MenuBar />
+          <AuthRoute exact path="/" component={Home} mode="false" />
+          <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
           <Container className="inner" id="inner">
-            <AuthRoute exact path="/" component={Home} mode="false" />
             <AuthRoute exact path="/register" component={Register} />
             <AuthRoute exact path="/login" component={Login} />
-            <AuthRoute
-              exact
-              path="/post/:postId"
-              component={Post}
-              mode="false"
-            />
 
             <AuthRoute
               exact

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Divider, Form, Button } from "semantic-ui-react";
+import { Divider, Form, Button, Grid } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard";
@@ -45,35 +45,44 @@ function Home(props) {
 
   return (
     <div>
-      <Form onSubmit={onSubmit}>
-        <Form.TextArea
-          placeholder="What are you thinking?"
-          value={values.body}
-          onChange={onChange}
-          label="Post"
-          name="body"
-          error={errors.body ? true : false}
-        />
-        <Button primary type="submit">
-          Post
-        </Button>
-      </Form>
-      {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
-          <ul className="list">
-            {Object.values(errors).map((v) => (
-              <li key={v}> {v}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <Divider />
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={4}>Profile information</Grid.Column>
 
-      {loading ? (
-        <h1>Loading...</h1>
-      ) : (
-        posts.map((post) => <PostCard key={post.id} post={post} />)
-      )}
+          <Grid.Column width={8}>
+            <Form onSubmit={onSubmit}>
+              <Form.TextArea
+                placeholder="What are you thinking?"
+                value={values.body}
+                onChange={onChange}
+                label="Post"
+                name="body"
+                error={errors.body ? true : false}
+              />
+              <Button primary type="submit">
+                Post
+              </Button>
+            </Form>
+            {Object.keys(errors).length > 0 && (
+              <div className="ui error message">
+                <ul className="list">
+                  {Object.values(errors).map((v) => (
+                    <li key={v}> {v}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <Divider />
+
+            {loading ? (
+              <h1>Loading...</h1>
+            ) : (
+              posts.map((post) => <PostCard key={post.id} post={post} />)
+            )}
+          </Grid.Column>
+          <Grid.Column width={4}></Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
   );
 }
