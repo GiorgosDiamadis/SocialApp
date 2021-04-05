@@ -45,6 +45,9 @@
   }
 }
 
+.ui.container.inner {
+  width: 40%;
+}
 .ui.form.commentForm > .field {
   margin-top: 10px;
 }

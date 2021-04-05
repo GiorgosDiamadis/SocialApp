@@ -151,7 +151,7 @@ export default function PostCard({ post }) {
           )}
 
           <Card.Header>{post.username}</Card.Header>
-          <CardMeta as={Link} to={"/" + post.id}>
+          <CardMeta as={Link} to={"post/" + post.id}>
             {moment(post.createdAt.replace("T", " ")).fromNow()}
           </CardMeta>
           <Card.Description>{post.body}</Card.Description>

@@ -22,7 +22,28 @@ export const FETCH_POSTS = gql`
     }
   }
 `;
-
+export const FETCH_POST = gql`
+  query getPost($postId: ID!) {
+    getPost(postId: $postId) {
+      id
+      body
+      createdAt
+      username
+      likeCount
+      likes {
+        id
+        username
+      }
+      commentCount
+      comments {
+        id
+        body
+        username
+        createdAt
+      }
+    }
+  }
+`;
 export const MAKE_POST = gql`
   mutation createPost($body: String!) {
     createPost(body: $body) {

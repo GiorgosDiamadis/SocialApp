@@ -1,9 +1,14 @@
 import React from "react";
+import PostCard from "../components/PostCard";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/react-hooks";
 
+import { FETCH_POST } from "../util/graphql";
 export default function Post() {
-  return (
-    <div>
-      <h1>hi</h1>
-    </div>
-  );
+  const { postId } = useParams();
+  const { loading, data } = useQuery(FETCH_POST, {
+    variables: { postId },
+  });
+  console.log(data.getPost);
+  return <div>{data.getPost.id}</div>;
 }
