@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+
 import {
   Button,
   Card,
@@ -7,8 +8,8 @@ import {
   Form,
   Icon,
   Label,
-  Comment,
-  Divider,
+  Container,
+  Modal,
 } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -21,20 +22,42 @@ import {
   COMMENT_POST,
 } from "../util/graphql";
 
+import PostComment from "./PostComment";
+import Likes from "./Likes";
+
+function seeLikesReducer(state, action) {
+  switch (action.type) {
+    case "close":
+      return { open: false };
+    case "open":
+      return { open: true, size: action.size };
+    default:
+      throw new Error("Unsupported action...");
+  }
+}
+
 export default function PostCard({ post }) {
   //==========Variables========================
   const ID = post.id;
   const { user } = useContext(AuthContext);
   const idClass = "id" + ID;
-  const newCommentDivSelector = `.newComment.invisible.${idClass}`;
+  const newCommentDivSelector = `.newComment.${idClass}`;
   const commentCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.commentCount`;
   const likeCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.likeCount`;
   const commentFormSelector = `.ui.form.commentForm.${idClass}`;
+  const commentSectionSelector = `.commentSection.${idClass}`;
 
   const [values, setValues] = useState({
     postComment: "",
     ID: ID,
+    commentID: "",
   });
+
+  const [state, dispatch] = React.useReducer(seeLikesReducer, {
+    open: false,
+    size: undefined,
+  });
+  const { open, size } = state;
 
   var newComment = "";
   //=============================================================
@@ -54,13 +77,12 @@ export default function PostCard({ post }) {
         },
       });
     },
-    variables: { ID },
+    variables: values,
   });
 
   const [like] = useMutation(LIKE_POST, {
-    variables: { ID },
+    variables: values,
   });
-
   const [comment] = useMutation(COMMENT_POST, {
     update(proxy, result) {
       newComment = values.postComment;
@@ -103,11 +125,11 @@ export default function PostCard({ post }) {
       ? likeButton.classList.remove("basic")
       : likeButton.classList.add("basic");
   };
-  const toggleCommentForm = () => {
-    const form = document.querySelector(commentFormSelector);
-    form.classList.contains("invisible")
-      ? form.classList.remove("invisible")
-      : form.classList.add("invisible");
+  const toggleVisibility = (selector) => {
+    const element = document.querySelector(selector);
+    element.classList.contains("invisible")
+      ? element.classList.remove("invisible")
+      : element.classList.add("invisible");
   };
   const deletePost = () => {
     delPost();
@@ -157,7 +179,11 @@ export default function PostCard({ post }) {
           </Button>
 
           <Button as="div" labelPosition="right">
-            <Button color="teal" basic onClick={toggleCommentForm}>
+            <Button
+              color="teal"
+              basic
+              onClick={() => toggleVisibility(commentFormSelector)}
+            >
               <Icon name="comments" />
             </Button>
             <Label
@@ -193,22 +219,23 @@ export default function PostCard({ post }) {
           </div>
         </Card.Content>
         <CardContent extra className="see-likes-comments">
-          <a href="">Comments </a>
-          <a href="">Likes</a>
+          <a onClick={() => toggleVisibility(commentSectionSelector)}>
+            Comments{" "}
+          </a>
+          <a onClick={() => dispatch({ type: "open", size: "tiny" })}>Likes</a>
         </CardContent>
-        <div className="commentSection">
-          <Comment.Group>
-            <Comment.Content>
-              <Comment.Author as="a">Matt</Comment.Author>
-              <Comment.Metadata>
-                <div>Today at 5:42PM</div>
-              </Comment.Metadata>
-              <Comment.Text>How artistic!</Comment.Text>
-              <Comment.Actions>
-                <Comment.Action>Reply</Comment.Action>
-              </Comment.Actions>
-            </Comment.Content>
-          </Comment.Group>
+        <div className={`commentSection ${idClass} invisible`}>
+          {post.comments.map((comment) => (
+            <PostComment key={comment.id} comment={comment} ID={ID} />
+          ))}
+        </div>
+        <div className={`likeSection ${idClass} invisible`}>
+          <Likes
+            likes={post.likes}
+            dispatch={dispatch}
+            open={open}
+            size={size}
+          />
         </div>
       </Card>
     </Card.Group>
