@@ -9,6 +9,8 @@ export default function Post() {
   const { loading, data } = useQuery(FETCH_POST, {
     variables: { postId },
   });
-  console.log(data.getPost);
-  return <div>{data.getPost.id}</div>;
+
+  return (
+    <div>{loading ? <h1>loading</h1> : <PostCard post={data.getPost} />}</div>
+  );
 }

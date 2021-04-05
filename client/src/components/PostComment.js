@@ -32,12 +32,10 @@ export default function PostComment({ comment, ID }) {
           <Container>{comment.body}</Container>
         </Comment.Text>
         <Comment.Actions>
-          <Comment.Action>Reply </Comment.Action>
           {comment.username === user.username && (
             <Comment.Action onClick={deleteComment}>Delete</Comment.Action>
           )}
         </Comment.Actions>
-        <Container>..Comments on this comment..</Container>
       </Comment.Content>
     </Comment.Group>
   );

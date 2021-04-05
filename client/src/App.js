@@ -11,13 +11,14 @@ import { AuthProvider } from "./context/auth";
 import AuthRoute from "./util/AuthRoute";
 
 import "./App.css";
+import Profile from "./pages/Profile";
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Container className="outer">
           <MenuBar />
-          <Container className="inner">
+          <Container className="inner" id="inner">
             <AuthRoute exact path="/" component={Home} mode="false" />
             <AuthRoute exact path="/register" component={Register} />
             <AuthRoute exact path="/login" component={Login} />
@@ -25,6 +26,13 @@ function App() {
               exact
               path="/post/:postId"
               component={Post}
+              mode="false"
+            />
+
+            <AuthRoute
+              exact
+              path="/profile/:userId"
+              component={Profile}
               mode="false"
             />
           </Container>
