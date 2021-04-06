@@ -20,7 +20,23 @@ const generateToken = (user) => {
 };
 
 module.exports = {
-  Query: {},
+  Query: {
+    async getUserInfo(_, { userId }, context, info) {
+      const user = await User.findById(userId);
+      const createdAt = user.createdAt;
+      const born = user.born ? user.born : "Unknown";
+      const livesIn = user.livesIn ? user.livesIn : "Unknown";
+      const isFrom = user.isFrom ? user.isFrom : "Unknown";
+      const graduatedAt = user.graduatedAt ? user.graduatedAt : "Unknown";
+      return {
+        createdAt,
+        born,
+        livesIn,
+        isFrom,
+        graduatedAt,
+      };
+    },
+  },
   Mutation: {
     async registerUser(
       _,

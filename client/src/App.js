@@ -12,6 +12,7 @@ import AuthRoute from "./util/AuthRoute";
 
 import "./App.css";
 import Profile from "./pages/Profile";
+import EditInfo from "./pages/EditInfo";
 function App() {
   return (
     <AuthProvider>
@@ -23,11 +24,16 @@ function App() {
           <Container className="inner" id="inner">
             <AuthRoute exact path="/register" component={Register} />
             <AuthRoute exact path="/login" component={Login} />
-
             <AuthRoute
               exact
-              path="/profile/:userId"
+              path="/profile/:profileId"
               component={Profile}
+              mode="false"
+            />
+            <AuthRoute
+              exact
+              path="/profile/:profileId/editInfo"
+              component={EditInfo}
               mode="false"
             />
           </Container>

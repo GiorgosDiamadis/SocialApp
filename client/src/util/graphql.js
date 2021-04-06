@@ -103,7 +103,6 @@ export const LOGIN_USER = gql`
       email
       token
       username
-      createdAt
     }
   }
 `;
@@ -176,6 +175,18 @@ export const DELETE_COMMENT = gql`
       }
       likeCount
       commentCount
+    }
+  }
+`;
+
+export const FETCH_USER_INFO = gql`
+  query getUserInfo($ID: ID!) {
+    getUserInfo(userId: $ID) {
+      createdAt
+      born
+      livesIn
+      isFrom
+      graduatedAt
     }
   }
 `;

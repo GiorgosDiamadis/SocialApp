@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 
 import { AuthContext } from "../context/auth";
@@ -7,26 +7,26 @@ import { FETCH_POSTS } from "../util/graphql";
 
 import PostCard from "../components/PostCard";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMeta,
-  Form,
-  Icon,
-  Label,
-  Container,
-  Modal,
-  Image,
-  Grid,
-  GridColumn,
-} from "semantic-ui-react";
+import { Card, Image, Grid, List, Button } from "semantic-ui-react";
 
-export default function Profile() {
+import { FETCH_USER_INFO } from "../util/graphql";
+
+export default function Profile(props) {
   const { user } = useContext(AuthContext);
+  const { profileId } = useParams();
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
+  const {
+    loading: loadingInfo,
+    data: { getUserInfo: userInfo } = {},
+  } = useQuery(FETCH_USER_INFO, {
+    variables: { ID: profileId },
+  });
 
-  const userPosts = posts.filter((f) => f.username === user.username);
+  var userPosts = {};
+
+  if (posts) {
+    userPosts = posts.filter((f) => f.username === user.username);
+  }
 
   return (
     <div>
@@ -47,9 +47,53 @@ export default function Profile() {
             <Grid.Row>
               <Grid.Column width={8}>
                 {" "}
-                <div>
-                  <h3 className="page-title">Personal details</h3>
-                </div>
+                <h3 className="page-title">Personal details</h3>
+                {loadingInfo ? (
+                  <h4>Loading...</h4>
+                ) : (
+                  <Card.Group>
+                    <Card fluid className="postCard">
+                      <Card.Content>
+                        <List>
+                          <List.Item icon="user" content={user.username} />
+                          <List.Item icon="mail" content={user.email} />
+                          <List.Item
+                            icon="calendar check outline"
+                            content={"Joined in " + userInfo.createdAt}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Born at " + userInfo.born}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Lives in " + userInfo.livesIn}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Is from " + userInfo.isFrom}
+                          />
+                          <List.Item
+                            icon="graduation cap"
+                            content={"Graduated at " + userInfo.graduatedAt}
+                          />
+                        </List>
+                      </Card.Content>
+                      {user.id === profileId ? (
+                        <Button
+                          primary
+                          onClick={() =>
+                            props.history.push(`/profile/${user.id}/editInfo`)
+                          }
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </Card>
+                  </Card.Group>
+                )}
               </Grid.Column>
               <Grid.Column width={8}>
                 <h3 className="page-title">Latest Posts</h3>
