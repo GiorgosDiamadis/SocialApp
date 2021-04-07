@@ -1,5 +1,5 @@
-import React, { useState, useContext, createRef } from "react";
-import { Menu, Sticky } from "semantic-ui-react";
+import React, { useState, useContext } from "react";
+import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 
@@ -8,7 +8,6 @@ export default function MenuBar() {
   const { user, logout } = useContext(AuthContext);
   const path = pathname === "/" ? "home" : pathname.substring(1);
   const [activeItem, setActiveItem] = useState(path);
-  const contextRef = createRef();
   const handleItemClick = (e, { name }) => setActiveItem(name);
   const dummy = () => {};
   return (

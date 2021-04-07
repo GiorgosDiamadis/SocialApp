@@ -8,8 +8,6 @@ import {
   Form,
   Icon,
   Label,
-  Container,
-  Modal,
 } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -90,7 +88,7 @@ export default function PostCard({ post, single }) {
       newCommentDiv.classList.remove("invisible");
 
       const commentCount = document.querySelector(commentCountSelector);
-      newCommentDiv.innerHTML = "You just commented: " + `"${newComment}"`;
+      newCommentDiv.innerHTML = "You just commented: " + newComment;
       commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
       const form = document.querySelector(commentFormSelector);
       form.classList.add("invisible");
@@ -111,7 +109,7 @@ export default function PostCard({ post, single }) {
   };
 
   const hasLiked = () => {
-    return post.likes.findIndex((v) => v.username === user.username) != -1;
+    return post.likes.findIndex((v) => v.username === user.username) !== -1;
   };
 
   const likePost = (event) => {
