@@ -115,7 +115,26 @@ module.exports = {
       _,
       { userId, born, livesIn, isFrom, graduatedAt }
     ) {
-      console.log(userId);
+      const user = await User.findById(userId);
+      user.born = born;
+      user.livesIn = livesIn;
+      user.isFrom = isFrom;
+      user.graduatedAt = graduatedAt;
+
+      const username = user.username;
+      const email = user.email;
+      const createdAt = user.createdAt;
+      await user.save();
+
+      return {
+        username,
+        email,
+        createdAt,
+        born,
+        livesIn,
+        isFrom,
+        graduatedAt,
+      };
     },
   },
 };

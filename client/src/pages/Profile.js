@@ -22,13 +22,6 @@ export default function Profile(props) {
     variables: { ID: profileId },
   });
 
-  var userPosts = {};
-
-  if (posts) {
-    userPosts = posts.filter((f) => f.username === user.username);
-  }
-  const date_join = moment(userInfo.createdAt);
-
   return (
     <div>
       <Card className="profile">
@@ -62,7 +55,9 @@ export default function Profile(props) {
                             icon="calendar check outline"
                             content={
                               "Joined in " +
-                              date_join.utc().format("DD/MM/YYYY")
+                              moment(userInfo.createdAt)
+                                .utc()
+                                .format("DD/MM/YYYY")
                             }
                           />
                           <List.Item
@@ -107,9 +102,9 @@ export default function Profile(props) {
                 {loading ? (
                   <h1>Loading...</h1>
                 ) : (
-                  userPosts.map((post) => (
-                    <PostCard key={post.id} post={post} />
-                  ))
+                  posts
+                    .filter((f) => f.username === user.username)
+                    .map((post) => <PostCard key={post.id} post={post} />)
                 )}
               </Grid.Column>
             </Grid.Row>

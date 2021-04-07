@@ -23,7 +23,7 @@ export default function EditInfo(props) {
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     userId: profileId,
-    born: born != "Unknown" ? born.utc().format("DD/MM/YYYY") : "Unknown",
+    born: "Unknown", //born != "Unknown" ? born.utc().format("DD/MM/YYYY") : "Unknown",
     livesIn: livesIn,
     isFrom: isFrom,
     graduatedAt: graduatedAt,
@@ -76,7 +76,10 @@ export default function EditInfo(props) {
             <Form.Input
               label="Born at"
               placeholder={
-                values.born === "Unknown" ? "DD/MM/YYYY" : values.born
+                "Unknown"
+                // moment(values.born).utc().format("DD/MM/YYYY") === "Unknown"
+                //   ? "DD/MM/YYYY"
+                //   : values.born
               }
               name="born"
               icon="calendar"
