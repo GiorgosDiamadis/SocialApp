@@ -17,7 +17,11 @@ export default function Post() {
           <Grid.Column width={4}></Grid.Column>
 
           <Grid.Column width={8}>
-            {loading ? <h1>loading</h1> : <PostCard post={data.getPost} />}
+            {loading ? (
+              <h1>loading</h1>
+            ) : (
+              <PostCard post={data.getPost} single={true} />
+            )}
           </Grid.Column>
           <Grid.Column width={4}></Grid.Column>
         </Grid.Row>

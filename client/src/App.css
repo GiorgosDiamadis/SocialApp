@@ -91,3 +91,6 @@
   border-radius: 1.3em;
   box-shadow: 0 1px 6px 0 #d4d4d5;
 }
+.ui.fluid.card.single {
+  margin-top: 30px;
+}

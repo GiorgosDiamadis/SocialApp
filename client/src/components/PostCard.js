@@ -36,7 +36,7 @@ function seeLikesReducer(state, action) {
   }
 }
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, single }) {
   //==========Variables========================
   const ID = post.id;
   const { user } = useContext(AuthContext);
@@ -138,7 +138,7 @@ export default function PostCard({ post }) {
   //=============================================================
   return (
     <Card.Group>
-      <Card fluid className="postCard">
+      <Card fluid className={single ? "single" : ""}>
         <Card.Content>
           {user ? (
             user.username === post.username ? (

@@ -33,6 +33,8 @@ module.exports = gql`
   }
 
   type UserInfo {
+    username: String!
+    email: String!
     createdAt: String!
     born: String!
     livesIn: String!
@@ -66,5 +68,12 @@ module.exports = gql`
     makeComment(postId: ID!, body: String!): Post
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
+    updatePersonalInfo(
+      userId: ID!
+      born: String!
+      livesIn: String!
+      isFrom: String!
+      graduatedAt: String!
+    ): UserInfo!
   }
 `;

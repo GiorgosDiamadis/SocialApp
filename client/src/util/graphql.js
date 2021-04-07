@@ -182,6 +182,34 @@ export const DELETE_COMMENT = gql`
 export const FETCH_USER_INFO = gql`
   query getUserInfo($ID: ID!) {
     getUserInfo(userId: $ID) {
+      username
+      email
+      createdAt
+      born
+      livesIn
+      isFrom
+      graduatedAt
+    }
+  }
+`;
+
+export const UPDATE_PERSONAL_INFO = gql`
+  mutation updatePersonalInfo(
+    $userId: ID!
+    $born: String!
+    $livesIn: String!
+    $isFrom: String!
+    $graduatedAt: String!
+  ) {
+    updatePersonalInfo(
+      userId: $userId
+      born: $born
+      livesIn: $livesIn
+      isFrom: $isFrom
+      graduatedAt: $graduatedAt
+    ) {
+      username
+      email
       createdAt
       born
       livesIn

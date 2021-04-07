@@ -6,7 +6,7 @@ import { AuthContext } from "../context/auth";
 import { FETCH_POSTS } from "../util/graphql";
 
 import PostCard from "../components/PostCard";
-
+import moment from "moment";
 import { Card, Image, Grid, List, Button } from "semantic-ui-react";
 
 import { FETCH_USER_INFO } from "../util/graphql";
@@ -27,6 +27,7 @@ export default function Profile(props) {
   if (posts) {
     userPosts = posts.filter((f) => f.username === user.username);
   }
+  const date_join = moment(userInfo.createdAt);
 
   return (
     <div>
@@ -55,11 +56,14 @@ export default function Profile(props) {
                     <Card fluid className="postCard">
                       <Card.Content>
                         <List>
-                          <List.Item icon="user" content={user.username} />
-                          <List.Item icon="mail" content={user.email} />
+                          <List.Item icon="user" content={userInfo.username} />
+                          <List.Item icon="mail" content={userInfo.email} />
                           <List.Item
                             icon="calendar check outline"
-                            content={"Joined in " + userInfo.createdAt}
+                            content={
+                              "Joined in " +
+                              date_join.utc().format("DD/MM/YYYY")
+                            }
                           />
                           <List.Item
                             icon="marker"
@@ -83,7 +87,10 @@ export default function Profile(props) {
                         <Button
                           primary
                           onClick={() =>
-                            props.history.push(`/profile/${user.id}/editInfo`)
+                            props.history.push({
+                              pathname: `/profile/${user.id}/editInfo`,
+                              state: { userInfo, profileId },
+                            })
                           }
                         >
                           Edit

@@ -23,12 +23,16 @@ module.exports = {
   Query: {
     async getUserInfo(_, { userId }, context, info) {
       const user = await User.findById(userId);
+      const username = user.username;
+      const email = user.email;
       const createdAt = user.createdAt;
       const born = user.born ? user.born : "Unknown";
       const livesIn = user.livesIn ? user.livesIn : "Unknown";
       const isFrom = user.isFrom ? user.isFrom : "Unknown";
       const graduatedAt = user.graduatedAt ? user.graduatedAt : "Unknown";
       return {
+        username,
+        email,
         createdAt,
         born,
         livesIn,
@@ -106,6 +110,12 @@ module.exports = {
         id: user._id,
         token,
       };
+    },
+    async updatePersonalInfo(
+      _,
+      { userId, born, livesIn, isFrom, graduatedAt }
+    ) {
+      console.log(userId);
     },
   },
 };
