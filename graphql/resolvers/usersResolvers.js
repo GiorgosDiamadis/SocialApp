@@ -30,6 +30,7 @@ module.exports = {
       const livesIn = user.livesIn ? user.livesIn : "Unknown";
       const isFrom = user.isFrom ? user.isFrom : "Unknown";
       const graduatedAt = user.graduatedAt ? user.graduatedAt : "Unknown";
+      console.log("fetching");
       return {
         username,
         email,
@@ -115,26 +116,37 @@ module.exports = {
       _,
       { userId, born, livesIn, isFrom, graduatedAt }
     ) {
-      const user = await User.findById(userId);
-      user.born = born;
-      user.livesIn = livesIn;
-      user.isFrom = isFrom;
-      user.graduatedAt = graduatedAt;
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          born: born,
+          livesIn: livesIn,
+          isFrom: isFrom,
+          graduatedAt: graduatedAt,
+        },
+        { useFindAndModify: false }
+      );
 
-      const username = user.username;
-      const email = user.email;
-      const createdAt = user.createdAt;
       await user.save();
-
-      return {
+      const userInfo = (({
         username,
         email,
+        born,
+        livesIn,
+        isFrom,
         createdAt,
+        graduatedAt,
+      }) => ({
+        username,
+        email,
         born,
         livesIn,
         isFrom,
         graduatedAt,
-      };
+        createdAt,
+      }))(user);
+
+      return userInfo;
     },
   },
 };

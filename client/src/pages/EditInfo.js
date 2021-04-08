@@ -14,7 +14,7 @@ export default function EditInfo(props) {
     livesIn,
     isFrom,
     graduatedAt,
-  } = props.location.state.userInfo;
+  } = props.location.state.profileInfo;
 
   const { profileId } = props.location.state;
   const { user } = useContext(AuthContext);
@@ -23,16 +23,14 @@ export default function EditInfo(props) {
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     userId: profileId,
-    born: "Unknown", //born != "Unknown" ? born.utc().format("DD/MM/YYYY") : "Unknown",
+    born: born,
     livesIn: livesIn,
     isFrom: isFrom,
     graduatedAt: graduatedAt,
   });
 
-  const [update] = useMutation(UPDATE_PERSONAL_INFO, {
-    update(result) {
-      console.log(result);
-    },
+  const [updateInfo] = useMutation(UPDATE_PERSONAL_INFO, {
+    update() {},
     variables: values,
   });
 
@@ -42,7 +40,7 @@ export default function EditInfo(props) {
   };
   const onSubmit = (event) => {
     event.preventDefault();
-    update();
+    updateInfo();
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 
 import { AuthContext } from "../context/auth";
@@ -14,10 +14,12 @@ import { FETCH_USER_INFO } from "../util/graphql";
 export default function Profile(props) {
   const { user } = useContext(AuthContext);
   const { profileId } = useParams();
+
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
+
   const {
     loading: loadingInfo,
-    data: { getUserInfo: userInfo } = {},
+    data: { getUserInfo: profileInfo } = {},
   } = useQuery(FETCH_USER_INFO, {
     variables: { ID: profileId },
   });
@@ -33,7 +35,11 @@ export default function Profile(props) {
         />
         <Card.Content>
           <div>
-            <h2 className="page-title">{user.username}</h2>
+            {loadingInfo ? (
+              <h4>Loading...</h4>
+            ) : (
+              <h2 className="page-title">{profileInfo.username}</h2>
+            )}
           </div>
         </Card.Content>
         <Card.Content>
@@ -49,32 +55,35 @@ export default function Profile(props) {
                     <Card fluid className="postCard">
                       <Card.Content>
                         <List>
-                          <List.Item icon="user" content={userInfo.username} />
-                          <List.Item icon="mail" content={userInfo.email} />
+                          <List.Item
+                            icon="user"
+                            content={profileInfo.username}
+                          />
+                          <List.Item icon="mail" content={profileInfo.email} />
                           <List.Item
                             icon="calendar check outline"
                             content={
                               "Joined in " +
-                              moment(userInfo.createdAt)
+                              moment(profileInfo.createdAt)
                                 .utc()
                                 .format("DD/MM/YYYY")
                             }
                           />
                           <List.Item
                             icon="marker"
-                            content={"Born at " + userInfo.born}
+                            content={"Born at " + profileInfo.born}
                           />
                           <List.Item
                             icon="marker"
-                            content={"Lives in " + userInfo.livesIn}
+                            content={"Lives in " + profileInfo.livesIn}
                           />
                           <List.Item
                             icon="marker"
-                            content={"Is from " + userInfo.isFrom}
+                            content={"Is from " + profileInfo.isFrom}
                           />
                           <List.Item
                             icon="graduation cap"
-                            content={"Graduated at " + userInfo.graduatedAt}
+                            content={"Graduated at " + profileInfo.graduatedAt}
                           />
                         </List>
                       </Card.Content>
@@ -84,7 +93,7 @@ export default function Profile(props) {
                           onClick={() =>
                             props.history.push({
                               pathname: `/profile/${user.id}/editInfo`,
-                              state: { userInfo, profileId },
+                              state: { profileInfo, profileId },
                             })
                           }
                         >
