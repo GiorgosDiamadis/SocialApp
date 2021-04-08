@@ -29,11 +29,13 @@ module.exports = {
         throw new UserInputError("Body can't be empty", { errors });
       }
       try {
+        const post_user = {};
+        post_user.id = user.id;
+        post_user.username = user.username;
         const post = new Post({
           body,
-          user: user.id,
+          user: post_user,
           createdAt: new Date().toISOString(),
-          username: user.username,
         });
         const newPost = post.save();
 

@@ -17,7 +17,7 @@ module.exports = gql`
   type Post {
     id: ID!
     body: String!
-    username: String!
+    user: User!
     createdAt: String!
     comments: [Comment]!
     likes: [Like]!

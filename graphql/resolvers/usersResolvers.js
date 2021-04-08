@@ -26,10 +26,10 @@ module.exports = {
       const username = user.username;
       const email = user.email;
       const createdAt = user.createdAt;
-      const born = user.born ? user.born : "Unknown";
-      const livesIn = user.livesIn ? user.livesIn : "Unknown";
-      const isFrom = user.isFrom ? user.isFrom : "Unknown";
-      const graduatedAt = user.graduatedAt ? user.graduatedAt : "Unknown";
+      const born = user.born ? user.born : "";
+      const livesIn = user.livesIn ? user.livesIn : "";
+      const isFrom = user.isFrom ? user.isFrom : "";
+      const graduatedAt = user.graduatedAt ? user.graduatedAt : "";
       console.log("fetching");
       return {
         username,
@@ -127,6 +127,12 @@ module.exports = {
         { useFindAndModify: false }
       );
 
+      errors = {};
+      const dateRegex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+      if (!born.match(dateRegex)) {
+        errors.born = "Wrong date format, date should be in DD/MM/YYYY format!";
+        throw new UserInputError("Errors", { errors });
+      }
       await user.save();
       const userInfo = (({
         username,

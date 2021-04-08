@@ -34,7 +34,7 @@ function seeLikesReducer(state, action) {
   }
 }
 
-export default function PostCard({ post, single }) {
+export default function PostCard({ props, post, single }) {
   //==========Variables========================
   const ID = post.id;
   const { user } = useContext(AuthContext);
@@ -148,7 +148,13 @@ export default function PostCard({ post, single }) {
             ""
           )}
 
-          <Card.Header>{post.username}</Card.Header>
+          <Card.Header
+            onClick={() => {
+              props.history.push(`/profile/${2}`);
+            }}
+          >
+            {post.user.username}
+          </Card.Header>
           <CardMeta as={Link} to={"/post/" + post.id}>
             {moment(post.createdAt.replace("T", " ")).fromNow()}
           </CardMeta>

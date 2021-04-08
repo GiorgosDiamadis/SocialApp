@@ -6,7 +6,10 @@ export const FETCH_POSTS = gql`
       id
       body
       createdAt
-      username
+      user {
+        username
+        id
+      }
       likeCount
       likes {
         id
@@ -28,7 +31,10 @@ export const FETCH_POST = gql`
       id
       body
       createdAt
-      username
+      user {
+        username
+        id
+      }
       likeCount
       likes {
         id
@@ -49,7 +55,10 @@ export const MAKE_POST = gql`
     createPost(body: $body) {
       id
       body
-      username
+      user {
+        username
+        id
+      }
       createdAt
       comments {
         id
@@ -92,7 +101,6 @@ export const REGISTER_USER = gql`
       email
       token
       username
-      createdAt
     }
   }
 `;

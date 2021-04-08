@@ -14,6 +14,8 @@ import { FETCH_USER_INFO } from "../util/graphql";
 export default function Profile(props) {
   const { user } = useContext(AuthContext);
   const { profileId } = useParams();
+  console.log(user);
+  console.log(profileId);
 
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
 
@@ -22,6 +24,7 @@ export default function Profile(props) {
     data: { getUserInfo: profileInfo } = {},
   } = useQuery(FETCH_USER_INFO, {
     variables: { ID: profileId },
+    fetchPolicy: "cache-and-network",
   });
 
   return (

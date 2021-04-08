@@ -30,19 +30,23 @@ export default function EditInfo(props) {
   });
 
   const [updateInfo] = useMutation(UPDATE_PERSONAL_INFO, {
-    update() {},
+    update() {
+      props.history.push(`/profile/${profileId}`);
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
     variables: values,
   });
 
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
-    console.log(values);
   };
   const onSubmit = (event) => {
     event.preventDefault();
     updateInfo();
   };
-
+  console.log(props);
   return (
     <Card.Group>
       <Card fluid className="single ">
@@ -73,15 +77,10 @@ export default function EditInfo(props) {
             />
             <Form.Input
               label="Born at"
-              placeholder={
-                "Unknown"
-                // moment(values.born).utc().format("DD/MM/YYYY") === "Unknown"
-                //   ? "DD/MM/YYYY"
-                //   : values.born
-              }
+              placeholder={values.born}
               name="born"
               icon="calendar"
-              format="DD/MM/YYYY"
+              error={errors.born ? true : false}
               onChange={onChange}
             />
             <Form.Input
@@ -105,6 +104,7 @@ export default function EditInfo(props) {
               name="graduatedAt"
               onChange={onChange}
             />
+
             {user.id === profileId ? (
               <Button primary type="submit">
                 Update
@@ -113,6 +113,15 @@ export default function EditInfo(props) {
               ""
             )}
           </Form>
+          {Object.keys(errors).length > 0 && (
+            <div className="ui error message">
+              <ul className="list">
+                {Object.values(errors).map((v) => (
+                  <li key={v}> {v}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </Card.Content>
       </Card>
     </Card.Group>
