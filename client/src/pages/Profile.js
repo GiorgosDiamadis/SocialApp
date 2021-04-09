@@ -38,9 +38,21 @@ export default function Profile(props) {
       const add_remove_friend = document.querySelector(
         ".page-title.add-remove-friend"
       );
+
+      isFriend()
+        ? (add_remove_friend.innerHTML = "Remove Friend")
+        : (add_remove_friend.innerHTML = "Add Friend");
     },
     variables: { profileId },
   });
+
+  const isFriend = () => {
+    return (
+      friends.friends.findIndex(
+        (fr) => fr.username === profileInfo.username
+      ) !== -1
+    );
+  };
 
   return (
     <div>
@@ -63,10 +75,16 @@ export default function Profile(props) {
                   onClick={() => addFriend()}
                   className="page-title add-remove-friend"
                 >
-                  {loadingFriends ? (
-                    <h4>Loading...</h4>
+                  {user.id !== profileId ? (
+                    loadingFriends ? (
+                      <h4>Loading...</h4>
+                    ) : isFriend() ? (
+                      "Remove Friend"
+                    ) : (
+                      "Add Friend"
+                    )
                   ) : (
-                    <h1>friends.friends[0].username</h1>
+                    ""
                   )}
                 </a>
               </div>
