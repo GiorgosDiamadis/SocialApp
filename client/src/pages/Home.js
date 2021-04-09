@@ -47,9 +47,9 @@ function Home(props) {
     <div>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={4}>Profile information</Grid.Column>
+          <Grid.Column width={5}> </Grid.Column>
 
-          <Grid.Column width={8}>
+          <Grid.Column width={6}>
             <Form onSubmit={onSubmit}>
               <Form.TextArea
                 placeholder="What are you thinking?"
@@ -82,7 +82,7 @@ function Home(props) {
               ))
             )}
           </Grid.Column>
-          <Grid.Column width={4}></Grid.Column>
+          <Grid.Column width={2}></Grid.Column>
         </Grid.Row>
       </Grid>
     </div>

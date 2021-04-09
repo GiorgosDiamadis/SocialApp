@@ -14,8 +14,6 @@ import { FETCH_USER_INFO } from "../util/graphql";
 export default function Profile(props) {
   const { user } = useContext(AuthContext);
   const { profileId } = useParams();
-  console.log(user);
-  console.log(profileId);
 
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
 
@@ -26,6 +24,9 @@ export default function Profile(props) {
     variables: { ID: profileId },
     fetchPolicy: "cache-and-network",
   });
+
+  console.log(profileInfo);
+  console.log(posts);
 
   return (
     <div>
@@ -111,11 +112,13 @@ export default function Profile(props) {
               </Grid.Column>
               <Grid.Column width={8}>
                 <h3 className="page-title">Latest Posts</h3>
-                {loading ? (
+                {loadingInfo || loading ? (
                   <h1>Loading...</h1>
                 ) : (
                   posts
-                    .filter((f) => f.username === user.username)
+                    .filter(
+                      (post) => post.user.username === profileInfo.username
+                    )
                     .map((post) => <PostCard key={post.id} post={post} />)
                 )}
               </Grid.Column>

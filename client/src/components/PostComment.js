@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 
-import { Comment, Container } from "semantic-ui-react";
+import { Button, Comment, Container } from "semantic-ui-react";
 import moment from "moment";
 import { AuthContext } from "../context/auth";
 import { useMutation } from "@apollo/react-hooks";
 import { DELETE_COMMENT } from "../util/graphql";
 
-export default function PostComment({ comment, ID }) {
+export default function PostComment({ comment, ID, profileId, props }) {
   const { user } = useContext(AuthContext);
 
   const [values, setValues] = useState({
@@ -24,7 +24,12 @@ export default function PostComment({ comment, ID }) {
   return (
     <Comment.Group>
       <Comment.Content>
-        <Comment.Author as="a">{comment.username}</Comment.Author>
+        <Comment.Author
+          className="comment-author"
+          onClick={() => props.history.push(`/profile/${profileId}`)}
+        >
+          {comment.username}
+        </Comment.Author>
         <Comment.Metadata className="text-muted">
           <div>{moment(comment.createdAt.replace("T", " ")).fromNow()}</div>
         </Comment.Metadata>
@@ -33,7 +38,11 @@ export default function PostComment({ comment, ID }) {
         </Comment.Text>
         <Comment.Actions>
           {comment.username === user.username && (
-            <Comment.Action onClick={deleteComment}>Delete</Comment.Action>
+            <Comment.Action onClick={deleteComment}>
+              <Button size="mini" className="delete-comment-btn" color="red">
+                Delete
+              </Button>{" "}
+            </Comment.Action>
           )}
         </Comment.Actions>
       </Comment.Content>

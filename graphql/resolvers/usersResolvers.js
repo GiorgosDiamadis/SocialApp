@@ -30,7 +30,7 @@ module.exports = {
       const livesIn = user.livesIn ? user.livesIn : "";
       const isFrom = user.isFrom ? user.isFrom : "";
       const graduatedAt = user.graduatedAt ? user.graduatedAt : "";
-      console.log("fetching");
+
       return {
         username,
         email,

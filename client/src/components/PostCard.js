@@ -150,10 +150,11 @@ export default function PostCard({ props, post, single }) {
 
           <Card.Header
             onClick={() => {
-              props.history.push(`/profile/${2}`);
+              props.history.push(`/profile/${post.user.id}`);
             }}
+            className="profile-link"
           >
-            {post.user.username}
+            <a href="">{post.user.username}</a>
           </Card.Header>
           <CardMeta as={Link} to={"/post/" + post.id}>
             {moment(post.createdAt.replace("T", " ")).fromNow()}
@@ -230,7 +231,13 @@ export default function PostCard({ props, post, single }) {
         </CardContent>
         <div className={`commentSection ${idClass} invisible`}>
           {post.comments.map((comment) => (
-            <PostComment key={comment.id} comment={comment} ID={ID} />
+            <PostComment
+              key={comment.id}
+              comment={comment}
+              ID={ID}
+              profileId={post.user.id}
+              props={props}
+            />
           ))}
         </div>
         <div className={`likeSection ${idClass} invisible`}>

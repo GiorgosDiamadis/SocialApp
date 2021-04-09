@@ -120,7 +120,10 @@ export const LIKE_POST = gql`
     likePost(postId: $ID) {
       id
       body
-      username
+      user {
+        username
+        id
+      }
       createdAt
       comments {
         id
@@ -144,7 +147,10 @@ export const COMMENT_POST = gql`
     makeComment(postId: $ID, body: $postComment) {
       id
       body
-      username
+      user {
+        username
+        id
+      }
       createdAt
       comments {
         id
@@ -168,7 +174,10 @@ export const DELETE_COMMENT = gql`
     deleteComment(postId: $ID, commentId: $commentID) {
       id
       body
-      username
+      user {
+        username
+        id
+      }
       createdAt
       comments {
         id

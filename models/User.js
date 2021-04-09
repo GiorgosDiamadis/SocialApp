@@ -1,4 +1,4 @@
-const { model, Schema } = require("mongoose");
+const { model, Schema, Mongoose } = require("mongoose");
 
 const userSchema = new Schema({
   username: String,
@@ -9,6 +9,12 @@ const userSchema = new Schema({
   livesIn: String,
   isFrom: String,
   graduatedAt: String,
+  friends: [
+    {
+      username: String,
+      id: { type: Schema.Types.ObjectId },
+    },
+  ],
 });
 
 module.exports = model("User", userSchema);
