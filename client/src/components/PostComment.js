@@ -9,7 +9,7 @@ import { DELETE_COMMENT } from "../util/graphql";
 export default function PostComment({ comment, ID, profileId, props }) {
   const { user } = useContext(AuthContext);
 
-  const [values, setValues] = useState({
+  const [values] = useState({
     ID: ID,
     commentID: comment.id,
   });

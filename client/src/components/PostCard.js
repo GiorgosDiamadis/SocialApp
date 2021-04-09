@@ -154,7 +154,7 @@ export default function PostCard({ props, post, single }) {
             }}
             className="profile-link"
           >
-            <a href="">{post.user.username}</a>
+            <a>{post.user.username}</a>
           </Card.Header>
           <CardMeta as={Link} to={"/post/" + post.id}>
             {moment(post.createdAt.replace("T", " ")).fromNow()}

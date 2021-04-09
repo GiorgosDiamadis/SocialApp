@@ -20,6 +20,7 @@ function Login(props) {
     update(proxy, { data: { loginUser: userData } }) {
       context.login(userData);
       props.history.push("/");
+      console.log(userData);
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);

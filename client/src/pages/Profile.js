@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
 import { AuthContext } from "../context/auth";
 import { FETCH_POSTS } from "../util/graphql";
@@ -9,7 +9,7 @@ import PostCard from "../components/PostCard";
 import moment from "moment";
 import { Card, Image, Grid, List, Button } from "semantic-ui-react";
 
-import { FETCH_USER_INFO } from "../util/graphql";
+import { FETCH_USER_INFO, ADD_FRIEND, GET_FRIENDS } from "../util/graphql";
 
 export default function Profile(props) {
   const { user } = useContext(AuthContext);
@@ -25,8 +25,22 @@ export default function Profile(props) {
     fetchPolicy: "cache-and-network",
   });
 
-  console.log(profileInfo);
-  console.log(posts);
+  const {
+    loading: loadingFriends,
+    data: { getFriends: friends } = {},
+  } = useQuery(GET_FRIENDS, {
+    update() {},
+    variables: { ID: user.id },
+  });
+
+  const [addFriend] = useMutation(ADD_FRIEND, {
+    update(proxy, result) {
+      const add_remove_friend = document.querySelector(
+        ".page-title.add-remove-friend"
+      );
+    },
+    variables: { profileId },
+  });
 
   return (
     <div>
@@ -37,12 +51,25 @@ export default function Profile(props) {
           circular
           centered
         />
+        <div></div>
         <Card.Content>
           <div>
             {loadingInfo ? (
               <h4>Loading...</h4>
             ) : (
-              <h2 className="page-title">{profileInfo.username}</h2>
+              <div>
+                <h2 className="page-title">{profileInfo.username}</h2>
+                <a
+                  onClick={() => addFriend()}
+                  className="page-title add-remove-friend"
+                >
+                  {loadingFriends ? (
+                    <h4>Loading...</h4>
+                  ) : (
+                    <h1>friends.friends[0].username</h1>
+                  )}
+                </a>
+              </div>
             )}
           </div>
         </Card.Content>

@@ -206,6 +206,10 @@ export const FETCH_USER_INFO = gql`
       livesIn
       isFrom
       graduatedAt
+      friends {
+        username
+        id
+      }
     }
   }
 `;
@@ -232,6 +236,28 @@ export const UPDATE_PERSONAL_INFO = gql`
       livesIn
       isFrom
       graduatedAt
+    }
+  }
+`;
+
+export const ADD_FRIEND = gql`
+  mutation addFriend($profileId: ID!) {
+    addFriend(friendId: $profileId) {
+      frinds {
+        username
+        id
+      }
+    }
+  }
+`;
+
+export const GET_FRIENDS = gql`
+  query getFriends($ID: ID!) {
+    getFriends(userId: $ID) {
+      friends {
+        username
+        id
+      }
     }
   }
 `;

@@ -1,6 +1,8 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const chechAuth = require("../../utils/check-auth");
+
 const {
   registerInputValidation,
   loginInputValidation,
@@ -41,6 +43,11 @@ module.exports = {
         graduatedAt,
       };
     },
+    async getFriends(_, { userId }, context, info) {
+      chechAuth(context);
+      const user = await User.findById(userId);
+      return user;
+    },
   },
   Mutation: {
     async registerUser(
@@ -73,6 +80,12 @@ module.exports = {
       const createdAt = new Date().toISOString();
 
       const newUser = new User({ username, password, email, createdAt });
+
+      newUser.born = "";
+      newUser.livesIn = "";
+      newUser.isFrom = "";
+      newUser.graduatedAt = "";
+
       const res = await newUser.save();
 
       const token = generateToken(res);
@@ -153,6 +166,27 @@ module.exports = {
       }))(user);
 
       return userInfo;
+    },
+    async addFriend(_, { friendId }, context) {
+      const user = chechAuth(context);
+      const user_adds = await User.findById(user.id);
+      const new_friend = await User.findById(friendId);
+
+      const friend_index = user_adds.friends.findIndex(
+        (friend) => friend.username === new_friend.username
+      );
+
+      if (friend_index === -1) {
+        user_adds.friends.push({
+          username: new_friend.username,
+          id: new_friend.id,
+        });
+      } else {
+        user_adds.friends.splice(friend_index, 1);
+      }
+
+      await user_adds.save();
+      return user_adds;
     },
   },
 };

@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Divider, Form, Button, Grid } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
-import { AuthContext } from "../context/auth";
 import PostCard from "../components/PostCard";
 const { FETCH_POSTS, MAKE_POST } = require("../util/graphql");
 
