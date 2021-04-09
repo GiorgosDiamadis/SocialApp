@@ -243,7 +243,7 @@ export const UPDATE_PERSONAL_INFO = gql`
 export const ADD_FRIEND = gql`
   mutation addFriend($profileId: ID!) {
     addFriend(friendId: $profileId) {
-      frinds {
+      friends {
         username
         id
       }
