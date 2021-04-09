@@ -25,23 +25,8 @@ module.exports = {
   Query: {
     async getUserInfo(_, { userId }, context, info) {
       const user = await User.findById(userId);
-      const username = user.username;
-      const email = user.email;
-      const createdAt = user.createdAt;
-      const born = user.born ? user.born : "";
-      const livesIn = user.livesIn ? user.livesIn : "";
-      const isFrom = user.isFrom ? user.isFrom : "";
-      const graduatedAt = user.graduatedAt ? user.graduatedAt : "";
 
-      return {
-        username,
-        email,
-        createdAt,
-        born,
-        livesIn,
-        isFrom,
-        graduatedAt,
-      };
+      return user;
     },
     async getFriends(_, { userId }, context, info) {
       chechAuth(context);
@@ -129,6 +114,13 @@ module.exports = {
       _,
       { userId, born, livesIn, isFrom, graduatedAt }
     ) {
+      errors = {};
+      const dateRegex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+      if (!born.match(dateRegex)) {
+        errors.born = "Wrong date format, date should be in DD/MM/YYYY format!";
+        throw new UserInputError("Errors", { errors });
+      }
+
       const user = await User.findByIdAndUpdate(
         userId,
         {
@@ -140,32 +132,9 @@ module.exports = {
         { useFindAndModify: false }
       );
 
-      errors = {};
-      const dateRegex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-      if (!born.match(dateRegex)) {
-        errors.born = "Wrong date format, date should be in DD/MM/YYYY format!";
-        throw new UserInputError("Errors", { errors });
-      }
       await user.save();
-      const userInfo = (({
-        username,
-        email,
-        born,
-        livesIn,
-        isFrom,
-        createdAt,
-        graduatedAt,
-      }) => ({
-        username,
-        email,
-        born,
-        livesIn,
-        isFrom,
-        graduatedAt,
-        createdAt,
-      }))(user);
 
-      return userInfo;
+      return user;
     },
     async addFriend(_, { friendId }, context) {
       const user = chechAuth(context);
