@@ -2,24 +2,32 @@ const { AuthenticationError, UserInputError } = require("apollo-server-errors");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 const Comment = require("../../models/Comment");
-const { POPULATE_COMMENT, POPULATE_USER } = require("../populates");
+const Like = require("../../models/Like");
+
+const {
+  POPULATE_COMMENT,
+  POPULATE_USER,
+  POPULATE_LIKES,
+} = require("../populates");
 
 const chechAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
     async getPosts() {
-      const posts = Post.find({})
+      const posts = await Post.find({})
         .populate(POPULATE_USER)
         .populate(POPULATE_COMMENT)
+        .populate(POPULATE_LIKES)
         .sort({ createdAt: -1 });
+
       return posts;
     },
     async getPost(parent, { postId }) {
       try {
         const post = await Post.findById(postId)
           .populate(POPULATE_USER)
-          .populate(POPULATE_COMMENT);
-
+          .populate(POPULATE_COMMENT)
+          .populate(POPULATE_LIKES);
         if (post) {
           return post;
         } else {
@@ -62,6 +70,8 @@ module.exports = {
         if (post.user.username === user.username) {
           await post.delete();
           await Comment.deleteMany({ _id: { $in: post.comments } });
+          await Like.deleteMany({ _id: { $in: post.likes } });
+
           return "Post deleted";
         } else {
           throw new AuthenticationError("Action not allowed!");
@@ -71,20 +81,26 @@ module.exports = {
       }
     },
     async likePost(_, { postId }, context) {
-      const user = chechAuth(context);
+      const authUser = chechAuth(context);
 
-      const post = await Post.findById(postId).populate(POPULATE_USER);
+      const post = await Post.findById(postId)
+        .populate(POPULATE_USER)
+        .populate(POPULATE_LIKES);
       if (post) {
         const user_like_idx = post.likes.findIndex(
-          (x) => x.user.username === user.username
+          (x) => x.user.username === authUser.username
         );
 
+        const user = await User.findById(authUser.id);
         if (user_like_idx === -1) {
-          post.likes.push({
-            username: user.username,
+          const like = new Like({
+            user,
             createdAt: new Date().toISOString(),
           });
+          await like.save();
+          post.likes.push(like);
         } else {
+          await Like.findByIdAndDelete(post.likes[user_like_idx].id);
           post.likes.splice(user_like_idx, 1);
         }
         await post.save();
