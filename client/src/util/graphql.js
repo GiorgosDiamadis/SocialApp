@@ -19,7 +19,10 @@ export const FETCH_POSTS = gql`
       comments {
         id
         body
-        username
+        user {
+          username
+          id
+        }
         createdAt
       }
     }
@@ -44,7 +47,10 @@ export const FETCH_POST = gql`
       comments {
         id
         body
-        username
+        user {
+          username
+          id
+        }
         createdAt
       }
     }
@@ -63,7 +69,10 @@ export const MAKE_POST = gql`
       comments {
         id
         body
-        username
+        user {
+          username
+          id
+        }
         createdAt
       }
       likes {
@@ -128,7 +137,10 @@ export const LIKE_POST = gql`
       comments {
         id
         body
-        username
+        user {
+          username
+          id
+        }
         createdAt
       }
       likes {
@@ -155,7 +167,10 @@ export const COMMENT_POST = gql`
       comments {
         id
         body
-        username
+        user {
+          username
+          id
+        }
         createdAt
       }
       likes {
@@ -182,7 +197,10 @@ export const DELETE_COMMENT = gql`
       comments {
         id
         body
-        username
+        user {
+          username
+          id
+        }
         createdAt
       }
       likes {

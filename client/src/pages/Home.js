@@ -77,7 +77,12 @@ function Home(props) {
               <h1>Loading...</h1>
             ) : (
               posts.map((post) => (
-                <PostCard props={props} key={post.id} post={post} />
+                <PostCard
+                  props={props}
+                  key={post.id}
+                  post={post}
+                  single={false}
+                />
               ))
             )}
           </Grid.Column>

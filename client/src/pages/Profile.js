@@ -47,6 +47,8 @@ export default function Profile(props) {
     );
   };
 
+  console.log(profileInfo);
+
   return (
     <div>
       <Grid>
@@ -70,7 +72,7 @@ export default function Profile(props) {
             ) : (
               <div>
                 <Card.Group>
-                  <Card fluid className="postCard">
+                  <Card fluid>
                     <Image
                       src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
                       size="medium"
@@ -145,7 +147,11 @@ export default function Profile(props) {
                 {loadingFriends ? (
                   <h1>Loading...</h1>
                 ) : (
-                  <ProfileCard key={"profile"} friends={profileInfo.friends} />
+                  <ProfileCard
+                    key={"profile"}
+                    friends={profileInfo.friends}
+                    props={props}
+                  />
                 )}
               </div>
             )}

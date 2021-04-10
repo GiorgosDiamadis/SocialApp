@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid } from "semantic-ui-react";
 import { FETCH_POST } from "../util/graphql";
-export default function Post() {
+export default function Post(props) {
   const { postId } = useParams();
   const { loading, data } = useQuery(FETCH_POST, {
     variables: { postId },
@@ -14,16 +14,16 @@ export default function Post() {
     <div>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={4}></Grid.Column>
+          <Grid.Column width={5}></Grid.Column>
 
-          <Grid.Column width={8}>
+          <Grid.Column width={6}>
             {loading ? (
               <h1>loading</h1>
             ) : (
-              <PostCard post={data.getPost} single={true} />
+              <PostCard post={data.getPost} single={true} props={props} />
             )}
           </Grid.Column>
-          <Grid.Column width={4}></Grid.Column>
+          <Grid.Column width={5}></Grid.Column>
         </Grid.Row>
       </Grid>
     </div>

@@ -6,7 +6,7 @@ import { AuthContext } from "../context/auth";
 import { useMutation } from "@apollo/react-hooks";
 import { DELETE_COMMENT } from "../util/graphql";
 
-export default function PostComment({ comment, ID, profileId, props }) {
+export default function PostComment({ comment, ID, props }) {
   const { user } = useContext(AuthContext);
 
   const [values] = useState({
@@ -26,9 +26,9 @@ export default function PostComment({ comment, ID, profileId, props }) {
       <Comment.Content>
         <Comment.Author
           className="comment-author"
-          onClick={() => props.history.push(`/profile/${profileId}`)}
+          onClick={() => props.history.push(`/profile/${comment.user.id}`)}
         >
-          {comment.username}
+          {comment.user.username}
         </Comment.Author>
         <Comment.Metadata className="text-muted">
           <div>{moment(comment.createdAt.replace("T", " ")).fromNow()}</div>
@@ -37,7 +37,7 @@ export default function PostComment({ comment, ID, profileId, props }) {
           <Container>{comment.body}</Container>
         </Comment.Text>
         <Comment.Actions>
-          {comment.username === user.username && (
+          {comment.user.username === user.username && (
             <Comment.Action onClick={deleteComment}>
               <Button size="mini" className="delete-comment-btn" color="red">
                 Delete

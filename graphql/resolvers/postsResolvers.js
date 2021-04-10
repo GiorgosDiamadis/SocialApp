@@ -1,22 +1,25 @@
 const { AuthenticationError, UserInputError } = require("apollo-server-errors");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
+const Comment = require("../../models/Comment");
+const { POPULATE_COMMENT, POPULATE_USER } = require("../populates");
 
 const chechAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
     async getPosts() {
       const posts = Post.find({})
-        .populate({ path: "user", model: "User" })
+        .populate(POPULATE_USER)
+        .populate(POPULATE_COMMENT)
         .sort({ createdAt: -1 });
       return posts;
     },
     async getPost(parent, { postId }) {
       try {
-        const post = await Post.findById(postId).populate({
-          path: "user",
-          model: "User",
-        });
+        const post = await Post.findById(postId)
+          .populate(POPULATE_USER)
+          .populate(POPULATE_COMMENT);
+
         if (post) {
           return post;
         } else {
@@ -37,6 +40,7 @@ module.exports = {
       }
       try {
         const user = await User.findById(authUser.id);
+
         const post = new Post({
           body,
           user,
@@ -51,10 +55,13 @@ module.exports = {
     },
     async deletePost(_, { postId }, context) {
       const user = chechAuth(context);
+
       try {
-        const post = await Post.findById(postId);
-        if (post.username === user.username) {
+        const post = await Post.findById(postId).populate(POPULATE_USER);
+
+        if (post.user.username === user.username) {
           await post.delete();
+          await Comment.deleteMany({ _id: { $in: post.comments } });
           return "Post deleted";
         } else {
           throw new AuthenticationError("Action not allowed!");
@@ -66,13 +73,10 @@ module.exports = {
     async likePost(_, { postId }, context) {
       const user = chechAuth(context);
 
-      const post = await Post.findById(postId).populate({
-        path: "user",
-        model: "User",
-      });
+      const post = await Post.findById(postId).populate(POPULATE_USER);
       if (post) {
         const user_like_idx = post.likes.findIndex(
-          (x) => x.username === user.username
+          (x) => x.user.username === user.username
         );
 
         if (user_like_idx === -1) {

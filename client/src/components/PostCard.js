@@ -84,6 +84,7 @@ export default function PostCard({ props, post, single }) {
   const [comment] = useMutation(COMMENT_POST, {
     update(proxy, result) {
       newComment = values.postComment;
+      values.postComment = "";
       const newCommentDiv = document.querySelector(newCommentDivSelector);
       newCommentDiv.classList.remove("invisible");
 
@@ -136,7 +137,7 @@ export default function PostCard({ props, post, single }) {
   //=============================================================
   return (
     <Card.Group>
-      <Card fluid className={single ? "single" : ""}>
+      <Card fluid>
         <Card.Content>
           {user ? (
             user.username === post.username ? (
@@ -209,6 +210,7 @@ export default function PostCard({ props, post, single }) {
             <Form.TextArea
               placeholder="Comment on this post?"
               name="postComment"
+              value={values.postComment}
               onChange={onChange}
             />
             <Button primary type="submit">
@@ -235,7 +237,6 @@ export default function PostCard({ props, post, single }) {
               key={comment.id}
               comment={comment}
               ID={ID}
-              profileId={post.user.id}
               props={props}
             />
           ))}

@@ -1,11 +1,15 @@
 const { AuthenticationError, UserInputError } = require("apollo-server-errors");
 const Post = require("../../models/Post");
+const User = require("../../models/User");
+const Comment = require("../../models/Comment");
+
 const chechAuth = require("../../utils/check-auth");
+const { POPULATE_COMMENT, POPULATE_USER } = require("../populates");
 module.exports = {
   Query: {},
   Mutation: {
     async makeComment(_, { postId, body }, context) {
-      const user = chechAuth(context);
+      const authUser = chechAuth(context);
 
       try {
         if (body.trim() === "") {
@@ -16,16 +20,23 @@ module.exports = {
           });
         }
 
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId)
+          .populate(POPULATE_USER)
+          .populate(POPULATE_COMMENT);
+
+        const user = await User.findById(authUser.id);
         if (post) {
-          const comment = {};
-          comment.body = body;
-          comment.username = user.username;
-          comment.createdAt = new Date().toISOString();
+          const comment = new Comment({
+            body,
+            user,
+            createdAt: new Date().toISOString(),
+          });
 
           post.comments.unshift(comment);
 
+          await comment.save();
           await post.save();
+
           return post;
         } else {
           throw new UserInputError("Post does not exist!");
@@ -35,18 +46,23 @@ module.exports = {
       }
     },
     async deleteComment(_, { postId, commentId }, context) {
-      const user = chechAuth(context);
+      const authUser = chechAuth(context);
       try {
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId)
+          .populate(POPULATE_USER)
+          .populate(POPULATE_COMMENT);
         if (post) {
           const commentIndex = post.comments.findIndex(
             (x) => x._id == commentId
           );
 
-          if (post.comments[commentIndex].username != user.username) {
+          console.log(post.comments[commentIndex]);
+
+          if (post.comments[commentIndex].user.username != authUser.username) {
             throw new AuthenticationError("Action not allowed!");
           }
 
+          await Comment.findByIdAndDelete(post.comments[commentIndex].id);
           post.comments.splice(commentIndex, 1);
           await post.save();
           return post;

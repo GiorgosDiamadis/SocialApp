@@ -2,7 +2,7 @@ const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const chechAuth = require("../../utils/check-auth");
-
+const { POPULATE_FRIENDS } = require("../populates");
 const {
   registerInputValidation,
   loginInputValidation,
@@ -24,19 +24,13 @@ const generateToken = (user) => {
 module.exports = {
   Query: {
     async getUserInfo(_, { userId }, context, info) {
-      const user = await User.findById(userId).populate({
-        path: "friends",
-        model: "User",
-      });
+      const user = await User.findById(userId).populate(POPULATE_FRIENDS);
 
       return user;
     },
     async getFriends(_, { userId }, context, info) {
       chechAuth(context);
-      const user = await User.findById(userId).populate({
-        path: "friends",
-        model: "User",
-      });
+      const user = await User.findById(userId).populate(POPULATE_FRIENDS);
       return user;
     },
   },
