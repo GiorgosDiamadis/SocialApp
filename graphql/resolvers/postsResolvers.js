@@ -1,15 +1,22 @@
 const { AuthenticationError, UserInputError } = require("apollo-server-errors");
 const Post = require("../../models/Post");
+const User = require("../../models/User");
+
 const chechAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
     async getPosts() {
-      const posts = Post.find({}).sort({ createdAt: -1 });
+      const posts = Post.find({})
+        .populate({ path: "user", model: "User" })
+        .sort({ createdAt: -1 });
       return posts;
     },
     async getPost(parent, { postId }) {
       try {
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate({
+          path: "user",
+          model: "User",
+        });
         if (post) {
           return post;
         } else {
@@ -22,22 +29,20 @@ module.exports = {
   },
   Mutation: {
     async createPost(_, { body }, context) {
-      const user = chechAuth(context);
+      const authUser = chechAuth(context);
       errors = {};
       if (body.trim() === "") {
         errors.body = "Body can't be empty";
         throw new UserInputError("Body can't be empty", { errors });
       }
       try {
-        const post_user = {};
-        post_user.id = user.id;
-        post_user.username = user.username;
+        const user = await User.findById(authUser.id);
         const post = new Post({
           body,
-          user: post_user,
+          user,
           createdAt: new Date().toISOString(),
         });
-        const newPost = post.save();
+        const newPost = await post.save();
 
         return newPost;
       } catch (e) {
@@ -61,7 +66,10 @@ module.exports = {
     async likePost(_, { postId }, context) {
       const user = chechAuth(context);
 
-      const post = await Post.findById(postId);
+      const post = await Post.findById(postId).populate({
+        path: "user",
+        model: "User",
+      });
       if (post) {
         const user_like_idx = post.likes.findIndex(
           (x) => x.username === user.username

@@ -24,13 +24,19 @@ const generateToken = (user) => {
 module.exports = {
   Query: {
     async getUserInfo(_, { userId }, context, info) {
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate({
+        path: "friends",
+        model: "User",
+      });
 
       return user;
     },
     async getFriends(_, { userId }, context, info) {
       chechAuth(context);
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate({
+        path: "friends",
+        model: "User",
+      });
       return user;
     },
   },
@@ -146,10 +152,7 @@ module.exports = {
       );
 
       if (friend_index === -1) {
-        user_adds.friends.push({
-          username: new_friend.username,
-          id: new_friend.id,
-        });
+        user_adds.friends.push(new_friend);
       } else {
         user_adds.friends.splice(friend_index, 1);
       }

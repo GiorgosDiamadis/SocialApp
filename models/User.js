@@ -9,12 +9,7 @@ const userSchema = new Schema({
   livesIn: String,
   isFrom: String,
   graduatedAt: String,
-  friends: [
-    {
-      username: String,
-      id: { type: Schema.Types.ObjectId },
-    },
-  ],
+  friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 module.exports = model("User", userSchema);
