@@ -110,7 +110,9 @@ export default function PostCard({ props, post, single }) {
   };
 
   const hasLiked = () => {
-    return post.likes.findIndex((v) => v.username === user.username) !== -1;
+    return (
+      post.likes.findIndex((v) => v.user.username === user.username) !== -1
+    );
   };
 
   const likePost = (event) => {
@@ -246,6 +248,7 @@ export default function PostCard({ props, post, single }) {
             likes={post.likes}
             dispatch={dispatch}
             open={open}
+            props={props}
             size={size}
           />
         </div>
