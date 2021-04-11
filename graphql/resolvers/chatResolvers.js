@@ -1,8 +1,9 @@
 module.exports = {
   Subscription: {
-    messageSent: {
+    messageSent() {
       // More on pubsub below
-      subscribe: () => pubsub.asyncIterator(["MESSAGE_SENT"]),
+      subscribe: (parent, args, { pubsub }) =>
+        pubsub.asyncIterator(["MESSAGE_SENT"]);
     },
   },
 };

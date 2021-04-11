@@ -37,6 +37,7 @@ function seeLikesReducer(state, action) {
 export default function PostCard({ props, post, single }) {
   //==========Variables========================
   const ID = post.id;
+  console.log(typeof ID);
   const { user } = useContext(AuthContext);
   const idClass = "id" + ID;
   const newCommentDivSelector = `.newComment.${idClass}`;
@@ -116,6 +117,7 @@ export default function PostCard({ props, post, single }) {
   };
 
   const likePost = (event) => {
+    console.log(values);
     like();
     const likeButton = document.querySelector(
       `.ui.teal.button.${idClass}.like`
@@ -142,7 +144,7 @@ export default function PostCard({ props, post, single }) {
       <Card fluid>
         <Card.Content>
           {user ? (
-            user.username === post.username ? (
+            user.username === post.user.username ? (
               <Icon name="trash" onClick={deletePost} />
             ) : (
               ""

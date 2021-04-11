@@ -38,7 +38,6 @@ export default function Profile(props) {
     refetchQueries: [{ query: GET_FRIENDS, variables: { ID: user.id } }],
   });
 
-  console.log(friends);
   const isFriend = () => {
     return (
       friends.friends.findIndex(
@@ -46,8 +45,6 @@ export default function Profile(props) {
       ) !== -1
     );
   };
-
-  console.log(profileInfo);
 
   return (
     <div>
@@ -61,7 +58,9 @@ export default function Profile(props) {
             ) : (
               posts
                 .filter((post) => post.user.username === profileInfo.username)
-                .map((post) => <PostCard key={post.id} post={post} />)
+                .map((post) => (
+                  <PostCard key={post.id} post={post} props={props} />
+                ))
             )}
           </Grid.Column>
           <Grid.Column width={5}>
