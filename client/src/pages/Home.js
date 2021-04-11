@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Divider, Form, Button, Grid } from "semantic-ui-react";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation, useSubscription } from "@apollo/react-hooks";
 import PostCard from "../components/PostCard";
-const { FETCH_POSTS, MAKE_POST } = require("../util/graphql");
+const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
 
 function Home(props) {
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     body: "",
   });
+
+  function MessageSent({ from, to, body }) {
+    const {
+      data: { messageSent },
+      loading,
+    } = useSubscription(MESSAGES, { variables: { from, to, body } });
+    return <h4>New comment: {!loading && messageSent.body}</h4>;
+  }
 
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });

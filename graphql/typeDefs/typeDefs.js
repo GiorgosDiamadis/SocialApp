@@ -59,22 +59,18 @@ module.exports = gql`
     password: String!
   }
 
-  type Message {
-    from_user: ID!
-    to_user: ID!
-
-    body: String!
-    createdAt: String
-  }
-
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
     getUserInfo(userId: ID!): UserInfo
     getFriends(userId: ID!): UserInfo!
   }
-  type Subscription {
-    messageSent: Message
+
+  type Message {
+    from: ID!
+    to: ID!
+    body: String!
+    createdAt: String
   }
 
   type Mutation {
@@ -94,5 +90,10 @@ module.exports = gql`
     ): UserInfo!
 
     addFriend(friendId: ID!): UserInfo!
+    sendMessage(from: ID!, to: ID!, body: String!): Message!
+  }
+
+  type Subscription {
+    messageSent: Message!
   }
 `;

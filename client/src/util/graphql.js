@@ -299,3 +299,13 @@ export const GET_FRIENDS = gql`
     }
   }
 `;
+
+export const MESSAGES = gql`
+  subscription messageSent($from: ID!, $to: ID!, $body: String!) {
+    messageSent(from: $from, to: $to, body: $body) {
+      from
+      to
+      body
+    }
+  }
+`;
