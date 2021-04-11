@@ -19,7 +19,7 @@ import {
   LIKE_POST,
   COMMENT_POST,
 } from "../util/graphql";
-
+import mongoose from "mongoose";
 import PostComment from "./PostComment";
 import Likes from "./Likes";
 
@@ -34,10 +34,10 @@ function seeLikesReducer(state, action) {
   }
 }
 
-export default function PostCard({ props, post, single }) {
+export default function PostCard({ props, post }) {
   //==========Variables========================
   const ID = post.id;
-  console.log(typeof ID);
+
   const { user } = useContext(AuthContext);
   const idClass = "id" + ID;
   const newCommentDivSelector = `.newComment.${idClass}`;
@@ -48,7 +48,7 @@ export default function PostCard({ props, post, single }) {
 
   const [values, setValues] = useState({
     postComment: "",
-    ID: ID,
+    ID: post.id,
     commentID: "",
   });
 

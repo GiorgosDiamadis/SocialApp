@@ -85,7 +85,9 @@ module.exports = {
 
       const post = await Post.findById(postId)
         .populate(POPULATE_USER)
+        .populate(POPULATE_COMMENT)
         .populate(POPULATE_LIKES);
+
       if (post) {
         const user_like_idx = post.likes.findIndex(
           (x) => x.user.username === authUser.username
@@ -97,8 +99,8 @@ module.exports = {
             user,
             createdAt: new Date().toISOString(),
           });
-          await like.save();
           post.likes.push(like);
+          await like.save();
         } else {
           await Like.findByIdAndDelete(post.likes[user_like_idx].id);
           post.likes.splice(user_like_idx, 1);

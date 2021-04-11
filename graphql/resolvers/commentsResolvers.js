@@ -4,7 +4,11 @@ const User = require("../../models/User");
 const Comment = require("../../models/Comment");
 
 const chechAuth = require("../../utils/check-auth");
-const { POPULATE_COMMENT, POPULATE_USER } = require("../populates");
+const {
+  POPULATE_COMMENT,
+  POPULATE_USER,
+  POPULATE_LIKES,
+} = require("../populates");
 module.exports = {
   Query: {},
   Mutation: {
@@ -22,7 +26,8 @@ module.exports = {
 
         const post = await Post.findById(postId)
           .populate(POPULATE_USER)
-          .populate(POPULATE_COMMENT);
+          .populate(POPULATE_COMMENT)
+          .populate(POPULATE_LIKES);
 
         const user = await User.findById(authUser.id);
         if (post) {
@@ -50,13 +55,13 @@ module.exports = {
       try {
         const post = await Post.findById(postId)
           .populate(POPULATE_USER)
-          .populate(POPULATE_COMMENT);
+          .populate(POPULATE_COMMENT)
+          .populate(POPULATE_LIKES);
+
         if (post) {
           const commentIndex = post.comments.findIndex(
             (x) => x._id == commentId
           );
-
-          console.log(post.comments[commentIndex]);
 
           if (post.comments[commentIndex].user.username != authUser.username) {
             throw new AuthenticationError("Action not allowed!");

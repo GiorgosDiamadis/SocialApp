@@ -138,7 +138,7 @@ module.exports = {
     },
     async addFriend(_, { friendId }, context) {
       const user = chechAuth(context);
-      const user_adds = await User.findById(user.id);
+      const user_adds = await User.findById(user.id).populate(POPULATE_FRIENDS);
       const new_friend = await User.findById(friendId);
 
       const friend_index = user_adds.friends.findIndex(

@@ -24,21 +24,6 @@ const authLink = setContext(() => {
   };
 });
 
-// const wsLink = new WebSocketLink({
-//   uri: "ws://localhost:5000/notfications",
-//   options: {
-//     reconnect: true,
-//   },
-// });
-
-// const splitLink = split(({ query }) => {
-//   const definition = getMainDefinition(query);
-//   return (
-//     definition.kind === "OperationDefinition" &&
-//     definition.operation === "subscription"
-//   );
-// }, wsLink);
-
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
