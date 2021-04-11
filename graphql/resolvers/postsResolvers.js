@@ -55,6 +55,7 @@ module.exports = {
           createdAt: new Date().toISOString(),
         });
         const newPost = await post.save();
+        context.PubSub.publish("POST_CREATED");
 
         return newPost;
       } catch (e) {

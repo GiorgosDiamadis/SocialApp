@@ -59,11 +59,22 @@ module.exports = gql`
     password: String!
   }
 
+  type Message {
+    from_user: ID!
+    to_user: ID!
+
+    body: String!
+    createdAt: String
+  }
+
   type Query {
     getPosts: [Post]
     getPost(postId: ID!): Post
     getUserInfo(userId: ID!): UserInfo
     getFriends(userId: ID!): UserInfo!
+  }
+  type Subscription {
+    messageSent: Message
   }
 
   type Mutation {

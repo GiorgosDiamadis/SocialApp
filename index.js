@@ -4,10 +4,14 @@ const { MONGODB } = require("./config");
 const typeDefs = require("./graphql/typeDefs/typeDefs");
 const resolvers = require("./graphql/resolvers");
 
+const { PubSub } = require("apollo-server");
+
+const pubsub = new PubSub();
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req }),
+  context: ({ req, PubSub }) => ({ req, PubSub }),
 });
 
 mongoose
