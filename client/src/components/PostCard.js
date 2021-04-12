@@ -19,7 +19,7 @@ import {
   LIKE_POST,
   COMMENT_POST,
 } from "../util/graphql";
-import mongoose from "mongoose";
+import ErrorsDisplay from "./ErrorsDisplay";
 import PostComment from "./PostComment";
 import Likes from "./Likes";
 
@@ -46,6 +46,7 @@ export default function PostCard({ props, post }) {
   const commentFormSelector = `.ui.form.commentForm.${idClass}`;
   const commentSectionSelector = `.commentSection.${idClass}`;
 
+  const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     postComment: "",
     ID: post.id,
@@ -94,6 +95,9 @@ export default function PostCard({ props, post }) {
       commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
       const form = document.querySelector(commentFormSelector);
       form.classList.add("invisible");
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
     variables: values,
   });
@@ -216,11 +220,13 @@ export default function PostCard({ props, post }) {
               name="postComment"
               value={values.postComment}
               onChange={onChange}
+              error={errors.postComment ? true : false}
             />
             <Button primary type="submit">
               Comment
             </Button>
           </Form>
+          <ErrorsDisplay errors={errors} />
 
           <div>
             <a

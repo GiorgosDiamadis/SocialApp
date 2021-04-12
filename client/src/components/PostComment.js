@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 
-import { Button, Comment, Container } from "semantic-ui-react";
+import { Button, Comment, Container, Popup } from "semantic-ui-react";
 import moment from "moment";
 import { AuthContext } from "../context/auth";
 import { useMutation } from "@apollo/react-hooks";
@@ -36,16 +36,42 @@ export default function PostComment({ comment, ID, props }) {
         <Comment.Text>
           <Container>{comment.body}</Container>
         </Comment.Text>
-        <Comment.Actions>
-          {comment.user.username === user.username && (
-            <Comment.Action onClick={deleteComment}>
-              <Button size="mini" className="delete-comment-btn" color="red">
-                Delete
-              </Button>{" "}
-            </Comment.Action>
-          )}
-        </Comment.Actions>
       </Comment.Content>
+      <Comment.Actions>
+        {comment.user.username === user.username && (
+          <Comment.Action>
+            <Popup
+              content={
+                <div>
+                  <Button
+                    size="mini"
+                    onClick={deleteComment}
+                    // className="delete-comment-btn"
+                    color="red"
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    size="mini"
+                    // className="delete-comment-btn"
+                    color="blue"
+                  >
+                    Edit
+                  </Button>
+                </div>
+              }
+              on="click"
+              pinned
+              trigger={
+                <Button
+                  style={{ borderRadius: "15px", margin: "auto" }}
+                  icon="ellipsis horizontal"
+                />
+              }
+            />
+          </Comment.Action>
+        )}
+      </Comment.Actions>
     </Comment.Group>
   );
 }

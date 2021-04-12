@@ -3,6 +3,8 @@ import { useQuery } from "@apollo/react-hooks";
 import { Divider, Form, Button, Grid } from "semantic-ui-react";
 import { useMutation, useSubscription } from "@apollo/react-hooks";
 import PostCard from "../components/PostCard";
+import ErrorsDisplay from "../components/ErrorsDisplay";
+
 const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
 
 function Home(props) {
@@ -70,15 +72,7 @@ function Home(props) {
                 Post
               </Button>
             </Form>
-            {Object.keys(errors).length > 0 && (
-              <div className="ui error message">
-                <ul className="list">
-                  {Object.values(errors).map((v) => (
-                    <li key={v}> {v}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <ErrorsDisplay errors={errors} />
             <Divider />
 
             {loading ? (
