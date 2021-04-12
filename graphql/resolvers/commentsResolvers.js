@@ -14,40 +14,35 @@ module.exports = {
   Mutation: {
     async makeComment(_, { postId, body }, context) {
       const authUser = chechAuth(context);
+      const errors = {};
 
-      try {
-        if (body.trim() === "") {
-          throw new UserInputError("Empty comment", {
-            errors: {
-              body: "Comments must have a body",
-            },
-          });
-        }
+      if (body.trim() === "") {
+        errors.postComment = "Your comment is empty!";
 
-        const post = await Post.findById(postId)
-          .populate(POPULATE_USER)
-          .populate(POPULATE_COMMENT)
-          .populate(POPULATE_LIKES);
+        throw new UserInputError("Empty comment", { errors });
+      }
 
-        const user = await User.findById(authUser.id);
-        if (post) {
-          const comment = new Comment({
-            body,
-            user,
-            createdAt: new Date().toISOString(),
-          });
+      const post = await Post.findById(postId)
+        .populate(POPULATE_USER)
+        .populate(POPULATE_COMMENT)
+        .populate(POPULATE_LIKES);
 
-          post.comments.unshift(comment);
+      const user = await User.findById(authUser.id);
+      if (post) {
+        const comment = new Comment({
+          body,
+          user,
+          createdAt: new Date().toISOString(),
+        });
 
-          await comment.save();
-          await post.save();
+        post.comments.unshift(comment);
 
-          return post;
-        } else {
-          throw new UserInputError("Post does not exist!");
-        }
-      } catch (e) {
-        throw new Error(e);
+        await comment.save();
+        await post.save();
+
+        return post;
+      } else {
+        throw new UserInputError("Post does not exist!");
       }
     },
     async deleteComment(_, { postId, commentId }, context) {

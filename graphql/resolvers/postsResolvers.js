@@ -44,7 +44,7 @@ module.exports = {
       errors = {};
       if (body.trim() === "") {
         errors.body = "Body can't be empty";
-        throw new UserInputError("Body can't be empty", { errors });
+        throw new UserInputError("Your post is empty", { errors });
       }
       try {
         const user = await User.findById(authUser.id);

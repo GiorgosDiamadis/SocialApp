@@ -10,18 +10,4 @@ const {
   POPULATE_LIKES,
 } = require("../populates");
 
-module.exports = {
-  Mutation: {
-    sendMessage(_, { from, to, body }, context) {
-      context.pubsub.publish("NEW_MESSAGE", {
-        messageSent: { from, to, body },
-      });
-      return { from, to, body };
-    },
-  },
-  Subscription: {
-    messageSent: {
-      subscribe: (_, args, { pubsub }) => pubsub.asyncIterator("NEW_MESSAGE"),
-    },
-  },
-};
+module.exports = {};

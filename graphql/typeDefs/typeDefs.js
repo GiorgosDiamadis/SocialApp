@@ -92,8 +92,4 @@ module.exports = gql`
     addFriend(friendId: ID!): UserInfo!
     sendMessage(from: ID!, to: ID!, body: String!): Message!
   }
-
-  type Subscription {
-    messageSent: Message!
-  }
 `;
