@@ -33,9 +33,9 @@ export default function PostComment({ comment, ID, props }) {
         <Comment.Metadata className="text-muted">
           <div>{moment(comment.createdAt.replace("T", " ")).fromNow()}</div>
         </Comment.Metadata>
-        <Comment.Text>
-          <Container>{comment.body}</Container>
-        </Comment.Text>
+        <Container>
+          <Comment.Text>{comment.body}</Comment.Text>
+        </Container>
       </Comment.Content>
       <Comment.Actions>
         {comment.user.username === user.username && (

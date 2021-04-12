@@ -53,7 +53,7 @@
   border-radius: 15px;
   padding: 5px;
   margin: 3px 10px;
-  width: 50%;
+  width: 90%;
 }
 
 .ui.comments > .actions {
@@ -104,4 +104,19 @@ a {
 
 .ui.cards > .card.profileCard {
   margin: auto;
+}
+
+.ui.form > .postComment-text-area textarea {
+  border-radius: 20px;
+  min-width: 100%;
+  min-height: 39px;
+  resize: none;
+
+  overflow: hidden;
+
+  background-color: #f9f9f9;
+}
+
+.text {
+  overflow-wrap: break-word;
 }

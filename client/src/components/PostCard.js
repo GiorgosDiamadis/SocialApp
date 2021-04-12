@@ -93,8 +93,7 @@ export default function PostCard({ props, post }) {
       const commentCount = document.querySelector(commentCountSelector);
       newCommentDiv.innerHTML = "You just commented: " + newComment;
       commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
-      const form = document.querySelector(commentFormSelector);
-      form.classList.add("invisible");
+      toggleVisibility(commentSectionSelector);
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -107,7 +106,6 @@ export default function PostCard({ props, post }) {
 
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
-    console.log(values);
   };
 
   const onSubmit = () => {
@@ -142,6 +140,13 @@ export default function PostCard({ props, post }) {
     delPost();
   };
 
+  const handleUserKeyPress = (e) => {
+    if (e.key === "Enter") {
+      console.log(e.target.value);
+      onSubmit(); // this won't be triggered
+    }
+  };
+
   //=============================================================
   return (
     <Card.Group>
@@ -168,7 +173,7 @@ export default function PostCard({ props, post }) {
           <CardMeta as={Link} to={"/post/" + post.id}>
             {moment(post.createdAt.replace("T", " ")).fromNow()}
           </CardMeta>
-          <Card.Description>{post.body}</Card.Description>
+          <Card.Description className="text">{post.body}</Card.Description>
         </Card.Content>
         <Card.Content extra>
           <Button as="div" labelPosition="right">
@@ -196,7 +201,7 @@ export default function PostCard({ props, post }) {
             <Button
               color="teal"
               basic
-              onClick={() => toggleVisibility(commentFormSelector)}
+              // onClick={() => toggleVisibility(commentFormSelector)}
             >
               <Icon name="comments" />
             </Button>
@@ -211,20 +216,20 @@ export default function PostCard({ props, post }) {
             </Label>
           </Button>
 
-          <Form
-            className={"commentForm " + idClass + " invisible"}
-            onSubmit={onSubmit}
-          >
+          <Form className={"commentForm " + idClass} onSubmit={onSubmit}>
             <Form.TextArea
-              placeholder="Comment on this post?"
+              className="postComment-text-area"
               name="postComment"
-              value={values.postComment}
-              onChange={onChange}
+              placeholder="Make a comment"
+              rows={1}
+              // value={values.postComment}
+              // onChange={onChange}
+              onKeyPress={handleUserKeyPress}
               error={errors.postComment ? true : false}
             />
-            <Button primary type="submit">
-              Comment
-            </Button>
+            {/* <Button primary size="mini" type="submit">
+              Make a comment
+            </Button> */}
           </Form>
           <ErrorsDisplay errors={errors} />
 
