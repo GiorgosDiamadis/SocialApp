@@ -9,13 +9,9 @@ const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
 
 function Home(props) {
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+  const [values] = useState({
     body: "",
   });
-
-  const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
 
   const onSubmit = (event) => {
     makePost();
