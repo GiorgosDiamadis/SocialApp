@@ -8,6 +8,8 @@ import {
   Form,
   Icon,
   Label,
+  Dimmer,
+  Loader,
 } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -18,6 +20,7 @@ import {
   FETCH_POSTS,
   LIKE_POST,
   COMMENT_POST,
+  FETCH_POST,
 } from "../util/graphql";
 import ErrorsDisplay from "./ErrorsDisplay";
 import PostComment from "./PostComment";
@@ -80,11 +83,12 @@ export default function PostCard({ props, post }) {
     variables: values,
   });
 
-  const [like] = useMutation(LIKE_POST, {
+  const [like, { loading }] = useMutation(LIKE_POST, {
+    update() {},
     variables: values,
   });
-  const [comment] = useMutation(COMMENT_POST, {
-    update(proxy, result) {
+  const [comment, { loading: commentProcessing }] = useMutation(COMMENT_POST, {
+    update() {
       newComment = values.postComment;
       values.postComment = "";
       const newCommentDiv = document.querySelector(newCommentDivSelector);
@@ -93,7 +97,7 @@ export default function PostCard({ props, post }) {
       const commentCount = document.querySelector(commentCountSelector);
       newCommentDiv.innerHTML = "You just commented: " + newComment;
       commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
-      toggleVisibility(commentSectionSelector);
+      toggleVisibility(commentSectionSelector, true);
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -105,7 +109,11 @@ export default function PostCard({ props, post }) {
   //==========Functions========================
 
   const onChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
+    const parent = event.target.parentNode;
+    if (parent.classList.contains("error")) {
+      parent.classList.remove("error");
+      setErrors({});
+    }
   };
 
   const onSubmit = () => {
@@ -119,22 +127,17 @@ export default function PostCard({ props, post }) {
   };
 
   const likePost = (event) => {
-    console.log(values);
     like();
-    const likeButton = document.querySelector(
-      `.ui.teal.button.${idClass}.like`
-    );
-    const likeCount = document.querySelector(likeCountSelector);
-    likeCount.innerHTML = parseInt(likeCount.innerHTML) + (hasLiked() ? -1 : 1);
-    likeButton.classList.contains("basic")
-      ? likeButton.classList.remove("basic")
-      : likeButton.classList.add("basic");
   };
-  const toggleVisibility = (selector) => {
+  const toggleVisibility = (selector, visibility = undefined) => {
     const element = document.querySelector(selector);
-    element.classList.contains("invisible")
-      ? element.classList.remove("invisible")
-      : element.classList.add("invisible");
+    if (!visibility) {
+      element.classList.contains("invisible")
+        ? element.classList.remove("invisible")
+        : element.classList.add("invisible");
+    } else {
+      element.classList.remove("invisible");
+    }
   };
   const deletePost = () => {
     delPost();
@@ -142,8 +145,11 @@ export default function PostCard({ props, post }) {
 
   const handleUserKeyPress = (e) => {
     if (e.key === "Enter") {
-      console.log(e.target.value);
-      onSubmit(); // this won't be triggered
+      e.preventDefault();
+      values.postComment = e.target.value;
+      e.target.value = "";
+      onSubmit();
+      values.postComment = "";
     }
   };
 
@@ -177,6 +183,7 @@ export default function PostCard({ props, post }) {
         </Card.Content>
         <Card.Content extra>
           <Button as="div" labelPosition="right">
+            <Loader active={loading ? true : false} />
             <Button
               color="teal"
               className={idClass + " like"}
@@ -190,7 +197,7 @@ export default function PostCard({ props, post }) {
               as="a"
               basic
               color="teal"
-              className={idClass + " likeCount"}
+              className={idClass + " likeCount " + "loading"}
               pointing="left"
             >
               {post.likeCount}
@@ -198,11 +205,7 @@ export default function PostCard({ props, post }) {
           </Button>
 
           <Button as="div" labelPosition="right">
-            <Button
-              color="teal"
-              basic
-              // onClick={() => toggleVisibility(commentFormSelector)}
-            >
+            <Button color="teal" basic>
               <Icon name="comments" />
             </Button>
             <Label
@@ -216,20 +219,24 @@ export default function PostCard({ props, post }) {
             </Label>
           </Button>
 
-          <Form className={"commentForm " + idClass} onSubmit={onSubmit}>
+          <Form
+            className={
+              "commentForm " +
+              idClass +
+              " " +
+              (commentProcessing ? "loading" : "")
+            }
+            onSubmit={onSubmit}
+          >
             <Form.TextArea
               className="postComment-text-area"
               name="postComment"
               placeholder="Make a comment"
               rows={1}
-              // value={values.postComment}
-              // onChange={onChange}
+              onChange={onChange}
               onKeyPress={handleUserKeyPress}
               error={errors.postComment ? true : false}
             />
-            {/* <Button primary size="mini" type="submit">
-              Make a comment
-            </Button> */}
           </Form>
           <ErrorsDisplay errors={errors} />
 
