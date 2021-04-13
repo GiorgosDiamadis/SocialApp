@@ -53,6 +53,7 @@
   border-radius: 15px;
   padding: 5px;
   margin: 3px 10px;
+  display: flex;
   width: 90%;
 }
 
@@ -106,7 +107,7 @@ a {
   margin: auto;
 }
 
-.ui.form > .postComment-text-area textarea {
+.ui.form > .text-area textarea {
   border-radius: 20px;
   min-width: 100%;
   min-height: 39px;
@@ -119,4 +120,31 @@ a {
 
 .text {
   overflow-wrap: break-word;
+}
+
+.commentDiv {
+  width: 50%;
+}
+.commentDiv.options {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+}
+.options > .option {
+  display: flex;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.ui.popup {
+  padding: 0.49em;
+}
+
+.options > .option:hover {
+  background: rgb(186, 186, 186);
 }

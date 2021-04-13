@@ -4,7 +4,7 @@ import { Divider, Form, Button, Grid } from "semantic-ui-react";
 import { useMutation, useSubscription } from "@apollo/react-hooks";
 import PostCard from "../components/PostCard";
 import ErrorsDisplay from "../components/ErrorsDisplay";
-
+import CustomTextArea from "../components/CustomTextArea";
 const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
 
 function Home(props) {
@@ -13,20 +13,11 @@ function Home(props) {
     body: "",
   });
 
-  function MessageSent({ from, to, body }) {
-    const {
-      data: { messageSent },
-      loading,
-    } = useSubscription(MESSAGES, { variables: { from, to, body } });
-    return <h4>New comment: {!loading && messageSent.body}</h4>;
-  }
-
   const onChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   const onSubmit = (event) => {
-    event.preventDefault();
     makePost();
   };
 
@@ -59,18 +50,18 @@ function Home(props) {
           <Grid.Column width={5}> </Grid.Column>
 
           <Grid.Column width={6}>
-            <Form onSubmit={onSubmit}>
-              <Form.TextArea
-                placeholder="What are you thinking?"
-                value={values.body}
-                onChange={onChange}
-                label="Post"
+            <Form>
+              <CustomTextArea
+                values={values}
+                valueField="body"
+                setErrors={setErrors}
+                errors={errors}
+                errorField="body"
+                db_callback={onSubmit}
                 name="body"
-                error={errors.body ? true : false}
+                placeholder="What are you thinking"
+                rows={1}
               />
-              <Button primary type="submit">
-                Post
-              </Button>
             </Form>
             <ErrorsDisplay errors={errors} />
             <Divider />

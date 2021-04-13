@@ -8,8 +8,7 @@ import {
   Form,
   Icon,
   Label,
-  Dimmer,
-  Loader,
+  TextArea,
 } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -25,6 +24,7 @@ import {
 import ErrorsDisplay from "./ErrorsDisplay";
 import PostComment from "./PostComment";
 import Likes from "./Likes";
+import CustomTextArea from "./CustomTextArea";
 
 function seeLikesReducer(state, action) {
   switch (action.type) {
@@ -43,14 +43,12 @@ export default function PostCard({ props, post }) {
 
   const { user } = useContext(AuthContext);
   const idClass = "id" + ID;
-  const newCommentDivSelector = `.newComment.${idClass}`;
   const commentCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.commentCount`;
   const likeCountSelector = `.ui.teal.left.pointing.basic.label.${idClass}.likeCount`;
-  const commentFormSelector = `.ui.form.commentForm.${idClass}`;
   const commentSectionSelector = `.commentSection.${idClass}`;
 
   const [errors, setErrors] = useState({});
-  const [values, setValues] = useState({
+  const [values] = useState({
     postComment: "",
     ID: post.id,
     commentID: "",
@@ -83,7 +81,7 @@ export default function PostCard({ props, post }) {
     variables: values,
   });
 
-  const [like, { loading }] = useMutation(LIKE_POST, {
+  const [like] = useMutation(LIKE_POST, {
     update() {},
     variables: values,
   });
@@ -91,11 +89,8 @@ export default function PostCard({ props, post }) {
     update() {
       newComment = values.postComment;
       values.postComment = "";
-      const newCommentDiv = document.querySelector(newCommentDivSelector);
-      newCommentDiv.classList.remove("invisible");
 
       const commentCount = document.querySelector(commentCountSelector);
-      newCommentDiv.innerHTML = "You just commented: " + newComment;
       commentCount.innerHTML = parseInt(commentCount.innerHTML) + 1;
       toggleVisibility(commentSectionSelector, true);
     },
@@ -107,14 +102,6 @@ export default function PostCard({ props, post }) {
   //=============================================================
 
   //==========Functions========================
-
-  const onChange = (event) => {
-    const parent = event.target.parentNode;
-    if (parent.classList.contains("error")) {
-      parent.classList.remove("error");
-      setErrors({});
-    }
-  };
 
   const onSubmit = () => {
     comment();
@@ -128,6 +115,14 @@ export default function PostCard({ props, post }) {
 
   const likePost = (event) => {
     like();
+    const likeButton = document.querySelector(
+      `.ui.teal.button.${idClass}.like`
+    );
+    const likeCount = document.querySelector(likeCountSelector);
+    likeCount.innerHTML = parseInt(likeCount.innerHTML) + (hasLiked() ? -1 : 1);
+    likeButton.classList.contains("basic")
+      ? likeButton.classList.remove("basic")
+      : likeButton.classList.add("basic");
   };
   const toggleVisibility = (selector, visibility = undefined) => {
     const element = document.querySelector(selector);
@@ -139,23 +134,15 @@ export default function PostCard({ props, post }) {
       element.classList.remove("invisible");
     }
   };
-  const deletePost = () => {
+  const deletePost = (e) => {
+    const post = e.target.parentNode.parentNode;
+    post.remove();
     delPost();
-  };
-
-  const handleUserKeyPress = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      values.postComment = e.target.value;
-      e.target.value = "";
-      onSubmit();
-      values.postComment = "";
-    }
   };
 
   //=============================================================
   return (
-    <Card.Group>
+    <Card.Group className="postcard">
       <Card fluid>
         <Card.Content>
           {user ? (
@@ -183,7 +170,6 @@ export default function PostCard({ props, post }) {
         </Card.Content>
         <Card.Content extra>
           <Button as="div" labelPosition="right">
-            <Loader active={loading ? true : false} />
             <Button
               color="teal"
               className={idClass + " like"}
@@ -228,24 +214,19 @@ export default function PostCard({ props, post }) {
             }
             onSubmit={onSubmit}
           >
-            <Form.TextArea
-              className="postComment-text-area"
+            <CustomTextArea
+              values={values}
+              valueField="postComment"
+              setErrors={setErrors}
+              errors={errors}
+              errorField="postComment"
+              db_callback={onSubmit}
               name="postComment"
               placeholder="Make a comment"
               rows={1}
-              onChange={onChange}
-              onKeyPress={handleUserKeyPress}
-              error={errors.postComment ? true : false}
             />
           </Form>
           <ErrorsDisplay errors={errors} />
-
-          <div>
-            <a
-              href={`post/${ID}`}
-              className={"newComment " + idClass + " invisible"}
-            ></a>
-          </div>
         </Card.Content>
         <CardContent extra className="see-likes-comments">
           <a onClick={() => toggleVisibility(commentSectionSelector)}>
