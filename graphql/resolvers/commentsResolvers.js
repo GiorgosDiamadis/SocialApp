@@ -73,5 +73,18 @@ module.exports = {
         throw new Error(e);
       }
     },
+    async editComment(_, { commentId, body }, context) {
+      errors = {};
+      if (body.trim() === "") {
+        errors.newBody = "Your comment is empty!";
+        throw new UserInputError("Errors", { errors });
+      }
+      const comment = await Comment.findByIdAndUpdate(commentId, {
+        body: body,
+      });
+
+      await comment.save();
+      return comment.body;
+    },
   },
 };

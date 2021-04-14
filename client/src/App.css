@@ -125,15 +125,14 @@ a {
 }
 
 .commentDiv {
-  width: 95%;
+  width: 90%;
 }
 .commentDiv.options {
-  width: 5%;
+  width: 10%;
 }
 .commentDiv.options {
   display: flex;
   flex-direction: row-reverse;
-  /* align-self: flex-end; */
 }
 
 .options {

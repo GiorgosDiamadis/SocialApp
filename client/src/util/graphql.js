@@ -299,3 +299,9 @@ export const GET_FRIENDS = gql`
     }
   }
 `;
+
+export const UPDATE_COMMENT = gql`
+  mutation editComment($commentId: ID!, $body: String!) {
+    editComment(commentId: $commentId, body: $body)
+  }
+`;

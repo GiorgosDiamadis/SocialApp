@@ -13,32 +13,59 @@ import CustomTextArea from "./CustomTextArea";
 import moment from "moment";
 import { AuthContext } from "../context/auth";
 import { useMutation } from "@apollo/react-hooks";
-import { DELETE_COMMENT } from "../util/graphql";
+import { DELETE_COMMENT, UPDATE_COMMENT } from "../util/graphql";
+import ErrorsDisplay from "./ErrorsDisplay";
 
 export default function PostComment({ comment, ID, props }) {
   const { user } = useContext(AuthContext);
-
+  const idclass = "a" + ID;
   const [values] = useState({
     ID: ID,
-    commentID: comment.id,
+    commentId: comment.id,
+    body: "",
   });
+
+  const [errors, setErrors] = useState({});
+
   const [delComment, { loading }] = useMutation(DELETE_COMMENT, {
     variables: values,
   });
 
-  const deleteComment = () => {
-    delComment();
-  };
-  const [errors, setErrors] = useState({});
+  const [editComment, { loading: updatingComment }] = useMutation(
+    UPDATE_COMMENT,
+    {
+      update(proxy, result) {},
+      variables: values,
+      onError(err) {
+        setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      },
+    }
+  );
 
-  const onSubmit = (event) => {};
+  const showEditForm = (active) => {
+    const form = document.getElementById(`Edit ${idclass}`);
+    const comment = document.getElementById(`comment ${idclass}`);
+    if (active) {
+      form.classList.remove("invisible");
+      comment.classList.add("invisible");
+    } else {
+      form.classList.add("invisible");
+      comment.classList.remove("invisible");
+    }
+  };
+
+  const onSubmit = (event) => {
+    editComment();
+  };
 
   return (
     <div>
-      <div id="Comment">
-        <Comment.Group>
-          <Comment.Content>
-            <div className="commentDiv">
+      <Loader active={loading ? true : false} />
+
+      <Comment.Group>
+        <Comment.Content>
+          <div className="commentDiv">
+            <div id={`comment ${idclass}`}>
               <Comment.Author
                 className="comment-author"
                 onClick={() =>
@@ -53,11 +80,10 @@ export default function PostComment({ comment, ID, props }) {
                 </div>
               </Comment.Metadata>
               <Container>
-                <Loader active={loading ? true : false} />
                 <Comment.Text>{comment.body}</Comment.Text>
               </Container>
             </div>
-            <div id="Edit" className="invisible">
+            <div id={`Edit ${idclass}`} className={`invisible`}>
               <Form onSubmit={onSubmit}>
                 <CustomTextArea
                   values={values}
@@ -67,39 +93,44 @@ export default function PostComment({ comment, ID, props }) {
                   errorField="body"
                   db_callback={onSubmit}
                   name="body"
-                  placeholder="What are you thinking"
+                  placeholder={comment.body}
                   rows={1}
                 />
               </Form>
+              <ErrorsDisplay errors={errors} />
             </div>
-            <div className="commentDiv options">
-              <Comment.Actions>
-                {comment.user.username === user.username && (
-                  <Comment.Action>
-                    <Popup
-                      content={
-                        <div className="options">
-                          <div className="option" onClick={deleteComment}>
-                            <Icon name="trash" />
-                            <p>Delete</p>
-                          </div>
-                          <div className="option">
-                            <Icon name="edit" />
-                            <p>Edit</p>
-                          </div>
+          </div>
+
+          <div className="commentDiv options">
+            <Comment.Actions>
+              {comment.user.username === user.username && (
+                <Comment.Action>
+                  <Popup
+                    content={
+                      <div className="options">
+                        <div className="option" onClick={() => delComment()}>
+                          <Icon name="trash" />
+                          <p>Delete</p>
                         </div>
-                      }
-                      on="click"
-                      pinned
-                      trigger={<Icon name="ellipsis horizontal" />}
-                    />
-                  </Comment.Action>
-                )}
-              </Comment.Actions>
-            </div>
-          </Comment.Content>
-        </Comment.Group>
-      </div>
+                        <div
+                          className="option"
+                          onClick={() => showEditForm(true)}
+                        >
+                          <Icon name="edit" />
+                          <p>Edit</p>
+                        </div>
+                      </div>
+                    }
+                    on="click"
+                    pinned
+                    trigger={<Icon name="ellipsis horizontal" />}
+                  />
+                </Comment.Action>
+              )}
+            </Comment.Actions>
+          </div>
+        </Comment.Content>
+      </Comment.Group>
     </div>
   );
 }

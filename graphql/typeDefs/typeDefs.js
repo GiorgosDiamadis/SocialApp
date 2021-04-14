@@ -89,6 +89,8 @@ module.exports = gql`
       graduatedAt: String!
     ): UserInfo!
 
+    editComment(commentId: ID!, body: String!): String!
+
     addFriend(friendId: ID!): UserInfo!
     sendMessage(from: ID!, to: ID!, body: String!): Message!
   }
