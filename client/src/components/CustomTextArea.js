@@ -18,13 +18,19 @@ export default function CustomTextArea({
     if (e.key === "Enter") {
       e.preventDefault();
       values[valueField] = e.target.value;
+      e.target.style.height = `${39}px`;
       e.target.value = "";
       db_callback();
       values[valueField] = "";
     }
   };
+
+  var scroll = 39;
   const onChange = (event) => {
     const parent = event.target.parentNode;
+
+    event.target.style.height = "inherit";
+    event.target.style.height = `${event.target.scrollHeight}px`;
     if (parent.classList.contains("error")) {
       parent.classList.remove("error");
       setErrors({});

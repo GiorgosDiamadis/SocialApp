@@ -35,21 +35,6 @@ export default function PostComment({ comment, ID, props }) {
 
   return (
     <div>
-      <div id="Edit invisible">
-        <Form onSubmit={onSubmit}>
-          <CustomTextArea
-            values={values}
-            valueField="body"
-            setErrors={setErrors}
-            errors={errors}
-            errorField="body"
-            db_callback={onSubmit}
-            name="body"
-            placeholder="What are you thinking"
-            rows={1}
-          />
-        </Form>
-      </div>
       <div id="Comment">
         <Comment.Group>
           <Comment.Content>
@@ -71,6 +56,21 @@ export default function PostComment({ comment, ID, props }) {
                 <Loader active={loading ? true : false} />
                 <Comment.Text>{comment.body}</Comment.Text>
               </Container>
+            </div>
+            <div id="Edit" className="invisible">
+              <Form onSubmit={onSubmit}>
+                <CustomTextArea
+                  values={values}
+                  valueField="body"
+                  setErrors={setErrors}
+                  errors={errors}
+                  errorField="body"
+                  db_callback={onSubmit}
+                  name="body"
+                  placeholder="What are you thinking"
+                  rows={1}
+                />
+              </Form>
             </div>
             <div className="commentDiv options">
               <Comment.Actions>

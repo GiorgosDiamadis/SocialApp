@@ -55,6 +55,7 @@
   padding: 5px;
   margin: 3px 10px;
   display: flex;
+  justify-content: space-between;
   width: 90%;
 }
 
@@ -115,7 +116,7 @@ a {
   resize: none;
 
   overflow: hidden;
-
+  overflow-wrap: break-word;
   background-color: #f9f9f9;
 }
 
@@ -124,11 +125,15 @@ a {
 }
 
 .commentDiv {
-  width: 50%;
+  width: 95%;
+}
+.commentDiv.options {
+  width: 5%;
 }
 .commentDiv.options {
   display: flex;
   flex-direction: row-reverse;
+  /* align-self: flex-end; */
 }
 
 .options {
