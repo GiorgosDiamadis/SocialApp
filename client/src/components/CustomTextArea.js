@@ -13,15 +13,15 @@ export default function CustomTextArea({
   rows,
   db_callback,
 }) {
-  console.log(errorField);
   const handleUserKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      values[valueField] = e.target.value;
+      if (e.target.value.trim() !== "") {
+        values[valueField] = e.target.value;
+      }
       e.target.style.height = `${39}px`;
       e.target.value = "";
       db_callback();
-      values[valueField] = "";
     }
   };
 

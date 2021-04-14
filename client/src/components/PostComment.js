@@ -22,7 +22,7 @@ export default function PostComment({ comment, ID, props }) {
   const [values] = useState({
     ID: ID,
     commentId: comment.id,
-    body: "",
+    body: comment.body,
   });
 
   const [errors, setErrors] = useState({});
@@ -34,7 +34,10 @@ export default function PostComment({ comment, ID, props }) {
   const [editComment, { loading: updatingComment }] = useMutation(
     UPDATE_COMMENT,
     {
-      update(proxy, result) {},
+      update(proxy, result) {
+        const oldbody = document.querySelector(`.text.${idclass}`);
+        oldbody.innerHTML = result.data.editComment;
+      },
       variables: values,
       onError(err) {
         setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -52,10 +55,16 @@ export default function PostComment({ comment, ID, props }) {
       form.classList.add("invisible");
       comment.classList.remove("invisible");
     }
+
+    const popup = document.querySelector(".ui.top.left.popup");
+    if (popup) {
+      popup.remove();
+    }
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = () => {
     editComment();
+    showEditForm(false);
   };
 
   return (
@@ -80,7 +89,9 @@ export default function PostComment({ comment, ID, props }) {
                 </div>
               </Comment.Metadata>
               <Container>
-                <Comment.Text>{comment.body}</Comment.Text>
+                <Comment.Text className={`${idclass}`}>
+                  {comment.body}
+                </Comment.Text>
               </Container>
             </div>
             <div id={`Edit ${idclass}`} className={`invisible`}>
@@ -93,7 +104,7 @@ export default function PostComment({ comment, ID, props }) {
                   errorField="body"
                   db_callback={onSubmit}
                   name="body"
-                  placeholder={comment.body}
+                  placeholder={values.body}
                   rows={1}
                 />
               </Form>
@@ -121,6 +132,7 @@ export default function PostComment({ comment, ID, props }) {
                         </div>
                       </div>
                     }
+                    className="popup"
                     on="click"
                     pinned
                     trigger={<Icon name="ellipsis horizontal" />}

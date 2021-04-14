@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ErrorsDisplay({ errors }) {
   return (
-    <div style={{ marginTop: "15px" }}>
+    <div style={{ marginTop: "0px" }}>
       {Object.keys(errors).length > 0 && (
         <div className="ui error message">
           <ul className="list">
