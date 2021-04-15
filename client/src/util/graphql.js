@@ -136,34 +136,17 @@ export const LOGIN_USER = gql`
 `;
 
 export const LIKE_POST = gql`
-  mutation likePost($ID: ID!) {
-    likePost(postId: $ID) {
+  mutation likePost($postId: ID!) {
+    likePost(postId: $postId) {
       id
-      body
-      user {
-        username
-        id
-      }
-      createdAt
-      comments {
-        id
-        body
-        user {
-          username
-          id
-        }
-        createdAt
-      }
       likes {
         id
         user {
           username
           id
         }
-        createdAt
       }
       likeCount
-      commentCount
     }
   }
 `;
@@ -202,8 +185,8 @@ export const COMMENT_POST = gql`
 `;
 
 export const DELETE_COMMENT = gql`
-  mutation deleteComment($ID: ID!, $commentID: ID!) {
-    deleteComment(postId: $ID, commentId: $commentID) {
+  mutation deleteComment($ID: ID!, $commentId: ID!) {
+    deleteComment(postId: $ID, commentId: $commentId) {
       id
       body
       user {

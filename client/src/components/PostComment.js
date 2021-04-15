@@ -16,11 +16,11 @@ import { useMutation } from "@apollo/react-hooks";
 import { DELETE_COMMENT, UPDATE_COMMENT } from "../util/graphql";
 import ErrorsDisplay from "./ErrorsDisplay";
 
-export default function PostComment({ comment, ID, props }) {
+export default function PostComment({ comment, postId, props }) {
   const { user } = useContext(AuthContext);
-  const idclass = "a" + ID;
+  const idclass = "id" + postId;
   const [values] = useState({
-    ID: ID,
+    ID: postId,
     commentId: comment.id,
     body: comment.body,
   });
@@ -31,19 +31,16 @@ export default function PostComment({ comment, ID, props }) {
     variables: values,
   });
 
-  const [editComment, { loading: updatingComment }] = useMutation(
-    UPDATE_COMMENT,
-    {
-      update(proxy, result) {
-        const oldbody = document.querySelector(`.text.${idclass}`);
-        oldbody.innerHTML = result.data.editComment;
-      },
-      variables: values,
-      onError(err) {
-        setErrors(err.graphQLErrors[0].extensions.exception.errors);
-      },
-    }
-  );
+  const [editComment] = useMutation(UPDATE_COMMENT, {
+    update(proxy, result) {
+      const oldbody = document.querySelector(`.text.${idclass}`);
+      oldbody.innerHTML = result.data.editComment;
+    },
+    variables: values,
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+  });
 
   const showEditForm = (active) => {
     const form = document.getElementById(`Edit ${idclass}`);

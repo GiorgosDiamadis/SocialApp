@@ -17,14 +17,15 @@ function Home(props) {
     makePost();
   };
 
-  const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
+  const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS, {
+    fetchPolicy: "cache-first",
+  });
 
   const [makePost] = useMutation(MAKE_POST, {
     update(proxy, result) {
       const data = proxy.readQuery({
         query: FETCH_POSTS,
       });
-
       proxy.writeQuery({
         query: FETCH_POSTS,
         data: {

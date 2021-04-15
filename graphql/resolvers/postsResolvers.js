@@ -85,7 +85,6 @@ module.exports = {
 
       const post = await Post.findById(postId)
         .populate(POPULATE_USER)
-        .populate(POPULATE_COMMENT)
         .populate(POPULATE_LIKES);
 
       if (post) {

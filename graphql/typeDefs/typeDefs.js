@@ -60,9 +60,9 @@ module.exports = gql`
   }
 
   type Query {
-    getPosts: [Post]
-    getPost(postId: ID!): Post
-    getUserInfo(userId: ID!): UserInfo
+    getPosts: [Post]!
+    getPost(postId: ID!): Post!
+    getUserInfo(userId: ID!): UserInfo!
     getFriends(userId: ID!): UserInfo!
   }
 
@@ -78,7 +78,7 @@ module.exports = gql`
     registerUser(registerInput: RegisterInput): User!
     createPost(body: String!): Post!
     deletePost(postId: ID!): String!
-    makeComment(postId: ID!, body: String!): Post
+    makeComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
     likePost(postId: ID!): Post!
     updatePersonalInfo(

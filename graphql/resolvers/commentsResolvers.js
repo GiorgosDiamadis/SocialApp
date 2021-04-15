@@ -84,7 +84,7 @@ module.exports = {
       });
 
       await comment.save();
-      return comment.body;
+      return body;
     },
   },
 };
