@@ -84,6 +84,7 @@ export default function Profile(props) {
 
   const isFriend = () => {
     return (
+      !loadingFriends &&
       friends.friends.findIndex(
         (fr) => fr.username === profileInfo.username
       ) !== -1
@@ -150,7 +151,11 @@ export default function Profile(props) {
                     >
                       {user.id !== profileId ? (
                         loadingFriends ? (
-                          <h4>Loading...</h4>
+                          isFriend() ? (
+                            <Button icon="remove user" content="Unfollow" />
+                          ) : (
+                            <Button icon="add user" content="Follow" />
+                          )
                         ) : isFriend() ? (
                           <Button icon="remove user" content="Unfollow" />
                         ) : (
@@ -210,7 +215,7 @@ export default function Profile(props) {
                 </Card.Group>
                 <h3 className="page-title">Friends</h3>
                 {loadingFriends ? (
-                  <h1>Loading...</h1>
+                  <h4>Loading...</h4>
                 ) : (
                   <ProfileCard
                     key={"profile"}

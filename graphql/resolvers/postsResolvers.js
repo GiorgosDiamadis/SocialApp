@@ -10,10 +10,11 @@ const {
   POPULATE_LIKES,
 } = require("../populates");
 
-const chechAuth = require("../../utils/check-auth");
+const checkAuth = require("../../utils/check-auth");
 module.exports = {
   Query: {
-    async getPosts() {
+    async getPosts(_, __, context) {
+      const authUser = checkAuth(context);
       const posts = await Post.find({})
         .populate(POPULATE_USER)
         .populate(POPULATE_COMMENT)
@@ -40,7 +41,7 @@ module.exports = {
   },
   Mutation: {
     async createPost(_, { body }, context) {
-      const authUser = chechAuth(context);
+      const authUser = checkAuth(context);
       errors = {};
       if (body.trim() === "") {
         errors.body = "Body can't be empty";
@@ -62,7 +63,7 @@ module.exports = {
       }
     },
     async deletePost(_, { postId }, context) {
-      const user = chechAuth(context);
+      const user = checkAuth(context);
 
       try {
         const post = await Post.findById(postId).populate(POPULATE_USER);
@@ -81,7 +82,7 @@ module.exports = {
       }
     },
     async likePost(_, { postId }, context) {
-      const authUser = chechAuth(context);
+      const authUser = checkAuth(context);
 
       const post = await Post.findById(postId)
         .populate(POPULATE_USER)

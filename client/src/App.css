@@ -165,3 +165,8 @@ a {
   color: #fff;
   text-shadow: none;
 }
+
+.ui.feed > .event > .content {
+  display: flex;
+  flex-direction: column;
+}
