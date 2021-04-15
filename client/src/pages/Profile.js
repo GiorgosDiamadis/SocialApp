@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
@@ -6,16 +6,59 @@ import { AuthContext } from "../context/auth";
 import { FETCH_POSTS } from "../util/graphql";
 import ProfileCard from "../components/ProfileCard";
 import PostCard from "../components/PostCard";
+import CustomTextArea from "../components/CustomTextArea";
+import ErrorsDisplay from "../components/ErrorsDisplay";
 import moment from "moment";
-import { Card, Image, Grid, List, Button } from "semantic-ui-react";
+import {
+  Card,
+  Image,
+  Grid,
+  List,
+  Button,
+  Form,
+  Divider,
+  Icon,
+} from "semantic-ui-react";
 
-import { FETCH_USER_INFO, ADD_FRIEND, GET_FRIENDS } from "../util/graphql";
+import {
+  FETCH_USER_INFO,
+  ADD_FRIEND,
+  GET_FRIENDS,
+  MAKE_POST,
+} from "../util/graphql";
 
 export default function Profile(props) {
   const { user } = useContext(AuthContext);
   const { profileId } = useParams();
 
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
+  const [errors, setErrors] = useState({});
+  const [values] = useState({
+    body: "",
+  });
+
+  const onSubmit = (event) => {
+    makePost();
+  };
+
+  const [makePost] = useMutation(MAKE_POST, {
+    update(proxy, result) {
+      const data = proxy.readQuery({
+        query: FETCH_POSTS,
+      });
+      proxy.writeQuery({
+        query: FETCH_POSTS,
+        data: {
+          getPosts: [result.data.createPost, ...data.getPosts],
+        },
+      });
+      values.body = "";
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+    variables: values,
+  });
 
   const {
     loading: loadingInfo,
@@ -31,6 +74,7 @@ export default function Profile(props) {
   } = useQuery(GET_FRIENDS, {
     update() {},
     variables: { ID: user.id },
+    fetchPolicy: "cache-and-network",
   });
 
   const [addFriend] = useMutation(ADD_FRIEND, {
@@ -53,6 +97,28 @@ export default function Profile(props) {
           <Grid.Column width={2}></Grid.Column>
           <Grid.Column width={7}>
             <h3 className="page-title">Latest Posts</h3>
+            {user.id === profileId ? (
+              <div>
+                <Form>
+                  <CustomTextArea
+                    values={values}
+                    valueField="body"
+                    setErrors={setErrors}
+                    errors={errors}
+                    errorField="body"
+                    db_callback={onSubmit}
+                    name="body"
+                    placeholder={`What are you thinking ${user.username}?`}
+                    rows={1}
+                  />
+                </Form>
+                <ErrorsDisplay errors={errors} />
+                <Divider />
+              </div>
+            ) : (
+              ""
+            )}
+
             {loadingInfo || loading ? (
               <h1>Loading...</h1>
             ) : (
@@ -78,7 +144,7 @@ export default function Profile(props) {
                       circular
                       centered
                     />
-                    <a
+                    <div
                       onClick={() => addFriend()}
                       className="page-title add-remove-friend"
                     >
@@ -86,14 +152,14 @@ export default function Profile(props) {
                         loadingFriends ? (
                           <h4>Loading...</h4>
                         ) : isFriend() ? (
-                          "Remove Friend"
+                          <Button icon="remove user" content="Unfollow" />
                         ) : (
-                          "Add Friend"
+                          <Button icon="add user" content="Follow" />
                         )
                       ) : (
                         ""
                       )}
-                    </a>
+                    </div>
                     <Card.Content>
                       <List>
                         <List.Item icon="user" content={profileInfo.username} />

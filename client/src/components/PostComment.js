@@ -32,8 +32,9 @@ export default function PostComment({ comment, postId, props }) {
   });
 
   const [editComment] = useMutation(UPDATE_COMMENT, {
-    update(result) {
+    update(proxy, result) {
       const oldbody = document.querySelector(`.text.${idclass}`);
+      console.log(result);
       oldbody.innerHTML = result.data.editComment;
     },
     variables: values,
@@ -60,7 +61,10 @@ export default function PostComment({ comment, postId, props }) {
   };
 
   const onDeleteComment = (e) => {
-    document.querySelector(`.comment.id${comment.id}`).remove();
+    const popup = document.querySelector(".ui.top.left.popup");
+    if (popup) {
+      popup.remove();
+    }
     delComment();
   };
 

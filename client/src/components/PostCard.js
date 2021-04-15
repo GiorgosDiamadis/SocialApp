@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { Card, CardMeta, Icon } from "semantic-ui-react";
+import { Button, Card, CardMeta, Icon } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
@@ -18,12 +18,22 @@ export default function PostCard({ props, post }) {
   const idClass = "id" + postId;
 
   const [delPost] = useMutation(DELETE_POST, {
+    update(proxy, result) {
+      const data = proxy.readQuery({
+        query: FETCH_POSTS,
+      });
+
+      proxy.writeQuery({
+        query: FETCH_POSTS,
+        data: {
+          getPosts: data.getPosts.filter((p) => p.id !== postId),
+        },
+      });
+    },
     variables: { ID: postId },
   });
 
   const deletePost = (e) => {
-    const post = e.target.parentNode.parentNode;
-    post.remove();
     delPost();
   };
 
@@ -32,16 +42,6 @@ export default function PostCard({ props, post }) {
     <Card.Group className="postcard">
       <Card fluid>
         <Card.Content>
-          {user ? (
-            user.username === post.user.username ? (
-              <Icon name="trash" onClick={deletePost} />
-            ) : (
-              ""
-            )
-          ) : (
-            ""
-          )}
-
           <Card.Header
             onClick={() => {
               props.history.push(`/profile/${post.user.id}`);
@@ -64,7 +64,17 @@ export default function PostCard({ props, post }) {
             user={user}
           />
           <CommentButton idClass={idClass} post={post} props={props} />
-
+          {user ? (
+            user.username === post.user.username ? (
+              <Button color="red" onClick={deletePost}>
+                Remove
+              </Button>
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )}
           <CommentForm postId={post.id} />
         </Card.Content>
         <div className={`commentSection ${idClass} invisible`}>

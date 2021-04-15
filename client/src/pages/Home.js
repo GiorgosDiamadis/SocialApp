@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Divider, Form, Button, Grid } from "semantic-ui-react";
 import { useMutation, useSubscription } from "@apollo/react-hooks";
 import PostCard from "../components/PostCard";
 import ErrorsDisplay from "../components/ErrorsDisplay";
 import CustomTextArea from "../components/CustomTextArea";
+import { AuthContext } from "../context/auth";
 const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
 
 function Home(props) {
   const [errors, setErrors] = useState({});
+  const { user } = useContext(AuthContext);
+
   const [values] = useState({
     body: "",
   });
@@ -56,7 +59,7 @@ function Home(props) {
                 errorField="body"
                 db_callback={onSubmit}
                 name="body"
-                placeholder="What are you thinking"
+                placeholder={`What are you thinking ${user.username}?`}
                 rows={1}
               />
             </Form>

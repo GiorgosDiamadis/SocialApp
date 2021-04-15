@@ -188,12 +188,6 @@ export const DELETE_COMMENT = gql`
   mutation deleteComment($ID: ID!, $commentId: ID!) {
     deleteComment(postId: $ID, commentId: $commentId) {
       id
-      body
-      user {
-        username
-        id
-      }
-      createdAt
       comments {
         id
         body

@@ -36,15 +36,15 @@ export default function LikeButton({ id, likes, likeCount, user, props }) {
   const likePost = (event) => {
     if (!loading) {
       like();
-      const likeButton = document.querySelector(
-        `.ui.teal.button.${idClass}.like`
-      );
-      const likeCount = document.querySelector(likeCountSelector);
-      likeCount.innerHTML =
-        parseInt(likeCount.innerHTML) + (hasLiked() ? -1 : 1);
-      likeButton.classList.contains("basic")
-        ? likeButton.classList.remove("basic")
-        : likeButton.classList.add("basic");
+      // const likeButton = document.querySelector(
+      //   `.ui.teal.button.${idClass}.like`
+      // );
+      // const likeCount = document.querySelector(likeCountSelector);
+      // likeCount.innerHTML =
+      //   parseInt(likeCount.innerHTML) + (hasLiked() ? -1 : 1);
+      // likeButton.classList.contains("basic")
+      //   ? likeButton.classList.remove("basic")
+      //   : likeButton.classList.add("basic");
     }
   };
 
