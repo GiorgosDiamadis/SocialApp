@@ -2,10 +2,10 @@ import React, { useState } from "react";
 
 import { Form } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
-import { COMMENT_POST, FETCH_POST } from "../util/graphql";
+import { COMMENT_POST } from "../util/graphql";
 import ErrorsDisplay from "./ErrorsDisplay";
 import CustomTextArea from "./CustomTextArea";
-
+import { toggleVisibility } from "../util/dom";
 export default function CommentForm({ postId }) {
   const idClass = "id" + postId;
   const commentSectionSelector = `.commentSection.${idClass}`;
@@ -17,18 +17,8 @@ export default function CommentForm({ postId }) {
     commentID: "",
   });
 
-  const toggleVisibility = (selector, visibility = undefined) => {
-    const element = document.querySelector(selector);
-    if (!visibility) {
-      element.classList.contains("invisible")
-        ? element.classList.remove("invisible")
-        : element.classList.add("invisible");
-    } else {
-      element.classList.remove("invisible");
-    }
-  };
-  const [comment] = useMutation(COMMENT_POST, {
-    update(cache, result) {
+  const [comment, { loading }] = useMutation(COMMENT_POST, {
+    update() {
       values.postComment = "";
 
       toggleVisibility(commentSectionSelector, true);
@@ -42,7 +32,7 @@ export default function CommentForm({ postId }) {
   return (
     <div>
       <Form
-        className={"commentForm " + idClass + " " + (false ? "loading" : "")}
+        className={"commentForm " + idClass + " " + (loading ? "loading" : "")}
         onSubmit={comment}
       >
         <CustomTextArea

@@ -32,7 +32,7 @@ export default function PostComment({ comment, postId, props }) {
   });
 
   const [editComment] = useMutation(UPDATE_COMMENT, {
-    update(proxy, result) {
+    update(result) {
       const oldbody = document.querySelector(`.text.${idclass}`);
       oldbody.innerHTML = result.data.editComment;
     },
@@ -59,13 +59,18 @@ export default function PostComment({ comment, postId, props }) {
     }
   };
 
+  const onDeleteComment = (e) => {
+    document.querySelector(`.comment.id${comment.id}`).remove();
+    delComment();
+  };
+
   const onSubmit = () => {
     editComment();
     showEditForm(false);
   };
 
   return (
-    <div>
+    <div className={`comment id${comment.id}`}>
       <Loader active={loading ? true : false} />
 
       <Comment.Group>
@@ -116,7 +121,10 @@ export default function PostComment({ comment, postId, props }) {
                   <Popup
                     content={
                       <div className="options">
-                        <div className="option" onClick={() => delComment()}>
+                        <div
+                          className="option"
+                          onClick={() => onDeleteComment()}
+                        >
                           <Icon name="trash" />
                           <p>Delete</p>
                         </div>
