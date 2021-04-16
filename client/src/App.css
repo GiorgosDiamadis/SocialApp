@@ -170,3 +170,12 @@ a {
   display: flex;
   flex-direction: column;
 }
+
+.ui.secondary.pointing.menu {
+  display: flex;
+  justify-content: center;
+}
+
+.ui.secondary.pointing.menu:nth-child(0) {
+  margin-right: auto;
+}

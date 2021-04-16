@@ -28,7 +28,7 @@ import {
 } from "../util/graphql";
 
 export default function Profile(props) {
-  const { user } = useContext(AuthContext);
+  const { user: authUser } = useContext(AuthContext);
   const { profileId } = useParams();
 
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS);
@@ -72,14 +72,32 @@ export default function Profile(props) {
     loading: loadingFriends,
     data: { getFriends: friends } = {},
   } = useQuery(GET_FRIENDS, {
-    update() {},
-    variables: { ID: user.id },
+    update(proxy, result) {},
+    variables: { ID: authUser.id },
     fetchPolicy: "cache-and-network",
   });
 
   const [addFriend] = useMutation(ADD_FRIEND, {
+    update(proxy, result) {
+      console.log(result);
+      const posts = proxy.readQuery({ query: FETCH_POSTS });
+
+      proxy.writeQuery({
+        query: FETCH_POSTS,
+        data: {
+          getPosts: [
+            ...posts.getPosts.filter(
+              (post) =>
+                result.data.addFriend.friends.findIndex(
+                  (f) => post.user.id === f.id
+                ) !== -1 || post.user.id === authUser.id
+            ),
+          ],
+        },
+      });
+    },
     variables: { profileId },
-    refetchQueries: [{ query: GET_FRIENDS, variables: { ID: user.id } }],
+    refetchQueries: [{ query: GET_FRIENDS, variables: { ID: authUser.id } }],
   });
 
   const isFriend = () => {
@@ -98,7 +116,7 @@ export default function Profile(props) {
           <Grid.Column width={2}></Grid.Column>
           <Grid.Column width={7}>
             <h3 className="page-title">Latest Posts</h3>
-            {user.id === profileId ? (
+            {authUser.id === profileId ? (
               <div>
                 <Form>
                   <CustomTextArea
@@ -109,7 +127,7 @@ export default function Profile(props) {
                     errorField="body"
                     db_callback={onSubmit}
                     name="body"
-                    placeholder={`What are you thinking ${user.username}?`}
+                    placeholder={`What are you thinking ${authUser.username}?`}
                     rows={1}
                   />
                 </Form>
@@ -149,7 +167,7 @@ export default function Profile(props) {
                       onClick={() => addFriend()}
                       className="page-title add-remove-friend"
                     >
-                      {user.id !== profileId ? (
+                      {authUser.id !== profileId ? (
                         loadingFriends ? (
                           isFriend() ? (
                             <Button icon="remove user" content="Unfollow" />
@@ -196,12 +214,12 @@ export default function Profile(props) {
                         />
                       </List>
                     </Card.Content>
-                    {user.id === profileId ? (
+                    {authUser.id === profileId ? (
                       <Button
                         primary
                         onClick={() =>
                           props.history.push({
-                            pathname: `/profile/${user.id}/editInfo`,
+                            pathname: `/profile/${authUser.id}/editInfo`,
                             state: { profileInfo, profileId },
                           })
                         }
@@ -215,7 +233,7 @@ export default function Profile(props) {
                 </Card.Group>
                 <h3 className="page-title">Friends</h3>
                 {loadingFriends ? (
-                  <h4>Loading...</h4>
+                  <h4></h4>
                 ) : (
                   <ProfileCard
                     key={"profile"}

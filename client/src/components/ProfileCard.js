@@ -8,9 +8,8 @@ export default function ProfileCard({ friends, props }) {
           <Grid columns={3}>
             {[...Array(friends.length >= 6 ? 6 : friends.length)].map(
               (x, i) => (
-                <Grid.Column>
+                <Grid.Column key={friends[i].id}>
                   <Card
-                    key={friends[i].id}
                     className="profileCard"
                     onClick={() =>
                       props.history.push(`/profile/${friends[i].id}`)

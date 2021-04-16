@@ -8,7 +8,7 @@ export default function Likes({ likes, dispatch, open, size, props }) {
       <Modal.Header>Likes</Modal.Header>
       <Modal.Content>
         {likes.map((like) => (
-          <List divided relaxed>
+          <List divided relaxed key={like.id}>
             <List.Item>
               <Image
                 src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
