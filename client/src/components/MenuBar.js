@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Menu, Input } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
-import CustomTextArea from "./CustomTextArea";
+import SearchBar from "./SearchBar";
 
 export default function MenuBar() {
   const pathname = window.location.pathname;
@@ -22,14 +22,14 @@ export default function MenuBar() {
         to="/"
         className={(user ? "" : "invisible") + " left"}
       />
-      <Menu.Item>
-        <Input
-          className="icon"
-          size="mini"
-          icon="search"
-          placeholder="Search..."
-        />
-      </Menu.Item>
+      {user ? (
+        <Menu.Item>
+          <SearchBar />
+        </Menu.Item>
+      ) : (
+        ""
+      )}
+
       {user ? (
         <Menu.Menu position="right">
           <Menu.Item name="profile" as={Link} to={`/profile/${user.id}`} />
