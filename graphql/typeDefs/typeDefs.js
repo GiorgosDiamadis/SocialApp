@@ -64,6 +64,7 @@ module.exports = gql`
     getPost(postId: ID!): Post!
     getUserInfo(userId: ID!): UserInfo!
     getFriends(userId: ID!): UserInfo!
+    searchUsers(prefix: String!): [User]
   }
 
   type Message {

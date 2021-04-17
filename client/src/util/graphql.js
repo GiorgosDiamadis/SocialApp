@@ -282,3 +282,12 @@ export const UPDATE_COMMENT = gql`
     editComment(commentId: $commentId, body: $body)
   }
 `;
+
+export const SEARCH_USERS = gql`
+  query searchUsers($prefix: String!) {
+    searchUsers(prefix: $prefix) {
+      username
+      id
+    }
+  }
+`;

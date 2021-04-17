@@ -1,7 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const chechAuth = require("../../utils/check-auth");
+const checkAuth = require("../../utils/check-auth");
 const { POPULATE_FRIENDS } = require("../populates");
 const {
   registerInputValidation,
@@ -29,9 +29,23 @@ module.exports = {
       return user;
     },
     async getFriends(_, { userId }, context, info) {
-      chechAuth(context);
+      checkAuth(context);
       const user = await User.findById(userId).populate(POPULATE_FRIENDS);
       return user;
+    },
+
+    async searchUsers(_, { prefix }, context, info) {
+      const user = checkAuth(context);
+      const myname = user.username;
+
+      const users = await User.find({
+        $and: [
+          { username: { $regex: `${prefix}` } },
+          { username: { $ne: myname } },
+        ],
+      });
+
+      return users;
     },
   },
   Mutation: {
@@ -137,7 +151,7 @@ module.exports = {
       return user;
     },
     async addFriend(_, { friendId }, context) {
-      const user = chechAuth(context);
+      const user = checkAuth(context);
       const user_adds = await User.findById(user.id).populate(POPULATE_FRIENDS);
       const new_friend = await User.findById(friendId);
 

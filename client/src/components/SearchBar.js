@@ -1,36 +1,73 @@
 import React, { useState, useRef } from "react";
-import { Input } from "semantic-ui-react";
+import { Input, Dropdown } from "semantic-ui-react";
+import { useLazyQuery } from "@apollo/react-hooks";
+
+import { SEARCH_USERS } from "../util/graphql";
 
 export default function SearchBar() {
   const [state, setState] = useState({
-    name: "",
+    prefix: "",
+    typing: false,
     typingTimeout: 0,
   });
-  const searchBar = useRef(null);
+
+  const [searchUsers, { loading, data }] = useLazyQuery(SEARCH_USERS, {
+    variables: { prefix: state.prefix },
+  });
+
+  const search = (event) => {
+    if (event.target.value.trim() !== "") {
+      return setTimeout(function () {
+        setState({
+          prefix: state.prefix,
+          typing: false,
+          typingTimeout: 0,
+        });
+
+        searchUsers();
+        const menu = document.querySelector(".dropdown-content");
+        menu.style.display = "block";
+      }, 1000);
+    } else {
+      return setTimeout(function () {
+        setState({
+          prefix: state.prefix,
+          typing: false,
+          typingTimeout: 0,
+        });
+      }, 1000);
+    }
+  };
+
   const onChange = (event) => {
     if (state.typingTimeout) {
       clearTimeout(state.typingTimeout);
     }
-    const searchBar = React.findDOMNode("searchUser");
-    console.log(searchBar);
 
-    searchBar.classList.add("loading");
+    const menu = document.querySelector(".dropdown-content");
+    menu.style.display = "none";
+
     setState({
-      name: event.target.value,
-      typingTimeout: setTimeout(function () {
-        searchBar.classList.remove("loading");
-      }, 1000),
+      typing: true,
+      prefix: event.target.value,
+      typingTimeout: search(event),
     });
   };
 
   return (
-    <Input
-      className={"icon"}
-      ref="searchUser"
-      size="mini"
-      icon="search"
-      placeholder="Search..."
-      onChange={onChange}
-    />
+    <div>
+      <Input
+        className={state.typing ? "loading" : ""}
+        size="mini"
+        icon="search"
+        placeholder="Search..."
+        onChange={onChange}
+      />
+      <div className="dropdown-content">
+        {data &&
+          data.searchUsers &&
+          data.searchUsers.map((user) => <p>{user.username}</p>)}
+      </div>
+    </div>
   );
 }
