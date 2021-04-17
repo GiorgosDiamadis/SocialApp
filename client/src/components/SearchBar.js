@@ -13,6 +13,7 @@ export default function SearchBar() {
 
   const [searchUsers, { loading, data }] = useLazyQuery(SEARCH_USERS, {
     variables: { prefix: state.prefix },
+    fetchPolicy: "network-only",
   });
 
   const search = (event) => {
@@ -26,7 +27,7 @@ export default function SearchBar() {
 
         searchUsers();
         const menu = document.querySelector(".dropdown-content");
-        menu.style.display = "block";
+        menu.classList.remove("invisible");
       }, 1000);
     } else {
       return setTimeout(function () {
@@ -45,7 +46,8 @@ export default function SearchBar() {
     }
 
     const menu = document.querySelector(".dropdown-content");
-    menu.style.display = "none";
+    console.log(menu.innerHTML);
+    menu.classList.add("invisible");
 
     setState({
       typing: true,
@@ -63,10 +65,10 @@ export default function SearchBar() {
         placeholder="Search..."
         onChange={onChange}
       />
-      <div className="dropdown-content">
+      <div className="dropdown-content invisible">
         {data &&
           data.searchUsers &&
-          data.searchUsers.map((user) => <p>{user.username}</p>)}
+          data.searchUsers.map((user) => <p key={user.id}>{user.username}</p>)}
       </div>
     </div>
   );

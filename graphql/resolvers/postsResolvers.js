@@ -8,6 +8,7 @@ const {
   POPULATE_COMMENT,
   POPULATE_USER,
   POPULATE_LIKES,
+  POPULATE_FRIENDS,
 } = require("../populates");
 
 const checkAuth = require("../../utils/check-auth");
@@ -15,13 +16,18 @@ module.exports = {
   Query: {
     async getPosts(_, __, context) {
       const authUser = checkAuth(context);
+      const user = await User.findById(authUser.id).populate(POPULATE_FRIENDS);
       const posts = await Post.find({})
         .populate(POPULATE_USER)
         .populate(POPULATE_COMMENT)
         .populate(POPULATE_LIKES)
         .sort({ createdAt: -1 });
 
-      return posts;
+      return posts.filter(
+        (post) =>
+          user.friends.findIndex((f) => post.user.id === f.id) !== -1 ||
+          post.user.id === user.id
+      );
     },
     async getPost(parent, { postId }) {
       try {
