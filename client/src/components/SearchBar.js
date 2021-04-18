@@ -75,39 +75,42 @@ export default function SearchBar(props) {
         onChange={onChange}
       />
       <div className="dropdown-content invisible">
-        <List divided relaxed>
-          {data && data.searchUsers
-            ? [
-                ...Array(
-                  data.searchUsers.length >= 6 ? 6 : data.searchUsers.length
-                ),
-              ].map((x, i) => (
-                <List.Item>
-                  <Image
-                    src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
-                    size="mini"
-                    circular
-                    centered
-                  />
-                  <List.Content>
-                    <List.Header
-                      as={Link}
-                      to={`/profile/${data.searchUsers[i].id}`}
-                      onClick={() => {
-                        const menu = document.querySelector(
-                          ".dropdown-content"
-                        );
-
-                        menu.classList.add("invisible");
-                      }}
-                    >
-                      {data.searchUsers[i].username}
-                    </List.Header>
-                  </List.Content>
-                </List.Item>
-              ))
-            : ""}
-          {data.searchUsers.length >= 6 ? <h4>See all</h4> : ""}
+        <List divided relaxed key={"userList"}>
+          {data &&
+            data.searchUsers &&
+            [
+              ...Array(
+                data.searchUsers.length >= 6 ? 6 : data.searchUsers.length
+              ),
+            ].map((x, i) => (
+              <List.Item>
+                <Image
+                  src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
+                  size="mini"
+                  circular
+                  centered
+                />
+                <List.Content>
+                  <List.Header
+                    as={Link}
+                    to={`/profile/${data.searchUsers[i].id}`}
+                  >
+                    {data.searchUsers[i].username}
+                  </List.Header>
+                </List.Content>
+              </List.Item>
+            ))}
+          {data && data.searchUsers && data.searchUsers.length > 6 ? (
+            <List.Item>
+              <List.Content>
+                <List.Header as={Link} to={"/seeAll"} params={{ all: data }}>
+                  See all
+                </List.Header>
+              </List.Content>
+            </List.Item>
+          ) : (
+            ""
+          )}
         </List>
       </div>
     </div>

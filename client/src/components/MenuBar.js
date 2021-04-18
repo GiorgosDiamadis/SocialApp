@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Menu, Input } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import SearchBar from "./SearchBar";
@@ -12,8 +12,7 @@ export default function MenuBar() {
   const handleItemClick = (e, { name }) => setActiveItem(name);
   const dummy = () => {};
   return (
-    // <Sticky>
-    <Menu pointing secondary size="massive" color="teal">
+    <Menu pointing secondary size="massive" color="teal" className="stickyTop">
       <Menu.Item
         name={user ? user.username : "home"}
         active={user ? true : activeItem === "home"}
@@ -23,7 +22,7 @@ export default function MenuBar() {
         className={(user ? "" : "invisible") + " left"}
       />
       {user ? (
-        <Menu.Item>
+        <Menu.Item className="search">
           <SearchBar />
         </Menu.Item>
       ) : (
@@ -54,6 +53,5 @@ export default function MenuBar() {
         </Menu.Menu>
       )}
     </Menu>
-    // </Sticky>
   );
 }

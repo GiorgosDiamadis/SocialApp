@@ -200,3 +200,21 @@ a {
 .ui.icon.input > i.icon:hover {
   cursor: pointer;
 }
+
+.ui.teal.massive.pointing.secondary.menu > .item.search {
+  padding: 0;
+}
+.ui.teal.massive.pointing.secondary.menu {
+  background: whitesmoke;
+}
+
+.stickyTop {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.ui.grid {
+  margin-top: 50px;
+}
