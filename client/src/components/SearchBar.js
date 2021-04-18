@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
-import { Input, Dropdown } from "semantic-ui-react";
+import { Input, List, Image } from "semantic-ui-react";
 import { useLazyQuery } from "@apollo/react-hooks";
+import { Link } from "react-router-dom";
 
 import { SEARCH_USERS } from "../util/graphql";
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const [state, setState] = useState({
     prefix: "",
     typing: false,
@@ -68,7 +69,23 @@ export default function SearchBar() {
       <div className="dropdown-content invisible">
         {data &&
           data.searchUsers &&
-          data.searchUsers.map((user) => <p key={user.id}>{user.username}</p>)}
+          data.searchUsers.map((user) => (
+            <List divided relaxed key={user.id}>
+              <List.Item>
+                <Image
+                  src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
+                  size="mini"
+                  circular
+                  centered
+                />
+                <List.Content>
+                  <List.Header as={Link} to={`/profile/${user.id}`}>
+                    {user.username}
+                  </List.Header>
+                </List.Content>
+              </List.Item>
+            </List>
+          ))}
       </div>
     </div>
   );

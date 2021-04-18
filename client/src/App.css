@@ -188,3 +188,9 @@ a {
   padding: 12px 16px;
   z-index: 1;
 }
+.dropdown-content > .ui.divided.relaxed.list > .item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
