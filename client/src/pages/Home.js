@@ -21,7 +21,7 @@ function Home(props) {
   };
 
   const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS, {
-    fetchPolicy: "cache-first",
+    fetchPolicy: "cache-and-network",
   });
 
   const [makePost] = useMutation(MAKE_POST, {

@@ -194,3 +194,9 @@ a {
   align-items: center;
   padding: 0;
 }
+.ui.icon.input > i.icon {
+  pointer-events: all !important;
+}
+.ui.icon.input > i.icon:hover {
+  cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Feed, Grid, Image } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 export default function ProfileCard({ friends, props }) {
   return (
     <Card.Group>
@@ -36,6 +37,7 @@ export default function ProfileCard({ friends, props }) {
               )
             )}
           </Grid>
+          <a href="">{friends.length > 6 ? <h5>See all</h5> : ""}</a>
         </Card.Group>
       </Card>
     </Card.Group>

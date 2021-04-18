@@ -18,6 +18,7 @@ import {
   Form,
   Divider,
   Icon,
+  GridColumn,
 } from "semantic-ui-react";
 
 import {
@@ -103,6 +104,7 @@ export default function Profile(props) {
   const isFriend = () => {
     return (
       !loadingFriends &&
+      !loadingInfo &&
       friends.friends.findIndex(
         (fr) => fr.username === profileInfo.username
       ) !== -1
@@ -111,141 +113,252 @@ export default function Profile(props) {
 
   return (
     <div>
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={2}></Grid.Column>
-          <Grid.Column width={7}>
-            <h3 className="page-title">Latest Posts</h3>
-            {authUser.id === profileId ? (
-              <div>
-                <Form>
-                  <CustomTextArea
-                    values={values}
-                    valueField="body"
-                    setErrors={setErrors}
-                    errors={errors}
-                    errorField="body"
-                    db_callback={onSubmit}
-                    name="body"
-                    placeholder={`What are you thinking ${authUser.username}?`}
-                    rows={1}
-                  />
-                </Form>
-                <ErrorsDisplay errors={errors} />
-                <Divider />
-              </div>
-            ) : (
-              ""
-            )}
-
-            {loadingInfo || loading ? (
-              <h1>Loading...</h1>
-            ) : (
-              posts
-                .filter((post) => post.user.username === profileInfo.username)
-                .map((post) => (
-                  <PostCard key={post.id} post={post} props={props} />
-                ))
-            )}
-          </Grid.Column>
-          <Grid.Column width={5}>
-            {" "}
-            <h3 className="page-title">Personal details</h3>
-            {loadingInfo ? (
-              <h4>Loading...</h4>
-            ) : (
-              <div>
-                <Card.Group>
-                  <Card fluid>
-                    <Image
-                      src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
-                      size="medium"
-                      circular
-                      centered
+      {isFriend() || authUser.id === profileId ? (
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={2}></Grid.Column>
+            <Grid.Column width={7}>
+              <h3 className="page-title">Latest Posts</h3>
+              {authUser.id === profileId ? (
+                <div>
+                  <Form>
+                    <CustomTextArea
+                      values={values}
+                      valueField="body"
+                      setErrors={setErrors}
+                      errors={errors}
+                      errorField="body"
+                      db_callback={onSubmit}
+                      name="body"
+                      placeholder={`What are you thinking ${authUser.username}?`}
+                      rows={1}
                     />
-                    <div
-                      onClick={() => addFriend()}
-                      className="page-title add-remove-friend"
-                    >
-                      {authUser.id !== profileId ? (
-                        loadingFriends ? (
-                          isFriend() ? (
+                  </Form>
+                  <ErrorsDisplay errors={errors} />
+                  <Divider />
+                </div>
+              ) : (
+                ""
+              )}
+
+              {loadingInfo || loading ? (
+                <h1>Loading...</h1>
+              ) : (
+                posts
+                  .filter((post) => post.user.username === profileInfo.username)
+                  .map((post) => (
+                    <PostCard key={post.id} post={post} props={props} />
+                  ))
+              )}
+            </Grid.Column>
+            <Grid.Column width={5}>
+              {" "}
+              <h3 className="page-title">Personal details</h3>
+              {loadingInfo ? (
+                <h4>Loading...</h4>
+              ) : (
+                <div>
+                  <Card.Group>
+                    <Card fluid>
+                      <Image
+                        src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
+                        size="medium"
+                        circular
+                        centered
+                      />
+                      <div
+                        onClick={() => addFriend()}
+                        className="page-title add-remove-friend"
+                      >
+                        {authUser.id !== profileId ? (
+                          loadingFriends ? (
+                            isFriend() ? (
+                              <Button icon="remove user" content="Unfollow" />
+                            ) : (
+                              <Button icon="add user" content="Follow" />
+                            )
+                          ) : isFriend() ? (
                             <Button icon="remove user" content="Unfollow" />
                           ) : (
                             <Button icon="add user" content="Follow" />
                           )
-                        ) : isFriend() ? (
-                          <Button icon="remove user" content="Unfollow" />
                         ) : (
-                          <Button icon="add user" content="Follow" />
-                        )
+                          ""
+                        )}
+                      </div>
+                      <Card.Content>
+                        <List>
+                          <List.Item
+                            icon="user"
+                            content={profileInfo.username}
+                          />
+                          <List.Item icon="mail" content={profileInfo.email} />
+                          <List.Item
+                            icon="calendar check outline"
+                            content={
+                              "Joined in " +
+                              moment(profileInfo.createdAt)
+                                .utc()
+                                .format("DD/MM/YYYY")
+                            }
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Born at " + profileInfo.born}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Lives in " + profileInfo.livesIn}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Is from " + profileInfo.isFrom}
+                          />
+                          <List.Item
+                            icon="graduation cap"
+                            content={"Graduated at " + profileInfo.graduatedAt}
+                          />
+                        </List>
+                      </Card.Content>
+                      {authUser.id === profileId ? (
+                        <Button
+                          primary
+                          onClick={() =>
+                            props.history.push({
+                              pathname: `/profile/${authUser.id}/editInfo`,
+                              state: { profileInfo, profileId },
+                            })
+                          }
+                        >
+                          Edit
+                        </Button>
                       ) : (
                         ""
                       )}
-                    </div>
-                    <Card.Content>
-                      <List>
-                        <List.Item icon="user" content={profileInfo.username} />
-                        <List.Item icon="mail" content={profileInfo.email} />
-                        <List.Item
-                          icon="calendar check outline"
-                          content={
-                            "Joined in " +
-                            moment(profileInfo.createdAt)
-                              .utc()
-                              .format("DD/MM/YYYY")
-                          }
-                        />
-                        <List.Item
-                          icon="marker"
-                          content={"Born at " + profileInfo.born}
-                        />
-                        <List.Item
-                          icon="marker"
-                          content={"Lives in " + profileInfo.livesIn}
-                        />
-                        <List.Item
-                          icon="marker"
-                          content={"Is from " + profileInfo.isFrom}
-                        />
-                        <List.Item
-                          icon="graduation cap"
-                          content={"Graduated at " + profileInfo.graduatedAt}
-                        />
-                      </List>
-                    </Card.Content>
-                    {authUser.id === profileId ? (
-                      <Button
-                        primary
-                        onClick={() =>
-                          props.history.push({
-                            pathname: `/profile/${authUser.id}/editInfo`,
-                            state: { profileInfo, profileId },
-                          })
-                        }
+                    </Card>
+                  </Card.Group>
+                  <h3 className="page-title">Friends</h3>
+                  {loadingFriends ? (
+                    <h4></h4>
+                  ) : (
+                    <ProfileCard
+                      key={"profile"}
+                      friends={profileInfo.friends}
+                      props={props}
+                    />
+                  )}
+                </div>
+              )}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      ) : (
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={5}></Grid.Column>
+            <Grid.Column width={5}>
+              {" "}
+              <h3 className="page-title">Personal details</h3>
+              {loadingInfo ? (
+                <h4>Loading...</h4>
+              ) : (
+                <div>
+                  <Card.Group>
+                    <Card fluid>
+                      <Image
+                        src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
+                        size="medium"
+                        circular
+                        centered
+                      />
+                      <div
+                        onClick={() => addFriend()}
+                        className="page-title add-remove-friend"
                       >
-                        Edit
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </Card>
-                </Card.Group>
-                <h3 className="page-title">Friends</h3>
-                {loadingFriends ? (
-                  <h4></h4>
-                ) : (
-                  <ProfileCard
-                    key={"profile"}
-                    friends={profileInfo.friends}
-                    props={props}
-                  />
-                )}
-              </div>
-            )}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+                        {authUser.id !== profileId ? (
+                          loadingFriends ? (
+                            isFriend() ? (
+                              <Button icon="remove user" content="Unfollow" />
+                            ) : (
+                              <Button icon="add user" content="Follow" />
+                            )
+                          ) : isFriend() ? (
+                            <Button icon="remove user" content="Unfollow" />
+                          ) : (
+                            <Button icon="add user" content="Follow" />
+                          )
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      <Card.Content>
+                        <List>
+                          <List.Item
+                            icon="user"
+                            content={profileInfo.username}
+                          />
+                          <List.Item icon="mail" content={profileInfo.email} />
+                          <List.Item
+                            icon="calendar check outline"
+                            content={
+                              "Joined in " +
+                              moment(profileInfo.createdAt)
+                                .utc()
+                                .format("DD/MM/YYYY")
+                            }
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Born at " + profileInfo.born}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Lives in " + profileInfo.livesIn}
+                          />
+                          <List.Item
+                            icon="marker"
+                            content={"Is from " + profileInfo.isFrom}
+                          />
+                          <List.Item
+                            icon="graduation cap"
+                            content={"Graduated at " + profileInfo.graduatedAt}
+                          />
+                        </List>
+                      </Card.Content>
+                      {authUser.id === profileId ? (
+                        <Button
+                          primary
+                          onClick={() =>
+                            props.history.push({
+                              pathname: `/profile/${authUser.id}/editInfo`,
+                              state: { profileInfo, profileId },
+                            })
+                          }
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </Card>
+                  </Card.Group>
+                  <h3 className="page-title">Friends</h3>
+                  {loadingFriends ? (
+                    <h4></h4>
+                  ) : (
+                    <ProfileCard
+                      key={"profile"}
+                      friends={profileInfo.friends}
+                      props={props}
+                    />
+                  )}
+                </div>
+              )}
+            </Grid.Column>
+            <Grid.Column width={5}></Grid.Column>
+          </Grid.Row>
+        </Grid>
+      )}
     </div>
   );
 }

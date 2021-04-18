@@ -29,6 +29,14 @@ export default function SearchBar(props) {
         searchUsers();
         const menu = document.querySelector(".dropdown-content");
         menu.classList.remove("invisible");
+
+        const x = document.querySelector(".ui.icon.input > i.icon");
+        x.addEventListener("click", () => {
+          menu.classList.add("invisible");
+          event.target.value = "";
+          x.classList.remove("cancel");
+          x.classList.add("search");
+        });
       }, 1000);
     } else {
       return setTimeout(function () {
@@ -47,7 +55,7 @@ export default function SearchBar(props) {
     }
 
     const menu = document.querySelector(".dropdown-content");
-    console.log(menu.innerHTML);
+
     menu.classList.add("invisible");
 
     setState({
@@ -62,30 +70,45 @@ export default function SearchBar(props) {
       <Input
         className={state.typing ? "loading" : ""}
         size="mini"
-        icon="search"
+        icon={!(data && data.searchUsers) ? "search" : "cancel"}
         placeholder="Search..."
         onChange={onChange}
       />
       <div className="dropdown-content invisible">
-        {data &&
-          data.searchUsers &&
-          data.searchUsers.map((user) => (
-            <List divided relaxed key={user.id}>
-              <List.Item>
-                <Image
-                  src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
-                  size="mini"
-                  circular
-                  centered
-                />
-                <List.Content>
-                  <List.Header as={Link} to={`/profile/${user.id}`}>
-                    {user.username}
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-            </List>
-          ))}
+        <List divided relaxed>
+          {data && data.searchUsers
+            ? [
+                ...Array(
+                  data.searchUsers.length >= 6 ? 6 : data.searchUsers.length
+                ),
+              ].map((x, i) => (
+                <List.Item>
+                  <Image
+                    src="https://cdn.iconscout.com/icon/free/png-256/avatar-373-456325.png"
+                    size="mini"
+                    circular
+                    centered
+                  />
+                  <List.Content>
+                    <List.Header
+                      as={Link}
+                      to={`/profile/${data.searchUsers[i].id}`}
+                      onClick={() => {
+                        const menu = document.querySelector(
+                          ".dropdown-content"
+                        );
+
+                        menu.classList.add("invisible");
+                      }}
+                    >
+                      {data.searchUsers[i].username}
+                    </List.Header>
+                  </List.Content>
+                </List.Item>
+              ))
+            : ""}
+          {data.searchUsers.length >= 6 ? <h4>See all</h4> : ""}
+        </List>
       </div>
     </div>
   );
