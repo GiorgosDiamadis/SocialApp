@@ -45,11 +45,11 @@ function Home(props) {
 
   return (
     <div>
-      <Grid>
+      <Grid className="main">
         <Grid.Row>
           <Grid.Column width={5}> </Grid.Column>
 
-          <Grid.Column width={6}>
+          <Grid.Column style={{ marginTop: 50 }} width={6}>
             <Form>
               <CustomTextArea
                 values={values}

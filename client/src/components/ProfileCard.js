@@ -6,7 +6,7 @@ export default function ProfileCard({ friends, props }) {
     <Card.Group>
       <Card fluid style={{ padding: "30px" }}>
         <Card.Group>
-          <Grid columns={3}>
+          <Grid columns={2}>
             {[...Array(friends.length >= 6 ? 6 : friends.length)].map(
               (x, i) => (
                 <Grid.Column key={friends[i].id}>
@@ -37,7 +37,7 @@ export default function ProfileCard({ friends, props }) {
               )
             )}
           </Grid>
-          <a href="">{friends.length > 6 ? <h5>See all</h5> : ""}</a>
+          {/* <a href="">{friends.length > 6 ? <h5>See all</h5> : ""}</a> */}
         </Card.Group>
       </Card>
     </Card.Group>

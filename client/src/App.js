@@ -22,8 +22,6 @@ function App() {
           <AuthRoute exact path="/" component={Home} mode="false" />
           <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
           <Container className="inner" id="inner">
-            <AuthRoute exact path="/register" component={Register} />
-            <AuthRoute exact path="/login" component={Login} />
             <AuthRoute
               exact
               path="/profile/:profileId"
@@ -38,6 +36,8 @@ function App() {
             />
           </Container>
         </Container>
+        <AuthRoute exact path="/register" component={Register} />
+        <AuthRoute exact path="/login" component={Login} />
       </Router>
     </AuthProvider>
   );
