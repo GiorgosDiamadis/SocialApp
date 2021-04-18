@@ -94,6 +94,11 @@ export default function SearchBar(props) {
                   <List.Header
                     as={Link}
                     to={`/profile/${data.searchUsers[i].id}`}
+                    onClick={() => {
+                      const menu = document.querySelector(".dropdown-content");
+
+                      menu.classList.add("invisible");
+                    }}
                   >
                     {data.searchUsers[i].username}
                   </List.Header>
