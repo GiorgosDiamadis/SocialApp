@@ -65,11 +65,13 @@ module.exports = gql`
     getUserInfo(userId: ID!): UserInfo!
     getFriends(userId: ID!): UserInfo!
     searchUsers(prefix: String!): [User]
+    messages: [Message!]
   }
 
   type Message {
-    from: ID!
-    to: ID!
+    id: ID!
+    from: ID
+    to: ID
     body: String!
     createdAt: String
   }
@@ -93,6 +95,6 @@ module.exports = gql`
     editComment(commentId: ID!, body: String!): String!
 
     addFriend(friendId: ID!): UserInfo!
-    sendMessage(from: ID!, to: ID!, body: String!): Message!
+    sendMessage(to: ID!, body: String!): Message!
   }
 `;

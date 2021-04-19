@@ -12,10 +12,12 @@ module.exports = {
     ...postsResolvers.Query,
     ...usersResolvers.Query,
     ...commentsResolvers.Query,
+    ...chatResolvers.Query,
   },
   Mutation: {
     ...usersResolvers.Mutation,
     ...postsResolvers.Mutation,
     ...commentsResolvers.Mutation,
+    ...chatResolvers.Mutation,
   },
 };

@@ -18,6 +18,8 @@ export default function CustomTextArea({
       e.preventDefault();
       if (e.target.value.trim() !== "") {
         values[valueField] = e.target.value;
+        console.log(e.target.value);
+        console.log(values);
       }
       e.target.style.height = `${39}px`;
       e.target.value = "";
@@ -25,7 +27,6 @@ export default function CustomTextArea({
     }
   };
 
-  var scroll = 39;
   const onChange = (event) => {
     const parent = event.target.parentNode;
 
@@ -47,7 +48,7 @@ export default function CustomTextArea({
         values={values}
         onChange={onChange}
         onKeyPress={handleUserKeyPress}
-        error={errors[errorField] ? true : false}
+        // error={errors[errorField] ? true : false}
       />
     </>
   );

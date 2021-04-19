@@ -9,5 +9,25 @@ const {
   POPULATE_USER,
   POPULATE_LIKES,
 } = require("../populates");
+const messages = [];
 
-module.exports = {};
+module.exports = {
+  Query: {
+    messages: () => messages,
+  },
+  Mutation: {
+    sendMessage(_, { to, body }, context) {
+      const authUser = chechAuth(context);
+
+      const id = messages.length;
+      const message = {
+        id,
+        from: authUser.username,
+        to,
+        body,
+      };
+      messages.push(message);
+      return message;
+    },
+  },
+};

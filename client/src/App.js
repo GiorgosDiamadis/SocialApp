@@ -19,12 +19,12 @@ function App() {
     <AuthProvider>
       <Router>
         <Container className="outer">
-          <MenuBar />
+          {/* <MenuBar /> */}
           <AuthRoute exact path="/" component={Home} mode="false" />
           <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
-          <Route exact path="/messages" component={Chat} />
 
           <Container className="inner" id="inner">
+            <AuthRoute exact path="/messages" component={Chat} mode="false" />
             <AuthRoute
               exact
               path="/profile/:profileId"

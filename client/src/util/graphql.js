@@ -291,3 +291,23 @@ export const SEARCH_USERS = gql`
     }
   }
 `;
+
+export const GET_MESSAGES = gql`
+  query {
+    messages {
+      id
+      body
+      from
+      to
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+  mutation sendMessage($to: ID!, $body: String!) {
+    sendMessage(to: $to, body: $body) {
+      id
+      body
+    }
+  }
+`;
