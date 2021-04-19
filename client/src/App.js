@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import MenuBar from "./components/MenuBar";
@@ -13,6 +13,7 @@ import AuthRoute from "./util/AuthRoute";
 import "./App.css";
 import Profile from "./pages/Profile";
 import EditInfo from "./pages/EditInfo";
+import Chat from "./pages/Chat";
 function App() {
   return (
     <AuthProvider>
@@ -21,6 +22,8 @@ function App() {
           <MenuBar />
           <AuthRoute exact path="/" component={Home} mode="false" />
           <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
+          <Route exact path="/messages" component={Chat} />
+
           <Container className="inner" id="inner">
             <AuthRoute
               exact

@@ -9,6 +9,7 @@ const {
 } = require("../../utils/inputValidations");
 const { SECRET_KEY } = require("../../config");
 const { UserInputError } = require("apollo-server-errors");
+
 const generateToken = (user) => {
   return jwt.sign(
     {
