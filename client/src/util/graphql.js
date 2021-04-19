@@ -293,7 +293,7 @@ export const SEARCH_USERS = gql`
 `;
 
 export const GET_MESSAGES = gql`
-  query {
+  subscription {
     messages {
       id
       body
@@ -303,6 +303,17 @@ export const GET_MESSAGES = gql`
   }
 `;
 
+export const GET_MESSAGES_TO = gql`
+  query {
+    getMessages {
+      id
+      body
+      from
+      to
+      createdAt
+    }
+  }
+`;
 export const SEND_MESSAGE = gql`
   mutation sendMessage($to: ID!, $body: String!) {
     sendMessage(to: $to, body: $body) {

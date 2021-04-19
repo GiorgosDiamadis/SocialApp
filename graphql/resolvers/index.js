@@ -20,4 +20,7 @@ module.exports = {
     ...commentsResolvers.Mutation,
     ...chatResolvers.Mutation,
   },
+  Subscription: {
+    ...chatResolvers.Subscription,
+  },
 };

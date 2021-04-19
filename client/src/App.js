@@ -14,17 +14,24 @@ import "./App.css";
 import Profile from "./pages/Profile";
 import EditInfo from "./pages/EditInfo";
 import Chat from "./pages/Chat";
+import Messages from "./pages/Messages";
+
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Container className="outer">
-          {/* <MenuBar /> */}
+          <MenuBar />
           <AuthRoute exact path="/" component={Home} mode="false" />
           <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
 
           <Container className="inner" id="inner">
-            <AuthRoute exact path="/messages" component={Chat} mode="false" />
+            <AuthRoute
+              exact
+              path="/messages"
+              component={Messages}
+              mode="false"
+            />
             <AuthRoute
               exact
               path="/profile/:profileId"

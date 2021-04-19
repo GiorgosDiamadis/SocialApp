@@ -65,15 +65,15 @@ module.exports = gql`
     getUserInfo(userId: ID!): UserInfo!
     getFriends(userId: ID!): UserInfo!
     searchUsers(prefix: String!): [User]
-    messages: [Message!]
+    getMessages: [Message!]
   }
 
   type Message {
     id: ID!
-    from: ID
-    to: ID
+    from: String!
+    to: ID!
     body: String!
-    createdAt: String
+    createdAt: String!
   }
 
   type Mutation {
@@ -96,5 +96,9 @@ module.exports = gql`
 
     addFriend(friendId: ID!): UserInfo!
     sendMessage(to: ID!, body: String!): Message!
+  }
+
+  type Subscription {
+    messages: [Message!]
   }
 `;

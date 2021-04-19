@@ -1,33 +1,44 @@
-const { AuthenticationError, UserInputError } = require("apollo-server-errors");
-const Post = require("../../models/Post");
-const User = require("../../models/User");
-const Comment = require("../../models/Comment");
-
 const chechAuth = require("../../utils/check-auth");
-const {
-  POPULATE_COMMENT,
-  POPULATE_USER,
-  POPULATE_LIKES,
-} = require("../populates");
-const messages = [];
+const Message = require("../../models/Message");
+
+var messages = [];
+const subscribers = [];
+const onMessagesUpdates = (fn) => subscribers.push(fn);
 
 module.exports = {
   Query: {
-    messages: () => messages,
-  },
-  Mutation: {
-    sendMessage(_, { to, body }, context) {
+    async getMessages(_, __, context) {
       const authUser = chechAuth(context);
 
-      const id = messages.length;
-      const message = {
-        id,
+      messages = await Message.find({
+        $or: [{ to: authUser.username }, { from: authUser.username }],
+      }).sort({ createdAt: -1 });
+
+      return messages;
+    },
+  },
+  Mutation: {
+    async sendMessage(_, { to, body }, context) {
+      const authUser = chechAuth(context);
+      const message = new Message({
         from: authUser.username,
         to,
         body,
-      };
+        createdAt: new Date().toISOString(),
+      });
+      await message.save();
       messages.push(message);
+      subscribers.forEach((fn) => fn());
       return message;
+    },
+  },
+  Subscription: {
+    messages: {
+      subscribe: (parent, args, { pubsub }) => {
+        const channel = Math.random.toString(36).slice(2, 15);
+        onMessagesUpdates(() => pubsub.publish(channel, { messages }));
+        return pubsub.asyncIterator(channel);
+      },
     },
   },
 };
