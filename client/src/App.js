@@ -28,7 +28,7 @@ function App() {
           <Container className="inner" id="inner">
             <AuthRoute
               exact
-              path="/messages"
+              path="/messages/:username"
               component={Messages}
               mode="false"
             />

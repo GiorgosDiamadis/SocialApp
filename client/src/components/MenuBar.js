@@ -32,6 +32,11 @@ export default function MenuBar() {
       {user ? (
         <Menu.Menu position="right">
           <Menu.Item name="profile" as={Link} to={`/profile/${user.id}`} />
+          <Menu.Item
+            name="messages"
+            as={Link}
+            to={`/messages/${user.username}`}
+          />
           <Menu.Item name="logout" onClick={logout} as={Link} to="/login" />
         </Menu.Menu>
       ) : (
