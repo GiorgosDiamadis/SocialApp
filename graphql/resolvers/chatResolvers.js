@@ -2,8 +2,7 @@ const chechAuth = require("../../utils/check-auth");
 const Message = require("../../models/Message");
 
 var messages = [];
-const subscribers = [];
-const onMessagesUpdates = (fn) => subscribers.push(fn);
+const MESSAGE_SENT = "MESSAGE_SENT";
 
 module.exports = {
   Query: {
@@ -31,16 +30,14 @@ module.exports = {
       });
       await message.save();
       messages.push(message);
-      subscribers.forEach((fn) => fn());
+      context.pubsub.publish(MESSAGE_SENT, { messages });
       return message;
     },
   },
   Subscription: {
     messages: {
       subscribe: (parent, args, { pubsub }) => {
-        const channel = Math.random.toString(36).slice(2, 15);
-        onMessagesUpdates(() => pubsub.publish(channel, { messages }));
-        return pubsub.asyncIterator(channel);
+        return pubsub.asyncIterator(MESSAGE_SENT);
       },
     },
   },
