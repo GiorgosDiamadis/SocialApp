@@ -304,8 +304,8 @@ export const GET_MESSAGES = gql`
 `;
 
 export const GET_MESSAGES_TO = gql`
-  query {
-    getMessages {
+  query getMessages($to: String!) {
+    getMessages(to: $to) {
       id
       body
       from

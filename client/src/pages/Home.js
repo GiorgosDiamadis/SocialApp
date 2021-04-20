@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Divider, Form, Button, Grid } from "semantic-ui-react";
-import { useMutation, useSubscription } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import PostCard from "../components/PostCard";
 import ErrorsDisplay from "../components/ErrorsDisplay";
 import CustomTextArea from "../components/CustomTextArea";

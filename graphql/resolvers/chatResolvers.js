@@ -7,12 +7,15 @@ const onMessagesUpdates = (fn) => subscribers.push(fn);
 
 module.exports = {
   Query: {
-    async getMessages(_, __, context) {
+    async getMessages(_, { to }, context) {
       const authUser = chechAuth(context);
 
       messages = await Message.find({
-        $or: [{ to: authUser.username }, { from: authUser.username }],
-      }).sort({ createdAt: -1 });
+        $or: [
+          { $and: [{ to: authUser.username }, { from: to }] },
+          { $and: [{ from: authUser.username }, { to: to }] },
+        ],
+      });
 
       return messages;
     },

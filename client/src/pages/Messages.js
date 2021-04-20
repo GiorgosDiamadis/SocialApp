@@ -1,43 +1,56 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Grid } from "semantic-ui-react";
+import { useQuery } from "@apollo/react-hooks";
+
+import Chat from "./Chat";
+import { List, Image } from "semantic-ui-react";
+import { AuthContext } from "../context/auth";
+import { GET_FRIENDS } from "../util/graphql";
 
 export default function Messages() {
-  const { username } = useParams();
+  const { user } = useContext(AuthContext);
+
+  const [state, setState] = useState({
+    to: "",
+  });
+
+  const { loading, data } = useQuery(GET_FRIENDS, {
+    fetchPolicy: "cache-first",
+    variables: {
+      ID: user.id,
+    },
+  });
+
+  const chatWith = (username) => {
+    setState({
+      to: username,
+    });
+  };
+
   return (
-    <Grid style={{ marginTop: 50 }}>
-      <Grid.Row>
-        <Grid.Column width={5} style={{ padding: 0 }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div
-              style={{
-                border: "1px groove rgba(224, 224, 224,0.5)",
-                textAlign: "center",
-              }}
-            >
-              <h3>username</h3>
-            </div>
-            <div
-              style={{
-                border: "1px groove rgba(224, 224, 224,0.5)",
-                textAlign: "center",
-              }}
-            >
-              <h3>username</h3>
-            </div>
-          </div>
-        </Grid.Column>
-        <Grid.Column width={10} style={{ padding: 0 }}>
-          <div
-            style={{
-              border: "1px groove rgba(224, 224, 224,0.5)",
-              textAlign: "center",
-            }}
-          >
-            <h3>uiop</h3>
-          </div>
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
+    <div className="messagesPanel">
+      <div className="messages">
+        <div className="messageFrom">{user.username}</div>
+        <div className="messageTo">
+          <List selection verticalAlign="middle">
+            {data &&
+              data.getFriends.friends.map(({ id, username }) => (
+                <List.Item key={id} onClick={() => chatWith(username)}>
+                  <Image
+                    avatar
+                    src="https://react.semantic-ui.com/images/avatar/small/helen.jpg"
+                  />
+                  <List.Content>
+                    <List.Header>{username}</List.Header>
+                  </List.Content>
+                </List.Item>
+              ))}
+          </List>
+        </div>
+      </div>
+      <div className="chat">
+        <Chat to={state.to} />
+      </div>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import { AuthContext } from "../context/auth";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { GET_MESSAGES, SEND_MESSAGE, GET_MESSAGES_TO } from "../util/graphql";
 import { useSubscription, useMutation } from "@apollo/client";
 import { Form, Grid } from "semantic-ui-react";
@@ -14,36 +14,22 @@ const Messages = ({ user, previous }) => {
       {previous &&
         previous.map(({ id, from, to, body }) => (
           <div
+            className="chatDisplay"
             style={{
-              display: "flex",
               justifyContent: user === from ? "flex-end" : "flex-start",
-              paddingBottom: "1em",
             }}
             key={id}
           >
             {user !== from && (
-              <div
-                style={{
-                  height: 50,
-                  width: 50,
-                  marginRight: "0.5em",
-                  border: "2px solid #e5e6ea",
-                  borderRadius: 25,
-                  textAlign: "center",
-                  fontSize: "18pt",
-                  paddingTop: 12,
-                }}
-              >
+              <div className="messageUserInitials">
                 {from.slice(0, 2).toUpperCase()}
               </div>
             )}
             <div
+              className="messageStyling"
               style={{
                 background: user === from ? "#58bf56" : "#e5e6ea",
                 color: user === from ? "white" : "black",
-                padding: "1em",
-                borderRadius: "1em",
-                maxWidth: "60%",
               }}
             >
               {body}
@@ -53,36 +39,22 @@ const Messages = ({ user, previous }) => {
       {data &&
         data.messages.map(({ id, from, to, body }) => (
           <div
+            className="chatDisplay"
             style={{
-              display: "flex",
               justifyContent: user === from ? "flex-end" : "flex-start",
-              paddingBottom: "1em",
             }}
             key={id}
           >
             {user !== from && (
-              <div
-                style={{
-                  height: 50,
-                  width: 50,
-                  marginRight: "0.5em",
-                  border: "2px solid #e5e6ea",
-                  borderRadius: 25,
-                  textAlign: "center",
-                  fontSize: "18pt",
-                  paddingTop: 12,
-                }}
-              >
+              <div className="messageUserInitials">
                 {from.slice(0, 2).toUpperCase()}
               </div>
             )}
             <div
+              className="messageStyling"
               style={{
                 background: user === from ? "#58bf56" : "#e5e6ea",
                 color: user === from ? "white" : "black",
-                padding: "1em",
-                borderRadius: "1em",
-                maxWidth: "60%",
               }}
             >
               {body}
@@ -93,22 +65,27 @@ const Messages = ({ user, previous }) => {
   );
 };
 
-export default function Chat() {
+export default function Chat({ to }) {
   const { user } = useContext(AuthContext);
 
   var variables = {
     user: user,
     body: "",
-    to: "Giorgos1997",
+    to: to,
   };
   const [sendMessage] = useMutation(SEND_MESSAGE, {
     variables: variables,
   });
-  const { loading, data: { getMessages: previousMessages } = {} } = useQuery(
-    GET_MESSAGES_TO
-  );
+  const {
+    loading,
+    data: { getMessages: previousMessages } = {},
+  } = useQuery(GET_MESSAGES_TO, { variables: variables });
 
   if (!previousMessages) {
+    return null;
+  }
+
+  if (to.trim() === "") {
     return null;
   }
   return (

@@ -2,6 +2,9 @@
   text-decoration: underline;
   color: teal !important;
 }
+body {
+  background: whitesmoke;
+}
 
 .page-title {
   display: block !important;
@@ -31,6 +34,7 @@
 
 .ui.container.inner {
   width: 80%;
+  margin-top: 70px;
 }
 .ui.form.commentForm > .field {
   margin-top: 10px;
@@ -218,4 +222,67 @@ a {
 
 .ui.grid {
   margin: 0;
+}
+
+.messagesPanel {
+  width: 80%;
+  height: 800px;
+  margin: auto;
+  display: flex;
+}
+
+.messages {
+  border-radius: 15px 0 0 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(199, 199, 199);
+  background: white;
+}
+
+.messageFrom {
+  flex: 1;
+  border-radius: 15px 0 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+
+.messageTo {
+  flex: 14;
+  border-radius: 0 0 0 15px;
+  border-top: 1px solid rgb(199, 199, 199);
+  background: white;
+}
+
+.chat {
+  border: 1px solid rgb(199, 199, 199);
+  border-left: none;
+  background: white;
+
+  border-radius: 0 15px 15px 0;
+  flex: 4;
+}
+
+.messageUserInitials {
+  height: 50px;
+  width: 50px;
+  margin-right: 0.5em;
+  border: 2px solid #e5e6ea;
+  border-radius: 25px;
+  text-align: center;
+  font-size: 18pt;
+  padding-top: 12px;
+}
+
+.chatDisplay {
+  display: flex;
+  padding-bottom: 1em;
+}
+
+.messageStyling {
+  padding: 1em;
+  border-radius: 1em;
+  max-width: 60%;
 }
