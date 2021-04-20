@@ -9,9 +9,11 @@ import { useQuery } from "@apollo/react-hooks";
 const Messages = ({ user, previous }) => {
   const { data } = useSubscription(GET_MESSAGES);
 
+  console.log(data);
+
   return (
     <>
-      {previous &&
+      {/* {previous &&
         previous.map(({ id, from, to, body }) => (
           <div
             className="chatDisplay"
@@ -35,32 +37,32 @@ const Messages = ({ user, previous }) => {
               {body}
             </div>
           </div>
-        ))}
-      {data &&
-        data.messages.map(({ id, from, to, body }) => (
-          <div
-            className="chatDisplay"
-            style={{
-              justifyContent: user === from ? "flex-end" : "flex-start",
-            }}
-            key={id}
-          >
-            {user !== from && (
-              <div className="messageUserInitials">
-                {from.slice(0, 2).toUpperCase()}
-              </div>
-            )}
-            <div
-              className="messageStyling"
-              style={{
-                background: user === from ? "#58bf56" : "#e5e6ea",
-                color: user === from ? "white" : "black",
-              }}
-            >
-              {body}
+        ))} */}
+      {data && data.messages && (
+        <div
+          className="chatDisplay"
+          style={{
+            justifyContent:
+              user === data.messages.from ? "flex-end" : "flex-start",
+          }}
+          key={data.messages.id}
+        >
+          {user !== data.messages.from && (
+            <div className="messageUserInitials">
+              {data.messages.from.slice(0, 2).toUpperCase()}
             </div>
+          )}
+          <div
+            className="messageStyling"
+            style={{
+              background: user === data.messages.from ? "#58bf56" : "#e5e6ea",
+              color: user === data.messages.from ? "white" : "black",
+            }}
+          >
+            {data.messages.body}
           </div>
-        ))}
+        </div>
+      )}
     </>
   );
 };

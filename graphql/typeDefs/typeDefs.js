@@ -99,6 +99,6 @@ module.exports = gql`
   }
 
   type Subscription {
-    messages: [Message!]
+    messages: Message!
   }
 `;
