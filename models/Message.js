@@ -1,8 +1,8 @@
 const { model, Schema } = require("mongoose");
 
 const messageSchema = new Schema({
-  from: String,
-  to: String,
+  sender: String,
+  receiver: String,
   body: String,
   createdAt: String,
 });

@@ -11,7 +11,7 @@ export default function Messages() {
   const { user } = useContext(AuthContext);
 
   const [state, setState] = useState({
-    to: "",
+    chatWith: "",
   });
 
   const { loading, data } = useQuery(GET_FRIENDS, {
@@ -23,7 +23,7 @@ export default function Messages() {
 
   const chatWith = (username) => {
     setState({
-      to: username,
+      chatWith: username,
     });
   };
 
@@ -49,7 +49,7 @@ export default function Messages() {
         </div>
       </div>
       <div className="chat">
-        <Chat to={state.to} />
+        <Chat chatWith={state.chatWith} />
       </div>
     </div>
   );

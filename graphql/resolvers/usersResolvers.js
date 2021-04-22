@@ -1,4 +1,6 @@
 const User = require("../../models/User");
+const Conversation = require("../../models/Conversation");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const checkAuth = require("../../utils/check-auth");
@@ -154,7 +156,9 @@ module.exports = {
     async addFriend(_, { friendId }, context) {
       const user = checkAuth(context);
       const user_adds = await User.findById(user.id).populate(POPULATE_FRIENDS);
-      const new_friend = await User.findById(friendId);
+      const new_friend = await User.findById(friendId).populate(
+        POPULATE_FRIENDS
+      );
 
       const friend_index = user_adds.friends.findIndex(
         (friend) => friend.username === new_friend.username
@@ -162,6 +166,16 @@ module.exports = {
 
       if (friend_index === -1) {
         user_adds.friends.push(new_friend);
+        new_friend.friends.push(user_adds);
+
+        const conversation = new Conversation({
+          user0: user_adds.username,
+          user1: new_friend.username,
+          messages: [],
+        });
+
+        await conversation.save();
+        await new_friend.save();
       } else {
         user_adds.friends.splice(friend_index, 1);
       }

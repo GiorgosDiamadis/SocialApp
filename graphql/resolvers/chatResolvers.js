@@ -1,5 +1,5 @@
 const chechAuth = require("../../utils/check-auth");
-const Message = require("../../models/Message");
+const Conversation = require("../../models/Conversation");
 const { withFilter } = require("graphql-subscriptions");
 
 var authUser = undefined;
@@ -7,25 +7,22 @@ const MESSAGE_SENT = "MESSAGE_SENT";
 
 module.exports = {
   Query: {
-    async getMessages(_, { to }, context) {
+    async getConversation(_, { username }, context) {
       authUser = chechAuth(context);
 
-      const messages = await Message.find({
-        $or: [
-          { $and: [{ to: authUser.username }, { from: to }] },
-          { $and: [{ from: authUser.username }, { to: to }] },
-        ],
+      const conversation = await Conversation.findOne({
+        $and: [{ user0: authUser.username }, { user1: username }],
       });
 
-      return messages;
+      return conversation;
     },
   },
   Mutation: {
     async sendMessage(_, { to, body }, context) {
       authUser = chechAuth(context);
       const message = new Message({
-        from: authUser.username,
-        to,
+        sender: authUser.username,
+        receiver: to,
         body,
         createdAt: new Date().toISOString(),
       });
@@ -40,15 +37,7 @@ module.exports = {
         (parent, args, { pubsub }) => {
           return pubsub.asyncIterator(MESSAGE_SENT);
         },
-        (payload, variables) => {
-          console.log(authUser);
-          console.log(payload);
-
-          return (
-            payload.messages.to === authUser.username ||
-            payload.messages.from === authUser.username
-          );
-        }
+        (payload, variables) => {}
       ),
     },
   },

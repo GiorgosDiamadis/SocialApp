@@ -303,14 +303,17 @@ export const GET_MESSAGES = gql`
   }
 `;
 
-export const GET_MESSAGES_TO = gql`
-  query getMessages($to: String!) {
-    getMessages(to: $to) {
+export const GET_CONVERSATION = gql`
+  query getConversation($username: String!) {
+    getConversation(username: $username) {
       id
-      body
-      from
-      to
-      createdAt
+      user0
+      user1
+      messages {
+        sender
+        body
+        createdAt
+      }
     }
   }
 `;

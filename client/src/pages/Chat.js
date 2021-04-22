@@ -1,93 +1,66 @@
 import { AuthContext } from "../context/auth";
 import React, { useContext } from "react";
-import { GET_MESSAGES, SEND_MESSAGE, GET_MESSAGES_TO } from "../util/graphql";
+import { GET_MESSAGES, SEND_MESSAGE, GET_CONVERSATION } from "../util/graphql";
 import { useSubscription, useMutation } from "@apollo/client";
 import { Form, Grid } from "semantic-ui-react";
 import CustomTextArea from "../components/CustomTextArea";
 import { useQuery } from "@apollo/react-hooks";
 
-const Messages = ({ user, previous }) => {
-  const { data } = useSubscription(GET_MESSAGES);
-
-  console.log(data);
+const Messages = ({ user, conversation }) => {
+  // const { data } = useSubscription(GET_MESSAGES);
 
   return (
     <>
-      {/* {previous &&
-        previous.map(({ id, from, to, body }) => (
-          <div
-            className="chatDisplay"
-            style={{
-              justifyContent: user === from ? "flex-end" : "flex-start",
-            }}
-            key={id}
-          >
-            {user !== from && (
-              <div className="messageUserInitials">
-                {from.slice(0, 2).toUpperCase()}
-              </div>
-            )}
-            <div
-              className="messageStyling"
-              style={{
-                background: user === from ? "#58bf56" : "#e5e6ea",
-                color: user === from ? "white" : "black",
-              }}
-            >
-              {body}
-            </div>
-          </div>
-        ))} */}
-      {data && data.messages && (
+      {/* {data && data.messages && (
         <div
           className="chatDisplay"
           style={{
             justifyContent:
-              user === data.messages.from ? "flex-end" : "flex-start",
+              user === data.messages.sender ? "flex-end" : "flex-start",
           }}
           key={data.messages.id}
         >
-          {user !== data.messages.from && (
+          {user !== data.messages.sender && (
             <div className="messageUserInitials">
-              {data.messages.from.slice(0, 2).toUpperCase()}
+              {data.messages.sender.slice(0, 2).toUpperCase()}
             </div>
           )}
           <div
             className="messageStyling"
             style={{
-              background: user === data.messages.from ? "#58bf56" : "#e5e6ea",
-              color: user === data.messages.from ? "white" : "black",
+              background: user === data.messages.sender ? "#58bf56" : "#e5e6ea",
+              color: user === data.messages.sender ? "white" : "black",
             }}
           >
             {data.messages.body}
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };
 
-export default function Chat({ to }) {
+export default function Chat({ chatWith }) {
   const { user } = useContext(AuthContext);
 
   var variables = {
     user: user,
     body: "",
-    to: to,
+    username: chatWith,
   };
   const [sendMessage] = useMutation(SEND_MESSAGE, {
-    variables: variables,
+    variables: { to: variables.username },
   });
   const {
-    loading,
-    data: { getMessages: previousMessages } = {},
-  } = useQuery(GET_MESSAGES_TO, { variables: variables });
+    _,
+    data: { getConversation: conversation } = {},
+  } = useQuery(GET_CONVERSATION, { variables: variables });
 
-  if (!previousMessages) {
+  if (!conversation) {
     return null;
   }
 
-  if (to.trim() === "") {
+  if (chatWith.trim() === "") {
     return null;
   }
   return (
@@ -96,7 +69,7 @@ export default function Chat({ to }) {
         <Grid.Column>
           <Messages
             user={variables.user.username}
-            previous={previousMessages}
+            conversation={conversation}
           />
         </Grid.Column>
       </Grid.Row>
