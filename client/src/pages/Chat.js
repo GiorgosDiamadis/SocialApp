@@ -1,17 +1,21 @@
 import { AuthContext } from "../context/auth";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GET_MESSAGES, SEND_MESSAGE, GET_CONVERSATION } from "../util/graphql";
 import { useSubscription, useMutation } from "@apollo/client";
 import { Form, Grid } from "semantic-ui-react";
 import CustomTextArea from "../components/CustomTextArea";
 import { useQuery } from "@apollo/react-hooks";
 
-const Messages = ({ user, conversation }) => {
-  // const { data } = useSubscription(GET_MESSAGES);
+const MessagesSubscription = ({ user, conversation }) => {
+  const { data } = useSubscription(GET_MESSAGES, {
+    variables: {
+      conversation: conversation.id,
+    },
+  });
 
   return (
     <>
-      {/* {data && data.messages && (
+      {data && data.messages && (
         <div
           className="chatDisplay"
           style={{
@@ -35,7 +39,7 @@ const Messages = ({ user, conversation }) => {
             {data.messages.body}
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 };
@@ -43,13 +47,14 @@ const Messages = ({ user, conversation }) => {
 export default function Chat({ chatWith }) {
   const { user } = useContext(AuthContext);
 
-  var variables = {
+  const [variables] = useState({
     user: user,
     body: "",
     username: chatWith,
-  };
+  });
+
   const [sendMessage] = useMutation(SEND_MESSAGE, {
-    variables: { to: variables.username },
+    variables: variables,
   });
   const {
     _,
@@ -63,11 +68,12 @@ export default function Chat({ chatWith }) {
   if (chatWith.trim() === "") {
     return null;
   }
+
   return (
     <Grid style={{ width: "50%", margin: "auto" }}>
       <Grid.Row>
         <Grid.Column>
-          <Messages
+          <MessagesSubscription
             user={variables.user.username}
             conversation={conversation}
           />

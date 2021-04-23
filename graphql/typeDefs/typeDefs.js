@@ -76,7 +76,8 @@ module.exports = gql`
   }
 
   type Message {
-    id: ID!
+    id: ID
+    conversation: ID
     sender: String!
     body: String!
     createdAt: String!
@@ -101,10 +102,10 @@ module.exports = gql`
     editComment(commentId: ID!, body: String!): String!
 
     addFriend(friendId: ID!): UserInfo!
-    sendMessage(to: ID!, body: String!): Message!
+    sendMessage(username: String!, body: String!): Message!
   }
 
   type Subscription {
-    messages: Message!
+    messages(conversation: ID!): Message!
   }
 `;

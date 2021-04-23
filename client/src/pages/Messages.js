@@ -49,7 +49,7 @@ export default function Messages() {
         </div>
       </div>
       <div className="chat">
-        <Chat chatWith={state.chatWith} />
+        {state.chatWith.trim() !== "" && <Chat chatWith={state.chatWith} />}
       </div>
     </div>
   );

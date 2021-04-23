@@ -18,8 +18,7 @@ export default function CustomTextArea({
       e.preventDefault();
       if (e.target.value.trim() !== "") {
         values[valueField] = e.target.value;
-        console.log(e.target.value);
-        console.log(values);
+        console.log(values[valueField]);
       }
       e.target.style.height = `${39}px`;
       e.target.value = "";
@@ -34,7 +33,7 @@ export default function CustomTextArea({
     event.target.style.height = `${event.target.scrollHeight}px`;
     if (parent.classList.contains("error")) {
       parent.classList.remove("error");
-      setErrors({});
+      // setErrors({});
     }
   };
 
