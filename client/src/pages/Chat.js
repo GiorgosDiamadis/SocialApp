@@ -44,38 +44,24 @@ const MessagesSubscription = ({ user, conversation }) => {
   );
 };
 
-export default function Chat({ chatWith }) {
-  const { user } = useContext(AuthContext);
-
-  const [variables] = useState({
-    user: user,
-    body: "",
-    username: chatWith,
-  });
-
+export default function Chat({ state }) {
   const [sendMessage] = useMutation(SEND_MESSAGE, {
-    variables: variables,
+    variables: state,
   });
-  const {
-    _,
-    data: { getConversation: conversation } = {},
-  } = useQuery(GET_CONVERSATION, { variables: variables });
 
-  if (!conversation) {
+  if (!state.conversation) {
     return null;
   }
 
-  if (chatWith.trim() === "") {
-    return null;
-  }
+  console.log(state);
 
   return (
     <Grid style={{ width: "50%", margin: "auto" }}>
       <Grid.Row>
         <Grid.Column>
           <MessagesSubscription
-            user={variables.user.username}
-            conversation={conversation}
+            user={state.user.username}
+            conversation={state.conversation}
           />
         </Grid.Column>
       </Grid.Row>
@@ -85,7 +71,7 @@ export default function Chat({ chatWith }) {
             <CustomTextArea
               rows={1}
               placeholder="Send Message"
-              values={variables}
+              values={state}
               valueField="body"
               name="body"
               db_callback={sendMessage}

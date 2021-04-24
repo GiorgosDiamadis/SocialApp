@@ -5,12 +5,14 @@ import { useQuery } from "@apollo/react-hooks";
 import Chat from "./Chat";
 import { List, Image } from "semantic-ui-react";
 import { AuthContext } from "../context/auth";
-import { GET_FRIENDS } from "../util/graphql";
+import { GET_FRIENDS, GET_CONVERSATION } from "../util/graphql";
 
 export default function Messages() {
   const { user } = useContext(AuthContext);
 
   const [state, setState] = useState({
+    user,
+    body: "",
     chatWith: "",
   });
 
@@ -21,9 +23,22 @@ export default function Messages() {
     },
   });
 
+  const { _, data: conversation, refetch } = useQuery(GET_CONVERSATION, {
+    variables: { username: state.chatWith },
+    fetchPolicy: "no-cache",
+  });
+
   const chatWith = (username) => {
     setState({
+      user,
+      body: "",
       chatWith: username,
+    });
+
+    refetch({
+      variables: {
+        username: state.chatWith,
+      },
     });
   };
 
@@ -49,7 +64,9 @@ export default function Messages() {
         </div>
       </div>
       <div className="chat">
-        {state.chatWith.trim() !== "" && <Chat chatWith={state.chatWith} />}
+        {conversation && conversation.getConversation && (
+          <Chat state={{ ...state, conversation }} />
+        )}
       </div>
     </div>
   );
