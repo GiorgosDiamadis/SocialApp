@@ -6,7 +6,7 @@ const conversationSchema = new Schema({
 
   messages: [
     {
-      from: String,
+      sender: String,
       body: String,
       createdAt: String,
     },

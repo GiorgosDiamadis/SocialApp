@@ -4,6 +4,7 @@ const { withFilter } = require("graphql-subscriptions");
 
 var authUser = undefined;
 const MESSAGE_SENT = "MESSAGE_SENT";
+const newMessages = [];
 
 module.exports = {
   Query: {
@@ -37,6 +38,11 @@ module.exports = {
         body,
         createdAt: new Date().toISOString(),
       };
+
+      conversation.messages.push(message);
+
+      await conversation.save();
+      newMessages.push(message);
 
       context.pubsub.publish(MESSAGE_SENT, { messages: message });
       return message;

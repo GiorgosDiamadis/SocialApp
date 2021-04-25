@@ -1,62 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import { GET_MESSAGES, SEND_MESSAGE, GET_CONVERSATION } from "../util/graphql";
 import { useSubscription, useMutation } from "@apollo/client";
 import { Form, Grid } from "semantic-ui-react";
 import CustomTextArea from "../components/CustomTextArea";
 
-const MessagesSubscription = ({ user, conversation }) => {
-  const { data } = useSubscription(GET_MESSAGES, {
+const Display = ({ message, user }) => {
+  return (
+    <>
+      {user !== message.sender && (
+        <div className="messageUserInitials">
+          {message.sender.slice(0, 2).toUpperCase()}
+        </div>
+      )}
+      <div
+        className="messageStyling"
+        style={{
+          background: user === message.sender ? "#58bf56" : "#e5e6ea",
+          color: user === message.sender ? "white" : "black",
+        }}
+      >
+        {message.body}
+      </div>
+    </>
+  );
+};
+
+const messages = [];
+const MessagesSubscription = ({
+  user,
+  conversation: { getConversation: conversation },
+}) => {
+  const { data, loading } = useSubscription(GET_MESSAGES, {
     variables: {
       conversation: conversation.id,
     },
   });
 
+  if (!loading) {
+    if (messages.indexOf(data.messages) === -1) messages.push(data.messages);
+  }
+
   return (
     <>
-      {data && data.messages && (
+      {conversation &&
+        conversation.messages.map((ms) => (
+          <div
+            className="chatDisplay"
+            style={{
+              justifyContent: user === ms.sender ? "flex-end" : "flex-start",
+            }}
+            key={ms.createdAt}
+          >
+            <Display message={ms} user={user} />
+          </div>
+        ))}
+      {messages.map((ms) => (
         <div
           className="chatDisplay"
           style={{
-            justifyContent:
-              user === data.messages.sender ? "flex-end" : "flex-start",
+            justifyContent: user === ms.sender ? "flex-end" : "flex-start",
           }}
-          key={data.messages.id}
+          key={ms.createdAt}
         >
-          {user !== data.messages.sender && (
-            <div className="messageUserInitials">
-              {data.messages.sender.slice(0, 2).toUpperCase()}
-            </div>
-          )}
-          <div
-            className="messageStyling"
-            style={{
-              background: user === data.messages.sender ? "#58bf56" : "#e5e6ea",
-              color: user === data.messages.sender ? "white" : "black",
-            }}
-          >
-            {data.messages.body}
-          </div>
+          <Display message={ms} user={user} />
         </div>
-      )}
+      ))}
     </>
   );
 };
 
 export default function Chat({ state }) {
-  const [sendMessage] = useMutation(SEND_MESSAGE, {
-    variables: state,
+  const [variables] = useState({
+    body: "",
+    username: state.chatWith,
   });
 
-  if (!state.conversation) {
-    return null;
-  }
-
-  console.log(state);
+  const [sendMessage] = useMutation(SEND_MESSAGE, {
+    variables: variables,
+  });
 
   return (
     <Grid style={{ width: "50%", margin: "auto" }}>
       <Grid.Row>
-        <Grid.Column>
+        <Grid.Column className={"chatting"}>
           <MessagesSubscription
             user={state.user.username}
             conversation={state.conversation}
@@ -69,7 +95,7 @@ export default function Chat({ state }) {
             <CustomTextArea
               rows={1}
               placeholder="Send Message"
-              values={state}
+              values={variables}
               valueField="body"
               name="body"
               db_callback={sendMessage}

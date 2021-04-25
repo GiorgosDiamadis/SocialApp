@@ -30,7 +30,6 @@ export default function Messages() {
   const chatWith = (username) => {
     setState({
       user,
-      body: "",
       chatWith: username,
     });
 
