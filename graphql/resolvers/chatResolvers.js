@@ -8,13 +8,13 @@ const newMessages = [];
 
 module.exports = {
   Query: {
-    async getConversation(_, { username }, context) {
+    async getConversation(_, { chatWith }, context) {
       authUser = chechAuth(context);
 
       const conversation = await Conversation.findOne({
         $or: [
-          { $and: [{ user0: authUser.username }, { user1: username }] },
-          { $and: [{ user0: username }, { user1: authUser.username }] },
+          { $and: [{ user0: authUser.username }, { user1: chatWith }] },
+          { $and: [{ user0: chatWith }, { user1: authUser.username }] },
         ],
       });
 
@@ -22,13 +22,13 @@ module.exports = {
     },
   },
   Mutation: {
-    async sendMessage(_, { username, body }, context) {
+    async sendMessage(_, { chatWith, body }, context) {
       authUser = chechAuth(context);
 
       const conversation = await Conversation.findOne({
         $or: [
-          { $and: [{ user0: authUser.username }, { user1: username }] },
-          { $and: [{ user0: username }, { user1: authUser.username }] },
+          { $and: [{ user0: authUser.username }, { user1: chatWith }] },
+          { $and: [{ user0: chatWith }, { user1: authUser.username }] },
         ],
       });
 

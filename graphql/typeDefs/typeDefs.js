@@ -65,7 +65,7 @@ module.exports = gql`
     getUserInfo(userId: ID!): UserInfo!
     getFriends(userId: ID!): UserInfo!
     searchUsers(prefix: String!): [User]
-    getConversation(username: String!): Conversation!
+    getConversation(chatWith: String!): Conversation!
   }
 
   type Conversation {
@@ -102,7 +102,7 @@ module.exports = gql`
     editComment(commentId: ID!, body: String!): String!
 
     addFriend(friendId: ID!): UserInfo!
-    sendMessage(username: String!, body: String!): Message!
+    sendMessage(chatWith: String!, body: String!): Message!
   }
 
   type Subscription {
