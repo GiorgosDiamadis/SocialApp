@@ -1,10 +1,8 @@
-import { AuthContext } from "../context/auth";
-import React, { useContext, useState } from "react";
+import React from "react";
 import { GET_MESSAGES, SEND_MESSAGE, GET_CONVERSATION } from "../util/graphql";
 import { useSubscription, useMutation } from "@apollo/client";
 import { Form, Grid } from "semantic-ui-react";
 import CustomTextArea from "../components/CustomTextArea";
-import { useQuery } from "@apollo/react-hooks";
 
 const MessagesSubscription = ({ user, conversation }) => {
   const { data } = useSubscription(GET_MESSAGES, {

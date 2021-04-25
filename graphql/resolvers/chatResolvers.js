@@ -11,7 +11,10 @@ module.exports = {
       authUser = chechAuth(context);
 
       const conversation = await Conversation.findOne({
-        $and: [{ user0: authUser.username }, { user1: username }],
+        $or: [
+          { $and: [{ user0: authUser.username }, { user1: username }] },
+          { $and: [{ user0: username }, { user1: authUser.username }] },
+        ],
       });
 
       return conversation;
@@ -22,7 +25,10 @@ module.exports = {
       authUser = chechAuth(context);
 
       const conversation = await Conversation.findOne({
-        $and: [{ user0: authUser.username }, { user1: username }],
+        $or: [
+          { $and: [{ user0: authUser.username }, { user1: username }] },
+          { $and: [{ user0: username }, { user1: authUser.username }] },
+        ],
       });
 
       const message = {
