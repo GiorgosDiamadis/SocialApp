@@ -13,6 +13,7 @@ export default function Messages() {
     user,
     body: "",
     chatWith: "",
+    messages: [],
   });
 
   const { loading, data } = useQuery(GET_FRIENDS, {
@@ -23,7 +24,7 @@ export default function Messages() {
   });
 
   const { _, data: conversation, refetch } = useQuery(GET_CONVERSATION, {
-    variables: { username: state.chatWith },
+    variables: state,
     fetchPolicy: "no-cache",
   });
 
@@ -31,14 +32,19 @@ export default function Messages() {
     setState({
       user,
       chatWith: username,
+      messages: [],
     });
 
     refetch({
-      variables: {
-        username: state.chatWith,
-      },
+      variables: state,
     });
   };
+
+  if (state.messages.length > 0) {
+    state.messages = [];
+  }
+
+  console.log(state);
 
   return (
     <div className="messagesPanel">
@@ -63,7 +69,7 @@ export default function Messages() {
       </div>
       <div className="chat">
         {conversation && conversation.getConversation && (
-          <Chat state={{ ...state, conversation }} />
+          <Chat state={{ ...state, conversation }} setState={setState} />
         )}
       </div>
     </div>

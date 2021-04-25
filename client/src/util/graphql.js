@@ -305,8 +305,8 @@ export const GET_MESSAGES = gql`
 `;
 
 export const GET_CONVERSATION = gql`
-  query getConversation($username: String!) {
-    getConversation(username: $username) {
+  query getConversation($chatWith: String!) {
+    getConversation(chatWith: $chatWith) {
       id
       user0
       user1
@@ -319,8 +319,8 @@ export const GET_CONVERSATION = gql`
   }
 `;
 export const SEND_MESSAGE = gql`
-  mutation sendMessage($username: String!, $body: String!) {
-    sendMessage(username: $username, body: $body) {
+  mutation sendMessage($chatWith: String!, $body: String!) {
+    sendMessage(chatWith: $chatWith, body: $body) {
       id
       body
     }

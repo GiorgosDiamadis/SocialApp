@@ -25,10 +25,10 @@ const Display = ({ message, user }) => {
   );
 };
 
-const messages = [];
 const MessagesSubscription = ({
   user,
   conversation: { getConversation: conversation },
+  messages,
 }) => {
   const { data, loading } = useSubscription(GET_MESSAGES, {
     variables: {
@@ -69,14 +69,12 @@ const MessagesSubscription = ({
   );
 };
 
-export default function Chat({ state }) {
-  const [variables] = useState({
-    body: "",
-    username: state.chatWith,
-  });
+export default function Chat({ state, setState }) {
+  // console.log(state);
 
   const [sendMessage] = useMutation(SEND_MESSAGE, {
-    variables: variables,
+    variables: state,
+    update() {},
   });
 
   return (
@@ -86,6 +84,7 @@ export default function Chat({ state }) {
           <MessagesSubscription
             user={state.user.username}
             conversation={state.conversation}
+            messages={state.messages}
           />
         </Grid.Column>
       </Grid.Row>
@@ -95,7 +94,7 @@ export default function Chat({ state }) {
             <CustomTextArea
               rows={1}
               placeholder="Send Message"
-              values={variables}
+              values={state}
               valueField="body"
               name="body"
               db_callback={sendMessage}
