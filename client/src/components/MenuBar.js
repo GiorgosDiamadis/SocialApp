@@ -12,8 +12,18 @@ export default function MenuBar() {
   const handleItemClick = (e, { name }) => setActiveItem(name);
   const dummy = () => {};
   return (
-    <Menu pointing secondary size="massive" color="teal" className="stickyTop">
-      <Menu.Item
+    <Menu secondary size="massive" className="myMenu">
+      <Menu.Item name={"Username and Image"} />
+
+      <Menu.Item name={"Home Feed"} />
+      <Menu.Item name={"Messages"} />
+      <Menu.Item name={"Friends"} />
+
+      <Menu.Item name={"Profile"} />
+      <Menu.Item name={"Search"} />
+      <Menu.Item name={"Logout"} />
+
+      {/* <Menu.Item
         name={user ? user.username : "home"}
         active={user ? true : activeItem === "home"}
         onClick={user ? dummy : handleItemClick}
@@ -56,7 +66,7 @@ export default function MenuBar() {
             to="/register"
           />
         </Menu.Menu>
-      )}
+      )} */}
     </Menu>
   );
 }
