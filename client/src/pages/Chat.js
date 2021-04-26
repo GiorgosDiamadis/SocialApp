@@ -25,6 +25,8 @@ const Display = ({ message, user }) => {
   );
 };
 
+var b = true;
+
 const MessagesSubscription = ({
   user,
   conversation: { getConversation: conversation },
@@ -33,11 +35,14 @@ const MessagesSubscription = ({
   const { data, loading } = useSubscription(GET_MESSAGES, {
     variables: {
       conversation: conversation.id,
+      channel: conversation.channel.toString(),
     },
+    fetchPolicy: "no-cache",
   });
 
   if (!loading) {
-    if (messages.indexOf(data.messages) === -1) messages.push(data.messages);
+    if (data.messages.conversation == conversation.id)
+      if (messages.indexOf(data.messages) === -1) messages.push(data.messages);
   }
 
   return (

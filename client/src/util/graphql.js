@@ -293,8 +293,8 @@ export const SEARCH_USERS = gql`
 `;
 
 export const GET_MESSAGES = gql`
-  subscription messages($conversation: ID!) {
-    messages(conversation: $conversation) {
+  subscription messages($conversation: ID!, $channel: String!) {
+    messages(conversation: $conversation, channel: $channel) {
       id
       conversation
       body
@@ -310,6 +310,7 @@ export const GET_CONVERSATION = gql`
       id
       user0
       user1
+      channel
       messages {
         sender
         body
@@ -320,9 +321,6 @@ export const GET_CONVERSATION = gql`
 `;
 export const SEND_MESSAGE = gql`
   mutation sendMessage($chatWith: String!, $body: String!) {
-    sendMessage(chatWith: $chatWith, body: $body) {
-      id
-      body
-    }
+    sendMessage(chatWith: $chatWith, body: $body)
   }
 `;

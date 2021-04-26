@@ -3,8 +3,7 @@ const Conversation = require("../../models/Conversation");
 const { withFilter } = require("graphql-subscriptions");
 
 var authUser = undefined;
-const MESSAGE_SENT = "MESSAGE_SENT";
-const newMessages = [];
+var CHANNEL = "";
 
 module.exports = {
   Query: {
@@ -34,6 +33,7 @@ module.exports = {
 
       const message = {
         conversation: conversation._id,
+        channel: conversation.channel,
         sender: authUser.username,
         body,
         createdAt: new Date().toISOString(),
@@ -42,20 +42,22 @@ module.exports = {
       conversation.messages.push(message);
 
       await conversation.save();
-      newMessages.push(message);
 
-      context.pubsub.publish(MESSAGE_SENT, { messages: message });
-      return message;
+      context.pubsub.publish(conversation.channel, { messages: message });
+      return "";
     },
   },
   Subscription: {
     messages: {
       subscribe: withFilter(
         (parent, args, { pubsub }) => {
-          return pubsub.asyncIterator(MESSAGE_SENT);
+          return pubsub.asyncIterator(args.channel);
         },
         (payload, variables) => {
-          return payload.messages.conversation == variables.conversation;
+          return (
+            payload.messages.conversation == variables.conversation &&
+            payload.messages.channel == variables.channel
+          );
         }
       ),
     },

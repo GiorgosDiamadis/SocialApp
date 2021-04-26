@@ -11,6 +11,7 @@ const {
 } = require("../../utils/inputValidations");
 const { SECRET_KEY } = require("../../config");
 const { UserInputError } = require("apollo-server-errors");
+const { mongoose } = require("mongoose");
 
 const generateToken = (user) => {
   return jwt.sign(
@@ -164,6 +165,10 @@ module.exports = {
         (friend) => friend.username === new_friend.username
       );
 
+      const user_index = new_friend.friends.findIndex(
+        (friend) => friend.username === user_adds.username
+      );
+
       if (friend_index === -1) {
         user_adds.friends.push(new_friend);
         new_friend.friends.push(user_adds);
@@ -172,15 +177,30 @@ module.exports = {
           user0: user_adds.username,
           user1: new_friend.username,
           messages: [],
+          channel: parseInt(Math.random() * 0xffffff, 10),
         });
 
         await conversation.save();
-        await new_friend.save();
       } else {
         user_adds.friends.splice(friend_index, 1);
+        new_friend.friends.splice(user_index, 1);
+
+        const conversation = await Conversation.findOne({
+          $or: [
+            {
+              $and: [{ user0: user.username }, { user1: new_friend.username }],
+            },
+            {
+              $and: [{ user0: new_friend.username }, { user1: user.username }],
+            },
+          ],
+        });
+
+        await conversation.delete();
       }
 
       await user_adds.save();
+      await new_friend.save();
       return user_adds;
     },
   },

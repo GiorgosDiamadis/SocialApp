@@ -3,6 +3,7 @@ const { model, Schema } = require("mongoose");
 const conversationSchema = new Schema({
   user0: String,
   user1: String,
+  channel: Number,
 
   messages: [
     {

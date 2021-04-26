@@ -73,7 +73,6 @@ export default function Profile(props) {
     loading: loadingFriends,
     data: { getFriends: friends } = {},
   } = useQuery(GET_FRIENDS, {
-    update(proxy, result) {},
     variables: { ID: authUser.id },
     fetchPolicy: "cache-and-network",
   });
@@ -98,7 +97,10 @@ export default function Profile(props) {
       });
     },
     variables: { profileId },
-    refetchQueries: [{ query: GET_FRIENDS, variables: { ID: authUser.id } }],
+    refetchQueries: [
+      { query: GET_FRIENDS, variables: { ID: authUser.id } },
+      { query: FETCH_USER_INFO, variables: { ID: profileId } },
+    ],
   });
 
   const isFriend = () => {

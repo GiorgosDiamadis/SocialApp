@@ -44,8 +44,6 @@ export default function Messages() {
     state.messages = [];
   }
 
-  console.log(state);
-
   return (
     <div className="messagesPanel">
       <div className="messages">

@@ -72,6 +72,7 @@ module.exports = gql`
     id: ID!
     user0: String!
     user1: String!
+    channel: String!
     messages: [Message]
   }
 
@@ -102,10 +103,10 @@ module.exports = gql`
     editComment(commentId: ID!, body: String!): String!
 
     addFriend(friendId: ID!): UserInfo!
-    sendMessage(chatWith: String!, body: String!): Message!
+    sendMessage(chatWith: String!, body: String!): String!
   }
 
   type Subscription {
-    messages(conversation: ID!): Message!
+    messages(conversation: ID!, channel: String!): Message!
   }
 `;
