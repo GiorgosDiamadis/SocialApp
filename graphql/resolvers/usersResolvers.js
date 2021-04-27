@@ -102,6 +102,8 @@ module.exports = {
     async loginUser(_, { loginInput: { username, password } }, context, info) {
       const { errors, valid } = loginInputValidation(username, password);
 
+      console.log(username, password);
+
       if (!valid) {
         throw new UserInputError("Errors", { errors });
       }

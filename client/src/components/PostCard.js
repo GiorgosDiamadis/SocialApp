@@ -10,7 +10,7 @@ import PostComment from "./PostComment";
 import CommentForm from "./CommentForm";
 import LikeButton from "./LikeButton";
 import CommentButton from "./CommentButton";
-
+import "../PostCard.css";
 export default function PostCard({ props, post }) {
   const postId = post.id;
 
@@ -39,7 +39,7 @@ export default function PostCard({ props, post }) {
 
   //=============================================================
   return (
-    <Card.Group className="postcard">
+    <Card.Group id="postcard">
       <Card fluid>
         <Card.Content>
           <Card.Header
@@ -50,7 +50,7 @@ export default function PostCard({ props, post }) {
           >
             <a>{post.user.username}</a>
           </Card.Header>
-          <CardMeta as={Link} to={"/post/" + post.id}>
+          <CardMeta id="timeCreated" as={Link} to={"/post/" + post.id}>
             {moment(post.createdAt.replace("T", " ")).fromNow()}
           </CardMeta>
           <Card.Description className="text">{post.body}</Card.Description>

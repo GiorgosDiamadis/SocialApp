@@ -1,0 +1,21 @@
+.ui.form.commentForm > .field {
+  margin-top: 10px;
+}
+#postcard > .ui.fluid.card {
+  border-radius: 20px;
+  background-color: rgb(47, 60, 72);
+  box-shadow: 0 1px 3px 0 rgb(47, 60, 72), 0 0 0 1px rgb(47, 60, 72);
+}
+
+#postcard > .ui.fluid.card > a:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+#timeCreated {
+  color: white;
+}
+#timeCreated:hover {
+  color: white;
+  text-decoration: underline;
+}

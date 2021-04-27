@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, Image } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
+import "../Login.css";
 
 import { LOGIN_USER } from "../util/graphql";
 function Login(props) {
@@ -34,31 +35,44 @@ function Login(props) {
   };
 
   return (
-    <div className="form-container" style={{ marginTop: 60 }}>
-      <Form onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-        <h1 className="page-title">Login</h1>
-        <Form.Input
-          label="Username"
-          placeholder="Username..."
-          name="username"
-          value={values.username}
-          error={errors.username ? true : false}
-          onChange={onChange}
-        />
-        <Form.Input
-          label="Password"
-          placeholder="Password..."
-          name="password"
-          value={values.password}
-          error={errors.password ? true : false}
-          type="password"
-          onChange={onChange}
-        />
-        <Button type="submit" primary>
-          Login
-        </Button>
+    <div className="loginForm-container">
+      <Form
+        onSubmit={onSubmit}
+        noValidate
+        className={loading ? "loading loginForm" : "loginForm"}
+      >
+        <div className="loginForm-left">
+          <Image
+            size="large"
+            src="https://preview.colorlib.com/theme/bootstrap/login-form-08/images/undraw_file_sync_ot38.svg"
+          />
+        </div>
+        <div className="loginForm-right">
+          <Form.Input
+            icon="user"
+            className="loginInput"
+            placeholder="Username..."
+            name="username"
+            value={values.username}
+            error={errors.username ? true : false}
+            onChange={onChange}
+          />
+          <Form.Input
+            icon="lock"
+            className="loginInput"
+            placeholder="Password..."
+            name="password"
+            value={values.password}
+            error={errors.password ? true : false}
+            type="password"
+            onChange={onChange}
+          />
+          <Button type="submit" primary>
+            Login
+          </Button>
+        </div>
       </Form>
-      {Object.keys(errors).length > 0 && (
+      {/* {Object.keys(errors).length > 0 && (
         <div className="ui error message">
           <ul className="list">
             {Object.values(errors).map((v) => (
@@ -66,7 +80,7 @@ function Login(props) {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

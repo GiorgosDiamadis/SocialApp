@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Divider, Form, Button, Grid } from "semantic-ui-react";
+import { Divider, Form, Button, Grid, Image } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import PostCard from "../components/PostCard";
 import ErrorsDisplay from "../components/ErrorsDisplay";
 import CustomTextArea from "../components/CustomTextArea";
+import MenuBar from "../components/MenuBar";
+import "../Home.css";
 import { AuthContext } from "../context/auth";
 const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
 
@@ -45,7 +47,52 @@ function Home(props) {
 
   return (
     <div>
-      <Grid className="main">
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={3}>
+            <MenuBar />
+          </Grid.Column>
+          <Grid.Column width={9}>
+            <Form>
+              <div className="makePostArea">
+                <Image
+                  src="https://customerthink.com/wp-content/uploads/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg"
+                  size="tiny"
+                  rounded
+                  className="makePostImage"
+                />
+                <CustomTextArea
+                  values={values}
+                  valueField="body"
+                  setErrors={setErrors}
+                  errors={errors}
+                  errorField="body"
+                  db_callback={onSubmit}
+                  name="body"
+                  placeholder={`What are you thinking ${user.username}?`}
+                  rows={1}
+                />
+              </div>
+            </Form>
+            <ErrorsDisplay errors={errors} />
+            <Divider />
+            {loading ? (
+              <h1>Loading...</h1>
+            ) : (
+              posts.map((post) => (
+                <PostCard
+                  props={props}
+                  key={post.id}
+                  post={post}
+                  single={false}
+                />
+              ))
+            )}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+
+      {/* <Grid className="main">
         <Grid.Row>
           <Grid.Column width={5}> </Grid.Column>
 
@@ -81,7 +128,7 @@ function Home(props) {
           </Grid.Column>
           <Grid.Column width={2}></Grid.Column>
         </Grid.Row>
-      </Grid>
+      </Grid> */}
     </div>
   );
 }

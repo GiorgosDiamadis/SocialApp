@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Container } from "semantic-ui-react";
+import { Container, Grid } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import MenuBar from "./components/MenuBar";
 import Home from "./pages/Home";
@@ -20,9 +20,15 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Container className="outer">
-          <MenuBar />
-          {/* <AuthRoute exact path="/" component={Home} mode="false" />
+        <AuthRoute exact path="/" component={Home} mode="false" />
+        <Route exact path="messages" />
+        <Route exact path="friends" />
+        <Route exact path="profile" />
+        <Route exact path="search" />
+        <Route exact path="logout" />
+        <AuthRoute exact path="/register" component={Register} />
+        <AuthRoute exact path="/login" component={Login} />
+        {/* <AuthRoute exact path="/" component={Home} mode="false" />
           <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
 
           <Container className="inner" id="inner">
@@ -45,9 +51,6 @@ function App() {
               mode="false"
             />
           </Container> */}
-        </Container>
-        <AuthRoute exact path="/register" component={Register} />
-        <AuthRoute exact path="/login" component={Login} />
       </Router>
     </AuthProvider>
   );

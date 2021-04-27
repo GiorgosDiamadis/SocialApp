@@ -1,8 +1,21 @@
 import React, { useState, useContext } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Image, Divider } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import SearchBar from "./SearchBar";
+
+const User = ({ user }) => (
+  <div>
+    <Image
+      src="https://customerthink.com/wp-content/uploads/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg"
+      size="medium"
+      rounded
+    />
+    <h3>{user.username}</h3>
+    <h3>{user.email}</h3>
+    <Divider />
+  </div>
+);
 
 export default function MenuBar() {
   const pathname = window.location.pathname;
@@ -11,17 +24,59 @@ export default function MenuBar() {
   const [activeItem, setActiveItem] = useState(path);
   const handleItemClick = (e, { name }) => setActiveItem(name);
   const dummy = () => {};
+
   return (
     <Menu secondary size="massive" className="myMenu">
-      <Menu.Item name={"Username and Image"} />
+      <Menu.Item className="user" content={<User user={user} />} />
 
-      <Menu.Item name={"Home Feed"} />
-      <Menu.Item name={"Messages"} />
-      <Menu.Item name={"Friends"} />
+      <Menu.Item
+        name={"home"}
+        icon="home"
+        as={Link}
+        to="/"
+        active={activeItem === "home"}
+        onClick={() => setActiveItem("home")}
+      />
+      <Menu.Item
+        name={"messages"}
+        icon="rocketchat"
+        as={Link}
+        to={"messages"}
+        active={activeItem === "messages"}
+        onClick={() => setActiveItem("messages")}
+      />
+      <Menu.Item
+        name={"friends"}
+        icon="users"
+        as={Link}
+        to="friends"
+        active={activeItem === "friends"}
+        onClick={() => setActiveItem("friends")}
+      />
 
-      <Menu.Item name={"Profile"} />
-      <Menu.Item name={"Search"} />
-      <Menu.Item name={"Logout"} />
+      <Menu.Item
+        name={"profile"}
+        icon="user"
+        as={Link}
+        to="profile"
+        active={activeItem === "profile"}
+        onClick={() => setActiveItem("profile")}
+      />
+      <Menu.Item
+        name={"search"}
+        icon="search"
+        as={Link}
+        to="search"
+        active={activeItem === "search"}
+        onClick={() => setActiveItem("search")}
+      />
+      <Menu.Item
+        name={"logout"}
+        icon="sign-out"
+        onClick={logout}
+        as={Link}
+        to="/login"
+      />
 
       {/* <Menu.Item
         name={user ? user.username : "home"}

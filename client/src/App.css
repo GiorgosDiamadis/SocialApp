@@ -6,12 +6,7 @@ body {
   background: whitesmoke;
 } */
 /* 
-.page-title {
-  display: block !important;
-  text-align: center;
-  font-size: 2rem;
-  margin-top: 10px;
-}
+
 .ui.grid > .row > .column {
   margin-top: 0;
   margin-bottom: 20px;
@@ -31,18 +26,10 @@ body {
 /* .ui.container.inner {
   width: 80%;
 } */
-/* .ui.form.commentForm > .field {
-  margin-top: 10px;
-} */
-/* 
-.ui.card > .extra,
-.ui.cards > .card > .extra {
-  padding: 0.2em 1em;
-}
 
-.ui.labeled.button {
-  margin-top: 10px;
-}
+/* 
+
+
 
 .ui.comments {
   display: flex;
@@ -79,10 +66,7 @@ body {
   margin-bottom: 5px;
 }
 
-.ui.cards > .card {
-  border-radius: 1.3em;
-  box-shadow: 0 1px 6px 0 #d4d4d5;
-}
+
 
 a {
   color: black;
@@ -109,16 +93,7 @@ a {
   margin: auto;
 }
 
-.ui.form > .text-area textarea {
-  border-radius: 20px;
-  min-width: 100%;
-  min-height: 39px;
-  resize: none;
 
-  overflow: hidden;
-  overflow-wrap: break-word;
-  background-color: #f9f9f9;
-}
 
 .text {
   overflow-wrap: break-word;
@@ -285,7 +260,16 @@ a {
 /* =============== */
 
 body {
-  background-color: rgb(0, 6, 16, 0.9);
+  background-color: rgba(0, 6, 16, 0.9);
+  padding: 20px;
+}
+a {
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: white;
 }
 .myMenu {
   position: absolute;
@@ -301,12 +285,52 @@ body {
   margin-left: 20px !important;
 }
 
-.ui.secondary.menu .item {
+.ui.massive.secondary.myMenu.menu > a.item {
   align-self: auto;
   color: white;
   margin-left: 15px;
+  margin-bottom: 7px;
+  font-size: 1.4rem;
 }
 
-.ui.secondary.menu .item:hover {
+.ui.massive.secondary.myMenu.menu > a.active.item {
   background-color: rgb(47, 60, 72);
+  color: white;
+  border-radius: 20px;
+}
+
+.ui.massive.secondary.myMenu.menu > a.active.item:hover {
+  background-color: rgb(47, 60, 72);
+  color: white;
+  border-radius: 20px;
+}
+
+.ui.massive.secondary.myMenu.menu > a.item:hover {
+  background-color: rgb(47, 60, 72);
+  border-radius: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: white;
+  margin: 10px;
+}
+
+.user {
+  text-align: center;
+}
+
+.ui.massive.secondary.myMenu.menu > .item.user {
+  padding: 0;
+}
+
+.page-title {
+  display: block !important;
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 10px;
 }
