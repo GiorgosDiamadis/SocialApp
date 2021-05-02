@@ -14,16 +14,16 @@ export default function Post(props) {
     <div>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={5}></Grid.Column>
+          <Grid.Column width={4}></Grid.Column>
 
-          <Grid.Column width={6}>
+          <Grid.Column width={8}>
             {loading ? (
               <h1>loading</h1>
             ) : (
               <PostCard post={data.getPost} single={true} props={props} />
             )}
           </Grid.Column>
-          <Grid.Column width={5}></Grid.Column>
+          <Grid.Column width={3}></Grid.Column>
         </Grid.Row>
       </Grid>
     </div>

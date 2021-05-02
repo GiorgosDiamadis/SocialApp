@@ -83,9 +83,22 @@ export default function Chat({ state, setState }) {
   });
 
   return (
-    <Grid style={{ width: "50%", margin: "auto" }}>
+    <Grid
+      style={{
+        width: "100%",
+        margin: "auto",
+        height: "100%",
+        backgroundColor: "rgb(47,56, 82)",
+        borderRadius: 40,
+        position: "relative",
+      }}
+    >
       <Grid.Row>
-        <Grid.Column className={"chatting"}>
+        <Grid.Column
+          className={"chatting"}
+          width={20}
+          style={{ overflow: "auto", height: 690, padding: 20 }}
+        >
           <MessagesSubscription
             user={state.user.username}
             conversation={state.conversation}
@@ -93,7 +106,9 @@ export default function Chat({ state, setState }) {
           />
         </Grid.Column>
       </Grid.Row>
-      <Grid.Row>
+      <Grid.Row
+        style={{ alignSelf: "flex-end", position: "absolute", bottom: 0 }}
+      >
         <Grid.Column>
           <Form>
             <CustomTextArea

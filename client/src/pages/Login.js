@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Button, Form, Image } from "semantic-ui-react";
+import { Button, Divider, Form, Image } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
 import "../Login.css";
+
+import { Link } from "react-router-dom";
 
 import { LOGIN_USER } from "../util/graphql";
 function Login(props) {
@@ -70,17 +72,21 @@ function Login(props) {
           <Button type="submit" primary>
             Login
           </Button>
+          <Divider />
+          <Button type="submit" primary as={Link} to="/register">
+            Register
+          </Button>
+          {Object.keys(errors).length > 0 && (
+            <div className="ui error message">
+              <ul className="list">
+                {Object.values(errors).map((v) => (
+                  <li key={v}> {v}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </Form>
-      {/* {Object.keys(errors).length > 0 && (
-        <div className="ui error message">
-          <ul className="list">
-            {Object.values(errors).map((v) => (
-              <li key={v}> {v}</li>
-            ))}
-          </ul>
-        </div>
-      )} */}
     </div>
   );
 }

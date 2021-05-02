@@ -8,7 +8,16 @@ import CustomTextArea from "../components/CustomTextArea";
 import MenuBar from "../components/MenuBar";
 import "../Home.css";
 import { AuthContext } from "../context/auth";
-const { FETCH_POSTS, MAKE_POST, MESSAGES } = require("../util/graphql");
+import ProfileCard from "../components/ProfileCard";
+const { FETCH_POSTS, MAKE_POST, FETCH_USER_INFO } = require("../util/graphql");
+
+const User = ({ user, profileInfo }) => (
+  <div>
+    <h2 className="page-title">Your profile card</h2>
+    <Divider />
+    <ProfileCard user={user} profileInfo={profileInfo} />
+  </div>
+);
 
 function Home(props) {
   const [errors, setErrors] = useState({});
@@ -26,6 +35,15 @@ function Home(props) {
     fetchPolicy: "cache-first",
   });
 
+  const {
+    loading: loadingInfo,
+    data: { getUserInfo: profileInfo } = {},
+  } = useQuery(FETCH_USER_INFO, {
+    variables: { ID: user.id },
+    fetchPolicy: "cache-and-network",
+  });
+
+  console.log(profileInfo);
   const [makePost] = useMutation(MAKE_POST, {
     update(proxy, result) {
       const data = proxy.readQuery({
@@ -49,10 +67,13 @@ function Home(props) {
     <div>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={3}>
+          <Grid.Column
+            width={4}
+            style={{ display: "flex", justifyContent: "flex-end" }}
+          >
             <MenuBar />
           </Grid.Column>
-          <Grid.Column width={9}>
+          <Grid.Column width={8}>
             <Form>
               <div className="makePostArea">
                 <Image
@@ -89,46 +110,20 @@ function Home(props) {
               ))
             )}
           </Grid.Column>
+          <Grid.Column
+            width={4}
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              flexDirection: "column",
+            }}
+          >
+            <div className="stickyTop">
+              {!loadingInfo && <User user={user} profileInfo={profileInfo} />}
+            </div>
+          </Grid.Column>
         </Grid.Row>
       </Grid>
-
-      {/* <Grid className="main">
-        <Grid.Row>
-          <Grid.Column width={5}> </Grid.Column>
-
-          <Grid.Column style={{ marginTop: 50 }} width={6}>
-            <Form>
-              <CustomTextArea
-                values={values}
-                valueField="body"
-                setErrors={setErrors}
-                errors={errors}
-                errorField="body"
-                db_callback={onSubmit}
-                name="body"
-                placeholder={`What are you thinking ${user.username}?`}
-                rows={1}
-              />
-            </Form>
-            <ErrorsDisplay errors={errors} />
-            <Divider />
-
-            {loading ? (
-              <h1>Loading...</h1>
-            ) : (
-              posts.map((post) => (
-                <PostCard
-                  props={props}
-                  key={post.id}
-                  post={post}
-                  single={false}
-                />
-              ))
-            )}
-          </Grid.Column>
-          <Grid.Column width={2}></Grid.Column>
-        </Grid.Row>
-      </Grid> */}
     </div>
   );
 }

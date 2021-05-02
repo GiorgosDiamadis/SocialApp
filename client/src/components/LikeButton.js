@@ -36,22 +36,13 @@ export default function LikeButton({ id, likes, likeCount, user, props }) {
   const likePost = (event) => {
     if (!loading) {
       like();
-      // const likeButton = document.querySelector(
-      //   `.ui.teal.button.${idClass}.like`
-      // );
-      // const likeCount = document.querySelector(likeCountSelector);
-      // likeCount.innerHTML =
-      //   parseInt(likeCount.innerHTML) + (hasLiked() ? -1 : 1);
-      // likeButton.classList.contains("basic")
-      //   ? likeButton.classList.remove("basic")
-      //   : likeButton.classList.add("basic");
     }
   };
 
   return (
     <Button as="div" labelPosition="right">
       <Button
-        color="teal"
+        color="green"
         className={`like ${idClass}`}
         basic={!hasLiked()}
         onClick={likePost}
@@ -63,8 +54,8 @@ export default function LikeButton({ id, likes, likeCount, user, props }) {
         as="a"
         className={`likeCount ${idClass}`}
         basic
-        color="teal"
-        pointing="left"
+        color="green"
+        // pointing="left"
         onClick={() => dispatch({ type: "open", size: "tiny" })}
       >
         {likeCount}

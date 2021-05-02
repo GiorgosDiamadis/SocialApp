@@ -26,17 +26,25 @@ module.exports = gql`
   }
   type Friend {
     id: ID!
+    email: String
     username: String!
   }
 
   type User {
     id: ID!
     email: String!
-    token: String!
+    token: String
     username: String!
+    createdAt: String!
+    born: String!
+    livesIn: String!
+    isFrom: String!
+    graduatedAt: String!
+    friends: [Friend]!
   }
 
   type UserInfo {
+    id: ID
     username: String
     email: String
     createdAt: String

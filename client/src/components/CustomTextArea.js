@@ -33,16 +33,17 @@ export default function CustomTextArea({
     event.target.style.height = `${event.target.scrollHeight}px`;
     if (parent.classList.contains("error")) {
       parent.classList.remove("error");
-      // setErrors({});
+      setErrors({});
     }
   };
 
   return (
     <>
       <Form.TextArea
-        className="text-area"
+        id="text-area"
         name={name}
         rows={rows}
+        style={{ height: "inherit" }}
         placeholder={placeholder}
         values={values}
         onChange={onChange}

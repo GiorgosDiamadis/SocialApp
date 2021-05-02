@@ -3,6 +3,8 @@
   justify-content: flex-start;
   align-items: center;
 
+  /* width: 700px; */
+
   padding: 20px;
   background-color: rgb(47, 60, 72);
   border-radius: 8px;
@@ -11,21 +13,8 @@
 .ui.tiny.image.makePostImage {
   width: 45px;
   margin-right: 10px;
+  align-self: flex-start;
 }
-
-.ui.form div > .text-area textarea {
-  border-radius: 20px;
-  min-width: 100%;
-  min-height: 39px;
-  resize: none;
-
-  overflow: hidden;
-  overflow-wrap: break-word;
-  background-color: rgba(1, 6, 16, 0.54);
-  color: white;
-  flex: 5;
-}
-
-.ui.form div > .field.text-area {
+.makePostArea > .field {
   flex: 5;
 }

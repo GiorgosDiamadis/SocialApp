@@ -21,7 +21,6 @@ export default function Likes({ likes, dispatch, open, size, props }) {
                   as="a"
                   onClick={() => {
                     dispatch({ type: "close" });
-                    props.history.push(`/profile/${like.user.id}`);
                   }}
                 >
                   {like.user.username}

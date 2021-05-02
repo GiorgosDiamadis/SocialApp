@@ -47,7 +47,7 @@ module.exports = {
           { username: { $regex: `${prefix}` } },
           { username: { $ne: myname } },
         ],
-      });
+      }).populate(POPULATE_FRIENDS);
 
       return users;
     },
@@ -136,7 +136,7 @@ module.exports = {
     ) {
       errors = {};
       const dateRegex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-      if (!born.match(dateRegex)) {
+      if (born.trim() !== "" && !born.match(dateRegex)) {
         errors.born = "Wrong date format, date should be in DD/MM/YYYY format!";
         throw new UserInputError("Errors", { errors });
       }

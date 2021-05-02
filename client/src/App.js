@@ -11,25 +11,28 @@ import { AuthProvider } from "./context/auth";
 import AuthRoute from "./util/AuthRoute";
 
 import "./App.css";
-import Profile from "./pages/Profile";
-import EditInfo from "./pages/EditInfo";
+import Settings from "./pages/Settings";
 import Chat from "./pages/Chat";
 import Messages from "./pages/Messages";
+import Friends from "./pages/Friends";
+import Search from "./pages/Search";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <AuthRoute exact path="/" component={Home} mode="false" />
-        <Route exact path="messages" />
-        <Route exact path="friends" />
-        <Route exact path="profile" />
-        <Route exact path="search" />
-        <Route exact path="logout" />
+        <AuthRoute exact path="/friends" component={Friends} mode="false" />
+        <AuthRoute exact path="/search" component={Search} mode="false" />
+
+        <AuthRoute exact path="/settings" component={Settings} mode="false" />
+
+        <AuthRoute exact path="/messages" component={Messages} mode="false" />
+        <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
+
         <AuthRoute exact path="/register" component={Register} />
         <AuthRoute exact path="/login" component={Login} />
         {/* <AuthRoute exact path="/" component={Home} mode="false" />
-          <AuthRoute exact path="/post/:postId" component={Post} mode="false" />
 
           <Container className="inner" id="inner">
             <AuthRoute

@@ -18,7 +18,7 @@ import ErrorsDisplay from "./ErrorsDisplay";
 
 export default function PostComment({ comment, postId, props }) {
   const { user } = useContext(AuthContext);
-  const idclass = "id" + postId;
+  const idclass = "id" + comment.id;
   const [values] = useState({
     ID: postId,
     commentId: comment.id,
@@ -81,12 +81,7 @@ export default function PostComment({ comment, postId, props }) {
         <Comment.Content>
           <div className="commentDiv">
             <div id={`comment ${idclass}`}>
-              <Comment.Author
-                className="comment-author"
-                onClick={() =>
-                  props.history.push(`/profile/${comment.user.id}`)
-                }
-              >
+              <Comment.Author className="comment-author">
                 {comment.user.username}
               </Comment.Author>
               <Comment.Metadata className="text-muted">
@@ -110,7 +105,7 @@ export default function PostComment({ comment, postId, props }) {
                   errorField="body"
                   db_callback={onSubmit}
                   name="body"
-                  placeholder={values.body}
+                  placeholder={""}
                   rows={1}
                 />
               </Form>

@@ -5,6 +5,7 @@
   border-radius: 20px;
   background-color: rgb(47, 60, 72);
   box-shadow: 0 1px 3px 0 rgb(47, 60, 72), 0 0 0 1px rgb(47, 60, 72);
+  /* width: 700px; */
 }
 
 #postcard > .ui.fluid.card > a:hover {
@@ -13,9 +14,112 @@
 }
 
 #timeCreated {
-  color: white;
+  color: rgb(116, 115, 115);
 }
 #timeCreated:hover {
-  color: white;
+  color: rgb(116, 115, 115);
   text-decoration: underline;
+}
+
+#text {
+  color: rgb(192, 189, 189);
+  font-size: 1.5em;
+  line-height: 1.3em;
+}
+
+.ui.card > .extra,
+.ui.cards > .card > .extra {
+  border-top: 1px solid rgba(192, 189, 189, 0.3) !important;
+}
+
+.ui.comments {
+  display: flex;
+  padding-left: 10px;
+  margin: 0;
+}
+.ui.comments > .content {
+  background: #f5f5f5;
+  border-radius: 15px;
+  padding: 5px;
+  padding-left: 10px;
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.ui.comments > .actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text-muted {
+  opacity: 0.6;
+}
+.author.comment-author {
+  text-decoration: solid;
+  font-weight: bolder;
+  font-weight: 2em;
+}
+
+.author.comment-author:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.commentDiv {
+  width: 90%;
+}
+.commentDiv.options {
+  width: 10%;
+}
+
+.commentDiv.options > .actions > a {
+  color: black;
+}
+
+.commentDiv.options > .actions > a:hover {
+  text-decoration: none;
+}
+.commentDiv.options {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+}
+.options > .option {
+  display: flex;
+  border-radius: 15px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.ui.popup {
+  padding: 0.49em;
+}
+
+.options > .option:hover {
+  background: rgb(186, 186, 186);
+}
+.commentSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  overflow-wrap: break-word;
+}
+
+#postInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#profile-link {
+  font-size: 1.5em;
+  font-weight: bolder;
 }

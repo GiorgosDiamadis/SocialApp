@@ -214,6 +214,7 @@ export const DELETE_COMMENT = gql`
 export const FETCH_USER_INFO = gql`
   query getUserInfo($ID: ID!) {
     getUserInfo(userId: $ID) {
+      id
       username
       email
       createdAt
@@ -223,6 +224,7 @@ export const FETCH_USER_INFO = gql`
       graduatedAt
       friends {
         username
+        email
         id
       }
     }
@@ -286,8 +288,17 @@ export const UPDATE_COMMENT = gql`
 export const SEARCH_USERS = gql`
   query searchUsers($prefix: String!) {
     searchUsers(prefix: $prefix) {
-      username
       id
+      token
+      username
+      friends {
+        username
+      }
+      graduatedAt
+      isFrom
+      livesIn
+      born
+      createdAt
     }
   }
 `;

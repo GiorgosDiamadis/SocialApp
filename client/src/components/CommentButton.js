@@ -8,8 +8,7 @@ export default function CommentButton({ idClass, post }) {
   return (
     <Button as="div" labelPosition="right">
       <Button
-        color="teal"
-        basic
+        color="blue"
         onClick={() => toggleVisibility(commentSectionSelector, false)}
       >
         <Icon name="comments" />
@@ -17,9 +16,9 @@ export default function CommentButton({ idClass, post }) {
       <Label
         as="a"
         basic
-        color="teal"
+        color="blue"
         className={idClass + " commentCount"}
-        pointing="left"
+        // pointing="left"
       >
         {post.commentCount}
       </Label>

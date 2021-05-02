@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { Button, Card, CardMeta, Icon } from "semantic-ui-react";
+import { Button, Card, CardMeta, Divider, Image } from "semantic-ui-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
@@ -42,39 +42,53 @@ export default function PostCard({ props, post }) {
     <Card.Group id="postcard">
       <Card fluid>
         <Card.Content>
-          <Card.Header
-            onClick={() => {
-              props.history.push(`/profile/${post.user.id}`);
-            }}
-            className="profile-link"
-          >
-            <a>{post.user.username}</a>
-          </Card.Header>
-          <CardMeta id="timeCreated" as={Link} to={"/post/" + post.id}>
-            {moment(post.createdAt.replace("T", " ")).fromNow()}
-          </CardMeta>
-          <Card.Description className="text">{post.body}</Card.Description>
+          <div style={{ display: "flex" }}>
+            <div>
+              <Image
+                src="https://customerthink.com/wp-content/uploads/pngtree-business-people-avatar-icon-user-profile-free-vector-png-image_4815126.jpg"
+                size="tiny"
+                rounded
+                className="makePostImage"
+              />
+            </div>
+            <div id="postInfo">
+              <Card.Header
+                as={Link}
+                to={`/profile/${post.user.id}`}
+                id="profile-link"
+              >
+                {post.user.username}
+              </Card.Header>
+              <CardMeta id="timeCreated" as={Link} to={"/post/" + post.id}>
+                {moment(post.createdAt.replace("T", " ")).fromNow()}
+              </CardMeta>
+            </div>
+          </div>
+          <Card.Description id="text">{post.body}</Card.Description>
         </Card.Content>
         <Card.Content extra>
-          <LikeButton
-            props={props}
-            id={post.id}
-            likeCount={post.likeCount}
-            likes={post.likes}
-            user={user}
-          />
-          <CommentButton idClass={idClass} post={post} props={props} />
-          {user ? (
-            user.username === post.user.username ? (
-              <Button color="red" onClick={deletePost}>
-                Remove
-              </Button>
-            ) : (
-              ""
-            )
-          ) : (
-            ""
-          )}
+          <div style={{ display: "flex" }}>
+            <div style={{ flex: 1 }}>
+              <LikeButton
+                props={props}
+                id={post.id}
+                likeCount={post.likeCount}
+                likes={post.likes}
+                user={user}
+              />
+              <CommentButton idClass={idClass} post={post} props={props} />
+            </div>
+            <div>
+              {user && user.username === post.user.username && (
+                <Button
+                  color="red"
+                  onClick={deletePost}
+                  icon="trash alternate"
+                />
+              )}
+            </div>
+          </div>
+
           <CommentForm postId={post.id} />
         </Card.Content>
         <div className={`commentSection ${idClass} invisible`}>
